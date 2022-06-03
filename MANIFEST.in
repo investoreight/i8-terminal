@@ -1,0 +1,4 @@
+include i8_terminal/config.yml
+include i8_terminal/version.txt
+graft i8_terminal/assets
+include requirements.txt

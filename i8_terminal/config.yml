@@ -1,0 +1,51 @@
+i8_core_endpoint: https://api.investoreight.com
+app:
+  port: 8050
+  debug: false
+metrics:
+  similarity_threshold: 0.75
+cache:
+  age: 48 # Hours
+styles:
+  plot:
+    default:
+      paper_bgcolor: "#F8F9F9"
+      plot_bgcolor: "#E5E8E8"
+  table:
+    default:
+      header:
+        color: "magenta"
+        bold: true
+      row:
+        color: "white"
+      alternate_row:
+        color: "cyan"
+      show_lines: false
+  terminal:
+    command:
+      color: "magenta"
+  xlsx:
+    default:
+      header:
+        bold: True
+        fg_color: "#00B191"
+        border: 1
+        align: "center"
+        valign: "vcenter"
+      metric:
+        bold: True
+        text_wrap: True
+        valign: "top"
+    company:
+      column:
+        num_format: "#,##0.00"
+        valign: "vcenter"
+        text_wrap: True
+    financials:
+      column:
+        num_format: "#,##0.00"
+        valign: "vcenter"
+        text_wrap: True
+    price:
+      column:
+        num_format: "#,##0.00"

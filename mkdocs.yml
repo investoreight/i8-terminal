@@ -1,0 +1,17 @@
+site_name: i8 Terminal Documentation
+theme:
+  logo: https://www.investoreight.com/media/logo-i8t.png
+  name: material
+  palette:
+    primary: black
+
+nav:
+  - index.md
+  - Getting started:
+    - get_started/index.md
+
+markdown_extensions:
+    - attr_list
+    - mkdocs-click
+
+dev_addr: '0.0.0.0:8000'

@@ -1,0 +1,15 @@
+click==8.1.2
+pandas==1.4.0
+requests==2.25.1
+arrow==1.0.3
+investor8-sdk==1.1.21
+pyyaml==5.4.1
+rich==12.0.0
+plotly==5.3.1
+dash==2.3.1
+dash-bootstrap-components==1.1.0
+kaleido==0.2.1
+openpyxl==3.0.9
+xlsxwriter==3.0.3
+click-repl==0.2.0
+wget==3.2

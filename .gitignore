@@ -1,0 +1,45 @@
+# Don't track content of these folders
+.idea/
+__pycache__/
+.vscode/
+.venv*/
+*.swp
+.DS_Store
+
+# Compiled source #
+###################
+*.env
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.pyc
+*.pkl
+
+# Setuptools distribution folder.
+dist/
+build/
+
+# Python egg metadata, regenerated from source files by setuptools.
+**/*.egg-info
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.html
+
+notebooks/.ipynb_checkpoints
+
+.user
+.mypy_cashe
