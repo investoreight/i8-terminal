@@ -46,8 +46,12 @@ jobs:
           key: ${{ runner.os }}-v1-test
           restore-keys: ${{ runner.os }}-v1-test
 
-      - run: pip3 install -r requirements.txt
-      - run: pip3 install twine==4.0.0
-      - run: python setup.py sdist
-      - run: echo "I8_TERMINAL_VERSION=$(python setup.py -V)" >> i8t_version.env
-      - run: twine upload dist/i8-terminal-$(python setup.py -V).tar.gz
+      - name: Build package & publish to PyPi
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: | 
+          pip3 install -r requirements.txt
+          pip3 install twine==4.0.0
+          python setup.py sdist
+          twine upload dist/i8-terminal-$(python setup.py -V).tar.gz
