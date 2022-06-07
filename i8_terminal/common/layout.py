@@ -26,8 +26,6 @@ def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dic
     table = Table(**style)
     default_justify = {
         "Price": "right",
-        "52 Week Low": "right",
-        "52 Week High": "right",
         "Open": "right",
         "Close": "right",
         "Low": "right",
@@ -36,7 +34,6 @@ def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dic
         "Change": "right",
         "Change (%)": "right",
         "Market Cap": "right",
-        "Market Capitalization": "right",
         "EPS Cons.": "right",
         "EPS Actual": "right",
         "Revenue Cons.": "right",
