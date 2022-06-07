@@ -19,6 +19,15 @@ def get_requirements() -> List[str]:
     return requirements.strip().split("\n")
 
 
+project_urls = {
+    "Homepage": "https://i8terminal.io/",
+    "Documentation": "https://docs.i8terminal.io/",
+    "Download": "https://i8terminal.io/download",
+    "Source Code": "https://github.com/investoreight/i8-terminal",
+    "Bug Tracker": "https://github.com/investoreight/i8-terminal/issues",
+}
+
+
 COMMON_ARGS = dict(
     name="i8-terminal",
     version=get_version(),
@@ -35,6 +44,7 @@ setup(
     **COMMON_ARGS,
     packages=find_packages(),
     package_dir={PACKAGE_NAME: PACKAGE_NAME, "": PACKAGE_NAME},
+    project_urls=project_urls,
     install_requires=get_requirements(),
     entry_points={"console_scripts": [f"i8={PACKAGE_NAME}.main:main"]},
     include_package_data=True,
