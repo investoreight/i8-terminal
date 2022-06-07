@@ -39,12 +39,6 @@ def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dic
         "Revenue Cons.": "right",
         "Revenue Actual": "right",
         "Level": "right",
-        "Basic Earnings per Share": "right",
-        "Consolidated Net Income / (Loss)": "right",
-        "Net Cash From Operating Activities": "right",
-        "Total Assets": "right",
-        "Total Liabilities": "right",
-        "Total Revenue": "right",
     }
     for c in df.columns:
         table.add_column(c, justify=columns_justify.get(c, default_justify.get(c, "left")))
