@@ -4,6 +4,16 @@
 
 i8 Terminal is backed by the [Investoreight Platform](https://www.investoreight.com) and currently covers major U.S. exchanges.
 
+## Features
+- Prompt Market Insights and Analysis
+- Custom Charting, Reporting, and Visualizations
+- Powerful and Customizable Screening
+- Easy-to-Use and Extendable
+- Backed by the [Investoreight Platform](https://www.investoreight.com)
+
+
+![i8 Terminal Features](https://www.i8terminal.io/img/gif/i8-terminal-demo.gif)
+
 ## Installing i8 Terminal
 **Note**: i8 Terminal currenly only supports Python 3.9+
 
