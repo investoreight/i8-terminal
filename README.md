@@ -4,15 +4,22 @@
 
 i8 Terminal is backed by the [Investoreight Platform](https://www.investoreight.com) and currently covers major U.S. exchanges.
 
-## Features
+## Features and Highlights
 - Prompt Market Insights and Analysis
 - Custom Charting, Reporting, and Visualizations
 - Powerful and Customizable Screening
 - Easy-to-Use and Extendable
 - Backed by the [Investoreight Platform](https://www.investoreight.com)
 
-
 ![i8 Terminal Features](https://www.i8terminal.io/img/gif/i8-terminal-demo.gif)
+
+## i8 Terminal Commands
+i8 Terminal offer some built-in commands to analyze and research the market. You can also create your own custom commands or extend the existing command. Find an overview of commands [here](https://i8terminal.io/#commands).
+
+Checkout the following video to see some more commands from i8 Terminal:
+
+[![i8 Terminal Sample Commands](https://img.youtube.com/vi/NpOCqcb-RxY/0.jpg)](https://www.youtube.com/watch?v=NpOCqcb-RxY)
+
 
 ## Installing i8 Terminal
 **Note**: i8 Terminal currenly only supports Python 3.9+
