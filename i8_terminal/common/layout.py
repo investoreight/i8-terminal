@@ -1,8 +1,10 @@
+from pydoc import locate
 from typing import Any, Dict
 
 from pandas import DataFrame
 from rich.table import Table
 
+from i8_terminal.common.formatting import get_formatter
 from i8_terminal.config import get_table_style
 
 
@@ -10,6 +12,13 @@ def format_df(df: DataFrame, cols_map: Dict[str, str], cols_formatters: Dict[str
     for c, f in cols_formatters.items():
         df[c] = df[c].map(f)
     return df[cols_map.keys()].rename(columns=cols_map)
+
+
+def format_metrics_df(df: DataFrame, target: str) -> DataFrame:
+    df["value"] = df.apply(
+        lambda metric: get_formatter(metric.display_format, target)(locate(metric.data_format)(metric.value)), axis=1  # type: ignore
+    )
+    return df
 
 
 def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dict[str, Any] = {}) -> Table:

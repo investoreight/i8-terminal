@@ -118,6 +118,8 @@ _formatters_map = {
     ("perc", "store"): lambda x: format_number(x, decimal=2),
     ("date", "console"): lambda x: format_date(x),
     ("date", "store"): lambda x: format_date(x),
+    ("string", "store"): lambda x: x,
+    ("string", "console"): lambda x: x,
 }
 
 
