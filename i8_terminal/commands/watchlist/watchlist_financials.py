@@ -28,9 +28,20 @@ def render_watchlist_table(name: str) -> Table:
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in metrics_df_formatted.groupby("display_name"):
         columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "string" else "right"
-    watchlist_stocks_df = metrics_df_formatted.pivot(
-        index="Ticker", columns="display_name", values="value"
-    ).reset_index(level=0)
+    sorted_columns = [
+        "Ticker",
+        "Total Revenue",
+        "Consolidated Net Income / (Loss)",
+        "Basic Earnings per Share",
+        "Net Cash From Operating Activities",
+        "Total Assets",
+        "Total Liabilities",
+    ]
+    watchlist_stocks_df = (
+        metrics_df_formatted.pivot(index="Ticker", columns="display_name", values="value")
+        .reset_index(level=0)
+        .reindex(sorted_columns, axis=1)
+    )
     return df2Table(watchlist_stocks_df, columns_justify=columns_justify)
 
 
