@@ -2,6 +2,7 @@ from typing import Any, Dict
 
 import click
 import investor8_sdk
+import numpy as np
 import pandas as pd
 from rich.console import Console
 from rich.table import Table
@@ -18,7 +19,7 @@ def render_watchlist_table(name: str) -> Table:
     watchlist = investor8_sdk.UserApi().get_watchlist_by_name_user_id(name=name, user_id=USER_SETTINGS.get("user_id"))
     metrics = investor8_sdk.MetricsApi().get_current_metrics(
         symbols=",".join(watchlist.tickers),
-        metrics="market_cap,52_week_high,52_week_low,change,price.r,stock_exchange,company_name",
+        metrics="company_name,stock_exchange,52_week_low,52_week_high,price.r,change,market_cap",
     )
     metrics_data_df = pd.DataFrame([m.to_dict() for m in metrics.data])
     metrics_data_df.rename(columns={"metric": "metric_name", "symbol": "Ticker"}, inplace=True)
@@ -28,20 +29,10 @@ def render_watchlist_table(name: str) -> Table:
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in metrics_df_formatted.groupby("display_name"):
         columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
-    sorted_columns = [
-        "Ticker",
-        "Company Name",
-        "Stock Exchange",
-        "52 Week Low",
-        "52 Week High",
-        "Latest Price",
-        "Change",
-        "Market Capitalization",
-    ]
     watchlist_stocks_df = (
         metrics_df_formatted.pivot(index="Ticker", columns="display_name", values="value")
         .reset_index(level=0)
-        .reindex(sorted_columns, axis=1)
+        .reindex(np.insert(metrics_df["display_name"].unique(), 0, "Ticker"), axis=1)
     )
     return df2Table(watchlist_stocks_df, columns_justify=columns_justify)
 
@@ -52,7 +43,7 @@ def render_watchlist_table(name: str) -> Table:
     "-n",
     type=UserWatchlistsParamType(),
     required=True,
-    help="Name of the watchlist you want to see more details.",
+    help="Name of the watchlist.",
 )
 @pass_command
 def summary(name: str) -> None:

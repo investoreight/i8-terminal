@@ -2,6 +2,7 @@ from typing import Any, Dict
 
 import click
 import investor8_sdk
+import numpy as np
 import pandas as pd
 from rich.console import Console
 from rich.table import Table
@@ -29,9 +30,11 @@ def render_watchlist_table(name: str, metricsList: str) -> Table:
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in metrics_df_formatted.groupby("display_name"):
         columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "string" else "right"
-    watchlist_stocks_df = metrics_df_formatted.pivot(
-        index="Ticker", columns="display_name", values="value"
-    ).reset_index(level=0)
+    watchlist_stocks_df = (
+        metrics_df_formatted.pivot(index="Ticker", columns="display_name", values="value")
+        .reset_index(level=0)
+        .reindex(np.insert(metrics_df["display_name"].unique(), 0, "Ticker"), axis=1)
+    )
     return df2Table(watchlist_stocks_df, columns_justify=columns_justify)
 
 
@@ -41,7 +44,7 @@ def render_watchlist_table(name: str, metricsList: str) -> Table:
     "-n",
     type=UserWatchlistsParamType(),
     required=True,
-    help="Name of the watchlist you want to see more details.",
+    help="Name of the watchlist.",
 )
 @click.option(
     "--metrics",
