@@ -24,11 +24,11 @@ def render_watchlist_table(name: str) -> Table:
     metrics_data_df = pd.DataFrame([m.to_dict() for m in metrics.data])
     metrics_data_df.rename(columns={"metric": "metric_name", "symbol": "Ticker"}, inplace=True)
     metrics_metadata_df = pd.DataFrame([m.to_dict() for m in metrics.metadata])
-    metrics_df = pd.merge(metrics_data_df, metrics_metadata_df, on="metric_name")
+    metrics_df = pd.merge(metrics_data_df, metrics_metadata_df, on="metric_name").replace("string", "str")
     metrics_df_formatted = format_metrics_df(metrics_df, "console")
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in metrics_df_formatted.groupby("display_name"):
-        columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "string" else "right"
+        columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
     watchlist_stocks_df = (
         metrics_df_formatted.pivot(index="Ticker", columns="display_name", values="value")
         .reset_index(level=0)
