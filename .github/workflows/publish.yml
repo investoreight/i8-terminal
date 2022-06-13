@@ -73,4 +73,5 @@ jobs:
           pip3 install mkdocs
           pip3 install mkdocs-click
           pip3 install mkdocs-material
+          pip3 install i8-terminal
           mkdocs gh-deploy --force --clean --verbose
