@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import click
 import investor8_sdk
@@ -11,21 +11,27 @@ from i8_terminal.commands.watchlist import watchlist
 from i8_terminal.common.cli import pass_command
 from i8_terminal.common.layout import df2Table, format_metrics_df
 from i8_terminal.config import USER_SETTINGS
+from i8_terminal.types.metric_param_type import MetricParamType
 
 from i8_terminal.types.user_watchlists_param_type import UserWatchlistsParamType  # isort:skip
 
 
-def render_watchlist_table(name: str) -> Table:
+def render_watchlist_table(name: str, metricsList: str) -> Optional[Table]:
+    console = Console()
     watchlist = investor8_sdk.UserApi().get_watchlist_by_name_user_id(name=name, user_id=USER_SETTINGS.get("user_id"))
     metrics = investor8_sdk.MetricsApi().get_current_metrics(
         symbols=",".join(watchlist.tickers),
-        metrics="company_name,stock_exchange,52_week_low,52_week_high,price.r,change,market_cap",
+        metrics=metricsList,
     )
+    if metrics.data is None:
+        return None
     metrics_data_df = pd.DataFrame([m.to_dict() for m in metrics.data])
     metrics_data_df.rename(columns={"metric": "metric_name", "symbol": "Ticker"}, inplace=True)
     metrics_metadata_df = pd.DataFrame([m.to_dict() for m in metrics.metadata])
     metrics_df = pd.merge(metrics_data_df, metrics_metadata_df, on="metric_name").replace("string", "str")
     metrics_df_formatted = format_metrics_df(metrics_df, "console")
+    for m in list(set(metricsList.split(",")) - set(metrics_df_formatted["metric_name"])):
+        console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in metrics_df_formatted.groupby("display_name"):
         columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
@@ -45,9 +51,19 @@ def render_watchlist_table(name: str) -> Table:
     required=True,
     help="Name of the watchlist.",
 )
+@click.option(
+    "--metrics",
+    "-m",
+    type=MetricParamType(),
+    default="pe_ratio_ttm",
+    help="Comma-separated list of daily metrics.",
+)
 @pass_command
-def summary(name: str) -> None:
+def metrics(name: str, metrics: str) -> None:
     console = Console()
     with console.status("Fetching data...", spinner="material"):
-        table = render_watchlist_table(name)
-    console.print(table)
+        table = render_watchlist_table(name, metrics)
+    if table is None:
+        console.print("No data found for metrics with selected tickers", style="yellow")
+    else:
+        console.print(table)

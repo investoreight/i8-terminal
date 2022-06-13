@@ -26,7 +26,7 @@ def remove_tickers_from_watchlist(name: str, tickers: List[str]) -> None:
     "-n",
     type=UserWatchlistsParamType(),
     required=True,
-    help="Name of the watchlist you want to see more details.",
+    help="Name of the watchlist.",
 )
 @click.option(
     "--tickers", "-k", type=UserWatchlistTickersParamType(), required=True, help="Comma-separated list of tickers."
