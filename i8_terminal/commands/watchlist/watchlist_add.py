@@ -25,7 +25,7 @@ def add_tickers_to_watchlist(name: str, tickers: List[str]) -> None:
     "-n",
     type=UserWatchlistsParamType(),
     required=True,
-    help="Name of the watchlist you want to see more details.",
+    help="Name of the watchlist.",
 )
 @click.option("--tickers", "-k", type=TickerParamType(), required=True, help="Comma-separated list of tickers.")
 @pass_command
