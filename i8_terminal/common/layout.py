@@ -44,6 +44,6 @@ def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dic
     for c in df.columns:
         table.add_column(c, justify=columns_justify.get(c, default_justify.get(c, "left")))
     for _, r in df.iterrows():
-        row = [r[c] if r[c] is not np.nan else "None" for c in df.columns]
+        row = [r[c] if r[c] is not np.nan else "-" for c in df.columns]
         table.add_row(*row)
     return table
