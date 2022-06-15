@@ -19,7 +19,7 @@ def render_watchlist_table(name: str) -> Table:
     watchlist = investor8_sdk.UserApi().get_watchlist_by_name_user_id(name=name, user_id=USER_SETTINGS.get("user_id"))
     metrics = investor8_sdk.MetricsApi().get_current_metrics(
         symbols=",".join(watchlist.tickers),
-        metrics="company_name,stock_exchange,52_week_low,52_week_high,price.r,change,market_cap",
+        metrics="company_name,stock_exchange,52_week_low,52_week_high,price.r,change,marketcap",
     )
     metrics_data_df = pd.DataFrame([m.to_dict() for m in metrics.data])
     metrics_data_df.rename(columns={"metric": "metric_name", "symbol": "Ticker"}, inplace=True)
