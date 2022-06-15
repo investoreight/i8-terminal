@@ -41,7 +41,8 @@ def financials(name: str, export_path: Optional[str]) -> None:
         df = prepare_watchlist_stocks_df(name)
     if df is None:
         console.print("No data found for metrics with selected tickers", style="yellow")
-    elif export_path:
+        return
+    if export_path:
         export_data(
             prepare_current_metrics_formatted_df(df, "store"),
             export_path,
