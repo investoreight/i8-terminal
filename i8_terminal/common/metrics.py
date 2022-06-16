@@ -2,10 +2,13 @@ import os
 from typing import Dict, List, Optional, Tuple
 
 import arrow
+import investor8_sdk
 import numpy as np
+import pandas as pd
 from investor8_sdk import MetricsApi
 from pandas import DataFrame, read_csv
 
+from i8_terminal.common.layout import format_metrics_df
 from i8_terminal.common.utils import is_cached_file_expired, similarity
 from i8_terminal.config import APP_SETTINGS, SETTINGS_FOLDER
 
@@ -96,3 +99,25 @@ def get_period_start_date(period: str) -> str:
         "5Y": arrow.now().shift(years=-5).datetime.strftime("%Y-%m-%d"),
     }
     return period_start_date[period]
+
+
+def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFrame]:
+    metrics = investor8_sdk.MetricsApi().get_current_metrics(
+        symbols=tickers,
+        metrics=metricsList,
+    )
+    if metrics.data is None:
+        return None
+    metrics_data_df = pd.DataFrame([m.to_dict() for m in metrics.data])
+    metrics_data_df.rename(columns={"metric": "metric_name", "symbol": "Ticker"}, inplace=True)
+    metrics_metadata_df = pd.DataFrame([m.to_dict() for m in metrics.metadata])
+    return pd.merge(metrics_data_df, metrics_metadata_df, on="metric_name").replace("string", "str")
+
+
+def prepare_current_metrics_formatted_df(df: DataFrame, target: str) -> DataFrame:
+    formatted_df = format_metrics_df(df, target)
+    return (
+        formatted_df.pivot(index="Ticker", columns="display_name", values="value")
+        .reset_index(level=0)
+        .reindex(np.insert(df["display_name"].unique(), 0, "Ticker"), axis=1)
+    )
