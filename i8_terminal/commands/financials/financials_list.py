@@ -7,7 +7,7 @@ from rich.console import Console
 
 from i8_terminal.commands.financials import financials
 from i8_terminal.common.cli import pass_command
-from i8_terminal.common.metrics import get_all_metrics_df
+from i8_terminal.common.metrics import get_all_financial_metrics_df
 from i8_terminal.common.utils import export_data
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.period_type_param_type import PeriodTypeParamType
@@ -102,8 +102,8 @@ def list(identifier: str, statement: str, period_type: Optional[str], export_pat
             click.echo("No data found!")
             return
         periods_list = fins["data"].columns[1:].to_list()
-        df_metrics = get_all_metrics_df()
-        df = fins["data"].merge(df_metrics, on="tag_fullname", how="left")
+        df_metrics = get_all_financial_metrics_df()
+        df = fins["data"].merge(df_metrics, on="tag", how="left")
         df["section_name"] = df["section_name"].apply(lambda x: "Others" if not x or x == "-" else x)
         df = df.astype(object).replace(np.nan, None)  # Replace nan with None
 

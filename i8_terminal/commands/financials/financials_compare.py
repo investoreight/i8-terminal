@@ -11,7 +11,7 @@ from i8_terminal.app.layout import get_plot_default_layout
 from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.financials import financials
 from i8_terminal.common.cli import get_click_command_path, pass_command
-from i8_terminal.common.metrics import get_all_metrics_df
+from i8_terminal.common.metrics import get_all_financial_metrics_df
 from i8_terminal.common.utils import PlotType, export_data
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.period_type_param_type import PeriodTypeParamType
@@ -154,8 +154,8 @@ def compare(
             click.echo("No data found!")
             return
         periods_list = fins["data"].columns[1:].to_list()
-        df_metrics = get_all_metrics_df()
-        df = fins["data"].merge(df_metrics, on="tag_fullname", how="left")
+        df_metrics = get_all_financial_metrics_df()
+        df = fins["data"].merge(df_metrics, on="tag", how="left")
         df["section_name"] = df["section_name"].apply(lambda x: "Others" if not x or x == "-" else x)
         df = df.astype(object).replace(np.nan, None)  # Replace nan with None
         if plot:
