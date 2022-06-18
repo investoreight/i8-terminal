@@ -67,7 +67,7 @@ def get_all_metrics_df() -> DataFrame:
     else:
         all_metrics = MetricsApi().get_list_metrics_metadata(page_size=1000)
         df = DataFrame([m.to_dict() for m in all_metrics])
-        df["categories"] = [",".join(str(cat)) for cat in df["categories"]]
+        df["categories"] = [str(cat) for cat in df["categories"]]
         df = df.drop(columns=["id", "last_modified"])
         df.to_csv(metric_path, index=False)
 

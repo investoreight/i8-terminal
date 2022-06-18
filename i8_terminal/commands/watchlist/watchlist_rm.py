@@ -42,5 +42,5 @@ def rm(name: str, tickers: str) -> None:
     )
     terminal_command_style = Style(**get_terminal_command_layout())
     console.print(
-        f'Try `[{terminal_command_style}]watchlist details --name "{name}"[/{terminal_command_style}]` to see the watchlist.'
+        f'Try `[{terminal_command_style}]watchlist summary --name "{name}"[/{terminal_command_style}]` to see the watchlist.'
     )

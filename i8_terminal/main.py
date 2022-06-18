@@ -89,7 +89,7 @@ def init_commands() -> None:
 
 
 def print_welcome_msg() -> None:
-    console.print(f"\n👋 Welcome to i8 Terminal! Version: {get_version()}", style="yellow")
+    console.print(f"\n👋 Welcome to i8 Terminal! Version:  {get_version()}", style="yellow")
     console.print("Copyright © 2020-2022 Investoreight | https://www.i8terminal.io/")
     console.print("- Enter [magenta]?[/magenta] to get the list of commands.")
     console.print("- Enter [magenta]exit[/magenta] to exit the shell.\n")
