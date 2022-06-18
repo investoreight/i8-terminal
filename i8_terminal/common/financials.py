@@ -174,8 +174,9 @@ def prepare_financials_df(
 
     df_rows = DataFrame(fins_dict.values(), index=fins_dict.keys()).T
     df_rows = df_rows.where(pd.notnull(df_rows), "-")  # Fill nan with `-`
-    df_rows.index = df_rows.index.set_names(["tag_fullname"])
+    df_rows.index = df_rows.index.set_names(["tag"])
     df_rows = df_rows.reset_index()
+    df_rows["tag"] = df_rows["tag"].apply(lambda x: x.split("_")[0])
 
     return {"header": header_dict, "data": df_rows}
 

@@ -35,7 +35,7 @@ def prepare_watchlist_stocks_df(name: str, metrics: str) -> Optional[pd.DataFram
     "--metrics",
     "-m",
     type=MetricParamType(),
-    default="pe_ratio_ttm",
+    required=True,
     help="Comma-separated list of daily metrics.",
 )
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
