@@ -52,5 +52,8 @@ class I8AutoSuggest(AutoSuggest):
                 elif matched_param.name == "export_path":
                     if len(ctx.incomplete) < 1:
                         return Suggestion("[path]/[filename].[csv|xlsx|pdf]")
+                elif matched_param.name == "path":
+                    if len(ctx.incomplete) < 1:
+                        return Suggestion("[path]/[filename].[xlsx]")
 
         return None
