@@ -35,26 +35,23 @@ def get_standardized_financials(
     exportize: Optional[bool] = False,
 ) -> Optional[Dict[str, Any]]:
     fins = []
-    try:
-        if identifiers_dict.get("fiscal_period"):
-            fins = [
-                investor8_sdk.FinancialsApi().get_financials_single(
-                    ticker=identifiers_dict["ticker"],
-                    stat_code=statement,
-                    fiscal_year=identifiers_dict.get("fiscal_year"),
-                    fiscal_period=identifiers_dict.get("fiscal_period"),
-                )
-            ]
-        else:
-            period_type = "FY" if not period_type else period_type
-            fins = investor8_sdk.FinancialsApi().get_list_standardized_financials(
+    if identifiers_dict.get("fiscal_period"):
+        fins = [
+            investor8_sdk.FinancialsApi().get_financials_single(
                 ticker=identifiers_dict["ticker"],
                 stat_code=statement,
-                period_type=period_type,
-                end_year=identifiers_dict.get("fiscal_year", ""),
+                fiscal_year=identifiers_dict.get("fiscal_year"),
+                fiscal_period=identifiers_dict.get("fiscal_period"),
             )
-    except Exception:
-        pass
+        ]
+    else:
+        period_type = "FY" if not period_type else period_type
+        fins = investor8_sdk.FinancialsApi().get_list_standardized_financials(
+            ticker=identifiers_dict["ticker"],
+            stat_code=statement,
+            period_type=period_type,
+            end_year=identifiers_dict.get("fiscal_year", ""),
+        )
     if not fins:
         return None
     return prepare_financials_df(fins, period_size, include_ticker=False, exportize=exportize)
