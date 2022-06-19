@@ -42,6 +42,19 @@ def financials(name: str, export_path: Optional[str]) -> None:
     if df is None:
         console.print("No data found for metrics with selected tickers", style="yellow")
         return
+    period_rows = []
+    for ticker, ticker_df in df.groupby("Ticker"):
+        period_rows.append(
+            {
+                "Ticker": ticker,
+                "metric_name": "period",
+                "value": ticker_df["period"].values[0],
+                "display_name": "Period",
+                "data_format": "str",
+                "display_format": "str",
+            }
+        )
+    df = pd.concat([pd.DataFrame(period_rows), df], ignore_index=True, axis=0)
     if export_path:
         export_data(
             prepare_current_metrics_formatted_df(df, "store"),
