@@ -41,6 +41,14 @@ def prepare_watchlist_stocks_df(name: str, metrics: str) -> Optional[pd.DataFram
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
 def metrics(name: str, metrics: str, export_path: Optional[str]) -> None:
+    """
+    Lists daily metrics of given watchlist companies.
+
+    Examples:
+
+    `i8 watchlist metrics --name MyWatchlist --metrics net_income`
+
+    """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         df = prepare_watchlist_stocks_df(name, metrics)

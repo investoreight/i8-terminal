@@ -63,7 +63,14 @@ def map_news_source(news_source: int) -> str:
 )
 @pass_command
 def list(ticker: str) -> None:
-    """Lists the latest market news. If ticker is provided, the news are filtered based on the give ticker."""
+    """
+    Lists the latest market news based on the given ticker.
+
+    Examples:
+
+    `i8 news list --ticker AAPL`
+
+    """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         df = get_news_df(ticker, page_size=10)

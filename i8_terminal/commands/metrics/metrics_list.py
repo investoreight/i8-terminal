@@ -26,6 +26,12 @@ from i8_terminal.common.metrics import get_current_metrics_df, prepare_current_m
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
 def list(tickers: str, metrics: str, export_path: Optional[str]) -> None:
+    """Lists daily metrics of given companies. TICKERS is a comma seperated list of tickers.
+
+    Examples:
+
+    `i8 metrics list --metrics pe_ratio_fy --tickers AMD,INTC,QCOM`
+    """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         df = get_current_metrics_df(tickers, metrics)

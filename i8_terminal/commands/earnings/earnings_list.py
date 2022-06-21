@@ -43,7 +43,14 @@ def format_hist_earnings_df(df: DataFrame, target: str) -> DataFrame:
 @click.option("--ticker", "-k", type=TickerParamType(), required=True, callback=validate_ticker, help="Company ticker.")
 @pass_command
 def list(ticker: str) -> None:
-    """Lists upcoming company earnings."""
+    """
+    Lists upcoming company earnings.
+
+    Examples:
+
+    `i8 earnings list --ticker AAPL`
+
+    """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         df = get_hist_earnings_df(ticker, size=10)
