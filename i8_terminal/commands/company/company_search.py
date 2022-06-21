@@ -13,7 +13,7 @@ from i8_terminal.common.layout import df2Table, format_df
 def search_stocks_df(keyword: str) -> DataFrame:
     results = investor8_sdk.SearchApi().search_stocks(keyword, 8)
     df = DataFrame([d.to_dict() for d in results])
-    return df[["ticker", "name", "exchange", "sector"]]
+    return df[["ticker", "name"]]
 
 
 def format_stocks_df(df: DataFrame, target: str) -> DataFrame:
@@ -21,8 +21,6 @@ def format_stocks_df(df: DataFrame, target: str) -> DataFrame:
     col_names = {
         "ticker": "Ticker",
         "name": "Name",
-        "exchange": "Exchange",
-        "sector": "Sector",
     }
     return format_df(df, col_names, formatters)
 
