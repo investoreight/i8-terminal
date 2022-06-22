@@ -127,7 +127,8 @@ def compare(
     plot: bool,
     export_path: Optional[str],
 ) -> None:
-    """Compare financial metrics of given companies. IDENTIFIERS is a comma separated list of identifiers.
+    """
+    Compare financial metrics of given companies. IDENTIFIERS is a comma-separated list of identifiers.
 
     Examples:
 

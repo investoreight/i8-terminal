@@ -184,7 +184,8 @@ def export_companies_data(
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
 def compare(tickers: str, export_path: Optional[str]) -> None:
-    """Compare details of the given companies.
+    """
+    Compare details of the given companies.
 
     Examples:
 

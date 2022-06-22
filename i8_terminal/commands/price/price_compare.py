@@ -99,7 +99,8 @@ def compare(
     tickers: str,
     export_path: Optional[str],
 ) -> None:
-    """Compare historical prices of given companies. TICKERS is a comma seperated list of tickers.
+    """
+    Compares historical prices of given companies. TICKERS is a comma-separated list of tickers.
 
     Examples:
 

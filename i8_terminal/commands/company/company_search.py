@@ -30,7 +30,7 @@ def format_stocks_df(df: DataFrame, target: str) -> DataFrame:
 @pass_command
 def search(keyword: str) -> None:
     """
-    Searches and shows all securities that matches with the given KEYWORD.
+    Searches and shows all securities that match with the given KEYWORD.
 
     Examples:
 

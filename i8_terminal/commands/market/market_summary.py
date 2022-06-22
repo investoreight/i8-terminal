@@ -164,7 +164,8 @@ def get_market_summary_panels(name: str, df: DataFrame) -> Panel:
 @click.option("--live", is_flag=True, default=False, help="Print live results of market summary on terminal.")
 @pass_command
 def summary(live: bool) -> None:
-    """Shows summary of the market information.
+    """
+    Shows a summary of the market information.
 
     Examples:
 

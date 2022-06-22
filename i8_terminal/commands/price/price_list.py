@@ -56,7 +56,7 @@ def list(
     ticker: str, period: str, from_date: Optional[DateTime], to_date: Optional[DateTime], export_path: Optional[str]
 ) -> None:
     """
-    Lists historical prices for the given TICKER.
+    Lists historical prices for a given TICKER.
 
     Examples:
 

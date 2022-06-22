@@ -79,7 +79,7 @@ def export_watchlist_data(
 @pass_command
 def export(name: str, path: str) -> None:
     """
-    Exports financial metrics and summary information of given watchlist tickers to the excel file.
+    Exports a given watchlist to an excel file.
 
     Examples:
 

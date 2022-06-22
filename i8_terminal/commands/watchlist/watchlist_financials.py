@@ -37,7 +37,7 @@ def prepare_watchlist_stocks_df(name: str) -> Optional[pd.DataFrame]:
 @pass_command
 def financials(name: str, export_path: Optional[str]) -> None:
     """
-    Lists financial metrics for given watchlist companies.
+    Lists financial metrics for a given watchlist.
 
     Examples:
 

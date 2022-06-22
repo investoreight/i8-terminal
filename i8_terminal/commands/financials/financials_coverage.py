@@ -19,7 +19,8 @@ def get_available_financials_df(ticker: str) -> DataFrame:
 @click.option("--ticker", "-k", type=TickerParamType(), required=True, callback=validate_ticker, help="Company ticker.")
 @pass_command
 def coverage(ticker: str) -> None:
-    """Shows available financial statements of the given company.
+    """
+    Shows available financial statements of the given company.
 
     Examples:
 

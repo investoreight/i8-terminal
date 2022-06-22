@@ -64,7 +64,7 @@ def map_news_source(news_source: int) -> str:
 @pass_command
 def list(ticker: str) -> None:
     """
-    Lists the latest market news based on the given ticker.
+    Lists the latest market news for a given ticker.
 
     Examples:
 

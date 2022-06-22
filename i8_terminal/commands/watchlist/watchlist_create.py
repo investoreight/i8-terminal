@@ -26,7 +26,7 @@ def create_watchlist(name: str, tickers: List[str]) -> None:
 @pass_command
 def create(name: str, tickers: str) -> None:
     """
-    Create new watchlist with given name and tickers.
+    Creates new watchlist with given name and tickers.
 
     Examples:
 

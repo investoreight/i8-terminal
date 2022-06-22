@@ -81,7 +81,8 @@ def get_standardized_financials(
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
 def list(identifier: str, statement: str, period_type: Optional[str], export_path: Optional[str]) -> None:
-    """Lists financial metrics of given company.
+    """
+    Lists financial metrics of a given company.
 
     Examples:
 

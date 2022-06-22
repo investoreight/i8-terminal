@@ -36,7 +36,7 @@ def prepare_watchlist_stocks_df(name: str) -> Optional[pd.DataFrame]:
 @pass_command
 def summary(name: str, export_path: Optional[str]) -> None:
     """
-    Shows summary of given watchlist companies information.
+    Lists a summary of the companies added to a watchlist.
 
     Examples:
 

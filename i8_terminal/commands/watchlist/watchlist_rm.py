@@ -34,7 +34,7 @@ def remove_tickers_from_watchlist(name: str, tickers: List[str]) -> None:
 @pass_command
 def rm(name: str, tickers: str) -> None:
     """
-    Remove given tickers from given watchlist.
+    Removes given tickers from a given watchlist.
 
     Examples:
 

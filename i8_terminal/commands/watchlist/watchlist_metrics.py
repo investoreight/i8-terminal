@@ -42,11 +42,11 @@ def prepare_watchlist_stocks_df(name: str, metrics: str) -> Optional[pd.DataFram
 @pass_command
 def metrics(name: str, metrics: str, export_path: Optional[str]) -> None:
     """
-    Lists daily metrics of given watchlist companies.
+    Lists and compares watchlist companies based on a given list of metrics.
 
     Examples:
 
-    `i8 watchlist metrics --name MyWatchlist --metrics net_income`
+    `i8 watchlist metrics --name MyWatchlist --metrics total_revenue,net_income,price_to_earnings`
 
     """
     console = Console()

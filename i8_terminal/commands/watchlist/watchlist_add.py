@@ -31,7 +31,7 @@ def add_tickers_to_watchlist(name: str, tickers: List[str]) -> None:
 @pass_command
 def add(name: str, tickers: str) -> None:
     """
-    Adds given tickers to given watchlist.
+    Adds given tickers to a given watchlist.
 
     Examples:
 
