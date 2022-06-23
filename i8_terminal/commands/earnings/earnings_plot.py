@@ -74,7 +74,8 @@ def create_fig(df: DataFrame, cmd_context: Dict[str, Any]) -> go.Figure:
 @click.option("--tickers", "-k", type=TickerParamType(), required=True, help="Comma-separated list of tickers.")
 @pass_command
 def plot(ctx: click.Context, metric: str, tickers: str) -> None:
-    """Compare and plot earning metrics of given companies. TICKERS is a comma seperated list of tickers.
+    """
+    Compare and plot earning metrics of given companies. TICKERS is a comma-separated list of tickers.
 
     Examples:
 

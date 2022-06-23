@@ -127,6 +127,14 @@ def compare(
     plot: bool,
     export_path: Optional[str],
 ) -> None:
+    """
+    Compare financial metrics of given companies. IDENTIFIERS is a comma-separated list of identifiers.
+
+    Examples:
+
+    `i8 financials compare --period_type FY --statement income --identifiers AAPL-2020-FY,MSFT-2020-FY`
+
+    """
     matched_statement = find_similar_statement(statement)
     if not matched_statement:
         click.echo(

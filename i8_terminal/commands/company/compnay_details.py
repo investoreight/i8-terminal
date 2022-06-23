@@ -57,7 +57,8 @@ def get_price_details_content(si: investor8_sdk.StockInfoApi) -> Table:
 )
 @pass_command
 def details(ticker: str) -> None:
-    """Get details for a given company.
+    """
+    Get details for a given company.
 
     Examples:
 

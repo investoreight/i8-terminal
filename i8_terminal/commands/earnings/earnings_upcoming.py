@@ -68,7 +68,16 @@ def format_upcoming_earnings_df_by_ticker(df: DataFrame, target: str) -> DataFra
 @click.option("--ticker", "-k", type=TickerParamType(), callback=validate_ticker, help="Company ticker.")
 @pass_command
 def upcoming(ticker: Optional[str]) -> None:
-    """Lists upcoming company earnings."""
+    """
+    Lists upcoming company earnings.
+
+    Examples:
+
+    `i8 earnings upcoming`
+
+    `i8 earnings upcoming --ticker AAPL`
+
+    """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         df = get_upcoming_earnings_df_by_ticker(ticker) if ticker else get_upcoming_earnings_df(size=20)

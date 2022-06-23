@@ -171,7 +171,8 @@ def plot(
     from_date: Optional[datetime],
     to_date: Optional[datetime],
 ) -> None:
-    """Compare and plot financials metrics of given companies. TICKERS is a comma seperated list of tickers.
+    """
+    Compare and plot financial metrics of given companies. TICKERS is a comma-separated list of tickers.
 
     Examples:
 

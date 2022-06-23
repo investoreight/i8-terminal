@@ -78,6 +78,14 @@ def export_watchlist_data(
 @click.option("--path", "path", "-p", required=True, help="Filename to export the output to.")
 @pass_command
 def export(name: str, path: str) -> None:
+    """
+    Exports a given watchlist to an excel file.
+
+    Examples:
+
+    `i8 watchlist export --name MyWatchlist --path MyWatchlist.xlsx`
+
+    """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         export_watchlist_data(name, path)

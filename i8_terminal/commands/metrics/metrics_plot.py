@@ -208,11 +208,12 @@ def plot(
     from_date: Optional[datetime],
     to_date: Optional[datetime],
 ) -> None:
-    """Compare and plot daily metrics of given companies. TICKERS is a comma seperated list of tickers.
+    """
+    Compares and plots daily metrics of given companies. TICKERS is a comma-separated list of tickers.
 
     Examples:
 
-    `i8 metrics plot --metrics pe_ratio_fy --period 5Y --tickers AMD,INTC,QCOM`
+    `i8 metrics plot --metrics price_to_earnings --period 5Y --tickers AMD,INTC,QCOM`
     """
     period = period.replace(" ", "").upper()
     metrics_list = metrics.replace(" ", "").split(",")

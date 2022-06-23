@@ -55,7 +55,14 @@ def format_hist_price_df(df: DataFrame, target: str) -> DataFrame:
 def list(
     ticker: str, period: str, from_date: Optional[DateTime], to_date: Optional[DateTime], export_path: Optional[str]
 ) -> None:
-    """Lists historical prices for the given TICKER."""
+    """
+    Lists historical prices for a given TICKER.
+
+    Examples:
+
+    `i8 price list --period 3M --ticker AAPL`
+
+    """
     period_code = get_period_code(period.replace(" ", "").upper())
     console = Console()
     with console.status("Fetching data...", spinner="material"):

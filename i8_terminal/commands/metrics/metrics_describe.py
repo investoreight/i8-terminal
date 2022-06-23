@@ -24,7 +24,8 @@ def get_metric_info_table(metric: str) -> Table:
 @click.option("--name", "-n", type=MetricParamType(), required=True, help="Metric name.")
 @pass_command
 def describe(name: str) -> None:
-    """Describe the metric information.
+    """
+    Describe the metric information.
 
     Examples:
 

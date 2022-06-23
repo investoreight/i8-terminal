@@ -184,6 +184,14 @@ def export_companies_data(
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
 def compare(tickers: str, export_path: Optional[str]) -> None:
+    """
+    Compare details of the given companies.
+
+    Examples:
+
+    `i8 company compare --tickers MSFT,AAPL`
+
+    """
     console = Console()
     tickers_list = tickers.replace(" ", "").upper().split(",")
     with console.status("Fetching data...", spinner="material") as status:

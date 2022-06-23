@@ -30,6 +30,14 @@ def add_tickers_to_watchlist(name: str, tickers: List[str]) -> None:
 @click.option("--tickers", "-k", type=TickerParamType(), required=True, help="Comma-separated list of tickers.")
 @pass_command
 def add(name: str, tickers: str) -> None:
+    """
+    Adds given tickers to a given watchlist.
+
+    Examples:
+
+    `i8 watchlist add --name MyWatchlist --tickers AAPL,MSFT`
+
+    """
     console = Console()
     tickers_list = tickers.replace(" ", "").upper().split(",")
     with console.status("Updating Watchlist...", spinner="material"):

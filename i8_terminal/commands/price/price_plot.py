@@ -238,7 +238,8 @@ def plot(
     to_date: Optional[datetime],
     chart_type: str,
 ) -> None:
-    """Plot historical prices of given company.
+    """
+    Plots historical prices of a given company.
 
     Examples:
 

@@ -33,6 +33,14 @@ def remove_tickers_from_watchlist(name: str, tickers: List[str]) -> None:
 )
 @pass_command
 def rm(name: str, tickers: str) -> None:
+    """
+    Removes given tickers from a given watchlist.
+
+    Examples:
+
+    `i8 watchlist rm --name MyWatchlist --tickers AAPL,MSFT`
+
+    """
     console = Console()
     tickers_list = tickers.replace(" ", "").upper().split(",")
     with console.status("Updating Watchlist...", spinner="material"):

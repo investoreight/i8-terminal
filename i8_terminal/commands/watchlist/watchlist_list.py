@@ -36,6 +36,14 @@ def prepare_watchlists_df(watchlists: List[WatchlistDto]) -> DataFrame:
 @watchlist.command()
 @pass_command
 def list() -> None:
+    """
+    Lists user watchlists.
+
+    Examples:
+
+    `i8 watchlist list`
+
+    """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         df = get_user_watchlists()

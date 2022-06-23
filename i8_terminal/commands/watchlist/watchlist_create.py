@@ -25,6 +25,14 @@ def create_watchlist(name: str, tickers: List[str]) -> None:
 @click.option("--tickers", "-k", type=TickerParamType(), required=True, help="Comma-separated list of tickers.")
 @pass_command
 def create(name: str, tickers: str) -> None:
+    """
+    Creates new watchlist with given name and tickers.
+
+    Examples:
+
+    `i8 watchlist create --name MyWatchlist --tickers AAPL,MSFT`
+
+    """
     console = Console()
     tickers_list = tickers.replace(" ", "").upper().split(",")
     with console.status("Creating Watchlist...", spinner="material"):

@@ -46,7 +46,14 @@ def format_recent_earnings_df(df: pd.DataFrame, target: str) -> pd.DataFrame:
 @earnings.command()
 @pass_command
 def recent() -> None:
-    """Lists recent company earnings."""
+    """
+    Lists recent company earnings.
+
+    Examples:
+
+    `i8 earnings recent`
+
+    """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         df = get_recent_earnings_df(size=20)
