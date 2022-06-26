@@ -16,6 +16,8 @@ def get_hist_earnings_df(ticker: str, size: int) -> DataFrame:
     historical_earnings = [d.to_dict() for d in historical_earnings]
     df = DataFrame(historical_earnings)
     df["period"] = df.fyq.str[2:-2] + " " + df.fyq.str[-2:]
+    df["eps_beat_?"] = df.apply(lambda x: "✔️" if x.eps_actual >= x.eps_ws else "❌", axis=1)
+    df["revenue_beat_?"] = df.apply(lambda x: "✔️" if x.revenue_actual >= x.revenue_ws else "❌", axis=1)
     return df
 
 
@@ -33,8 +35,10 @@ def format_hist_earnings_df(df: DataFrame, target: str) -> DataFrame:
         "period": "Period",
         "eps_actual": "EPS Actual",
         "eps_ws": "EPS Cons.",
+        "eps_beat_?": "EPS Beat?",
         "revenue_actual": "Revenue Actual",
         "revenue_ws": "Revenue Cons.",
+        "revenue_beat_?": "Revenue Beat?",
     }
     return format_df(df, col_names, formatters)
 
