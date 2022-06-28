@@ -1,9 +1,7 @@
-from typing import Any, Dict, List, Optional
+from typing import Optional
 
 import click
-import investor8_sdk
 import pandas as pd
-from investor8_sdk.models.stock_info_master_dto import StockInfoMasterDto
 from pandas import DataFrame
 from rich.console import Console
 from rich.panel import Panel
@@ -12,132 +10,81 @@ from rich.tree import Tree
 
 from i8_terminal.commands.company import company
 from i8_terminal.common.cli import pass_command
+from i8_terminal.common.layout import format_metrics_df
+from i8_terminal.common.metrics import get_current_metrics_df
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.ticker_param_type import TickerParamType
 
-from i8_terminal.common.formatting import format_date, format_fyq, format_number  # isort:skip
+metrics = {
+    "Summary": "company_name,stock_exchange,sector,industry_group,marketcap,pe_ratio_ttm,price,change",
+    "Financials": "operating_revenue,total_revenue,total_gross_profit,other_income,basic_eps,diluted_eps,adj_basic_eps",
+    "Price Returns": "return_1w,return_1m,return_3m,return_6m,return_ytd,return_1y,return_2y,return_5y",
+}
 
 
-def get_stock_infos_df(tickers: List[str], exportize: Optional[bool] = False) -> Optional[DataFrame]:
-    stock_infos = []
-    for ticker in tickers:
-        try:
-            resp = investor8_sdk.StockInfoApi().get_stock_info_master(ticker=ticker)
-            if resp:
-                stock_infos.append(resp)
-        except Exception:
-            continue
-    if not stock_infos:
+def get_section_stock_infos_df(tickers: str, target: str, section: str) -> Optional[DataFrame]:
+    df = get_current_metrics_df(tickers, metrics[section])
+    if df is None:
         return None
-    return prepare_stock_infos_df(stock_infos, exportize)
+    if section == "Financials":
+        fyq_rows = []
+        for ticker, ticker_df in df.groupby("Ticker"):
+            fyq_rows.append(
+                {
+                    "Ticker": ticker,
+                    "metric_name": "fyq",
+                    "value": ticker_df["period"].values[0],
+                    "display_name": "FYQ",
+                    "data_format": "str",
+                    "display_format": "str",
+                }
+            )
+        df = pd.concat([pd.DataFrame(fyq_rows), df], ignore_index=True, axis=0)
+    formatted_df = format_metrics_df(df, target)
+    formatted_df = formatted_df.pivot(index="display_name", columns="Ticker", values="value").reset_index(level=0)
+    formatted_df["Section"] = section
+    sorter = df["display_name"].unique()
+    sorter_index = dict(zip(sorter, range(len(sorter))))
+    formatted_df["Rank"] = formatted_df["display_name"].map(sorter_index)
+    formatted_df.sort_values("Rank", inplace=True)
+    formatted_df.drop("Rank", axis=1, inplace=True)
+    return formatted_df
 
 
-def prepare_stock_infos_df(stock_infos: List[StockInfoMasterDto], exportize: Optional[bool]) -> DataFrame:
-    available_stock_infos_dict = {
-        "summary": {
-            "name": {"display_name": "Name", "unit": "str"},
-            "exchange": {"display_name": "Exchange", "unit": "str"},
-            "sector": {"display_name": "Sector", "unit": "str"},
-            "industry_group": {"display_name": "Industry", "unit": "str"},
-            "market_cap": {"display_name": "Market Cap", "unit": "usd"},
-            "pe_ratio_ttm": {"display_name": "P/E Ratio", "unit": "usdpershare"},
-            "current_price": {"display_name": "Current Price", "unit": "usd"},
-            "change_perc": {"display_name": "Change", "unit": "percentage"},
-        },
-        "financials": {
-            "fyq": {"display_name": "FYQ", "unit": "fyq"},
-            "operating_revenue": {"display_name": "Operating Revenue", "unit": "usd"},
-            "total_revenue": {"display_name": "Total Revenue", "unit": "usd"},
-            "total_grossprofit": {"display_name": "Total Gross Profit", "unit": "usd"},
-            "other_income": {"display_name": "Other Income", "unit": "usd"},
-            "net_income": {"display_name": "Net Income", "unit": "usd"},
-            "basic_eps": {"display_name": "Basic EPS", "unit": "usdpershare"},
-            "diluted_eps": {"display_name": "Diluted EPS", "unit": "usdpershare"},
-            "filing_date": {"display_name": "Filing Date", "unit": "date"},
-            "adjusted_basic_eps": {"display_name": "Adjusted Basic EPS", "unit": "usd"},
-        },
-        "price_returns": {
-            "OneDay": {"display_name": "One Day", "unit": "percentage"},
-            "OneWeek": {"display_name": "One Week", "unit": "percentage"},
-            "OneMonth": {"display_name": "One Month", "unit": "percentage"},
-            "ThreeMonth": {"display_name": "Three Month", "unit": "percentage"},
-            "SixMonth": {"display_name": "Six Month", "unit": "percentage"},
-            "YearToDate": {"display_name": "Year To Date", "unit": "percentage"},
-            "OneYear": {"display_name": "One Year", "unit": "percentage"},
-            "TwoYear": {"display_name": "Two Year", "unit": "percentage"},
-            "FiveYear": {"display_name": "Five Year", "unit": "percentage"},
-        },
-    }
-    stock_infos_dict: Dict[str, Dict[str, Any]] = {}
-    for stock_info in stock_infos:
-        ticker = stock_info.ticker
-        stock_infos_dict[ticker] = {}
-        for name, value in stock_info.summary.to_dict().items():
-            if name in available_stock_infos_dict["summary"]:
-                stock_infos_dict[ticker][
-                    f"Summary-{available_stock_infos_dict['summary'][name]['display_name']}"
-                ] = format_value(
-                    value,
-                    available_stock_infos_dict["summary"][name]["unit"],
-                    exportize,
-                    colorize=True if name == "change_perc" else False,
-                )
-        for name, value in stock_info.latest_financials.quarterly.to_dict().items():
-            if name in available_stock_infos_dict["financials"]:
-                stock_infos_dict[ticker][
-                    f"Financials-{available_stock_infos_dict['financials'][name]['display_name']}"
-                ] = format_value(value, available_stock_infos_dict["financials"][name]["unit"], exportize)
-        for name, value in stock_info.price_returns.items():
-            if name in available_stock_infos_dict["price_returns"]:
-                stock_infos_dict[ticker][
-                    f"Price Return-{available_stock_infos_dict['price_returns'][name]['display_name']}"
-                ] = format_value(
-                    value, available_stock_infos_dict["price_returns"][name]["unit"], exportize, colorize=True
-                )
-    df = DataFrame(stock_infos_dict.values(), index=stock_infos_dict.keys()).T
-    df = df.where(pd.notnull(df), "-")
-    df.index = df.index.set_names(["Name"])
-    df = df.reset_index()
-    df["Section"] = df["Name"].apply(lambda name: name.split("-")[0])
-    df["Name"] = df["Name"].apply(lambda name: name.split("-")[1])
-
-    return df
+def get_stock_infos_df(tickers: str, target: str) -> Optional[DataFrame]:
+    return pd.concat(
+        [
+            get_section_stock_infos_df(tickers, target, "Summary"),
+            get_section_stock_infos_df(tickers, target, "Financials"),
+            get_section_stock_infos_df(tickers, target, "Price Returns"),
+        ]
+    ).rename(columns={"display_name": "Name"})
 
 
-def format_value(value: Any, unit: str, exportize: Optional[bool], colorize: Optional[bool] = False) -> Any:
-    if value is None:
-        return "-"
-    if unit == "str":
-        return value
-    elif unit == "date":
-        return format_date(value)
-    elif unit == "fyq":
-        return format_fyq(value)
-    else:
-        return format_number(value, unit, humanize=True, exportize=exportize, colorize=colorize)  # type: ignore
-
-
-def companies_df2tree(df: DataFrame, tickers: List[str]) -> Tree:
+def companies_df2tree(df: DataFrame, tickers: str) -> Tree:
+    tickers_list = tickers.replace(" ", "").upper().split(",")
     col_width = 40
-    plot_title = f"Comparison of {', '.join(tickers)}"
+    plot_title = f"Comparison of {', '.join(tickers_list)}"
     plot_title = " and ".join(plot_title.rsplit(", ", 1))
     tree = Tree(Panel(plot_title, width=50))
     # Add header table to tree
-    header_table = Table(width=50 + (col_width * (len(tickers) - 1)), show_lines=False, show_header=False, box=None)
-    header_table.add_column(width=35, style="magenta")
-    for p in tickers:
+    header_table = Table(
+        width=60 + (col_width * (len(tickers_list) - 1)), show_lines=False, show_header=False, box=None
+    )
+    header_table.add_column(width=45, style="magenta")
+    for p in tickers_list:
         header_table.add_column(width=col_width, justify="center", style="magenta")
-    header_table.add_row("Ticker", *tickers)
+    header_table.add_row("Ticker", *tickers_list)
     tree.add(header_table)
 
     for sec_name, sec_values in df.groupby("Section", sort=False):
         sec_branch = tree.add(f"[cyan]{sec_name}")
         for i, r in sec_values.iterrows():
-            t = Table(width=46 + (col_width * (len(tickers) - 1)), show_lines=False, show_header=False, box=None)
-            t.add_column(width=31)
-            for tk in tickers:
+            t = Table(width=56 + (col_width * (len(tickers_list) - 1)), show_lines=False, show_header=False, box=None)
+            t.add_column(width=41)
+            for tk in tickers_list:
                 t.add_column(width=col_width, justify="center")
-            t.add_row(r["Name"], *[f"{d}" for d in r[tickers].values])
+            t.add_row(r["Name"], *[f"{d}" for d in r[tickers_list].values])
             sec_branch.add(t)
 
     return tree
@@ -193,9 +140,8 @@ def compare(tickers: str, export_path: Optional[str]) -> None:
 
     """
     console = Console()
-    tickers_list = tickers.replace(" ", "").upper().split(",")
     with console.status("Fetching data...", spinner="material") as status:
-        stock_infos_df = get_stock_infos_df(tickers_list, exportize=True if export_path else False)
+        stock_infos_df = get_stock_infos_df(tickers, target="store" if export_path else "console")
         if stock_infos_df is None:
             status.stop()
             click.echo("No data found!")
@@ -206,5 +152,5 @@ def compare(tickers: str, export_path: Optional[str]) -> None:
             export_path,
         )
     else:
-        tree = companies_df2tree(stock_infos_df, tickers_list)
+        tree = companies_df2tree(stock_infos_df, tickers)
         console.print(tree)
