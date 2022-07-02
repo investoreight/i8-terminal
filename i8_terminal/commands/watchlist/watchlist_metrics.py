@@ -55,7 +55,7 @@ def metrics(name: str, metrics: str, export_path: Optional[str]) -> None:
     if df is None:
         console.print("No data found for metrics with selected tickers", style="yellow")
         return
-    for m in list(set(metrics.split(",")) - set(df["metric_name"])):
+    for m in [*set(metric.split(".")[0] for metric in set(metrics.split(","))) - set(df["metric_name"])]:
         console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
     if export_path:
         export_data(
