@@ -90,10 +90,11 @@ jobs:
         with:
           python-version: "3.9"
           architecture: x64
-
+      - name: Set Package Version
+        run: echo "$(python setup.py -V)"
+        id: version
       - name: Build package & create msi
         run: |
-          echo "$(python setup.py -V)"
           pip3 install -r requirements-pub.txt
           python setup_cx.py bdist_msi
 
@@ -103,8 +104,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: Release $(python setup.py -V)
-          tag_name: v$(python setup.py -V)
+          release_name: Release ${{ steps.version.outputs.version }}
+          tag_name: v${{ steps.version.outputs.version }}
           body: |
             Changes in this Release
             - First Change
@@ -120,6 +121,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./dist/i8-terminal-$(python setup.py -V)-win64.msi
-          asset_name: i8-terminal$(python setup.py -V).msi
+          asset_path: ./dist/i8-terminal-${{ steps.version.outputs.version }}-win64.msi
+          asset_name: i8-terminal${{ steps.version.outputs.version }}.msi
           asset_content_type: application/msi
