@@ -95,6 +95,7 @@ jobs:
         id: version
       - name: Build package & create msi
         run: |
+          pip3 install -r requirements.txt
           pip3 install -r requirements-pub.txt
           python setup_cx.py bdist_msi
 
@@ -122,5 +123,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: ./dist/i8-terminal-${{ steps.version.outputs.version }}-win64.msi
-          asset_name: i8-terminal${{ steps.version.outputs.version }}.msi
+          asset_name: i8-terminal-${{ steps.version.outputs.version }}.msi
           asset_content_type: application/msi
