@@ -93,6 +93,7 @@ jobs:
 
       - name: Build package & create msi
         run: |
+          echo "$(python setup.py -V)"
           pip3 install -r requirements-pub.txt
           python setup_cx.py bdist_msi
 
