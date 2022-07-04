@@ -23,7 +23,7 @@ metrics = {
 
 
 def get_section_stock_infos_df(tickers: str, target: str, section: str) -> Optional[DataFrame]:
-    df = get_current_metrics_df(tickers, metrics[section])
+    df = get_current_metrics_df(tickers, APP_SETTINGS["commands"]["company_compare"]["metrics"][section])
     if df is None:
         return None
     if section == "Financials":
@@ -54,9 +54,8 @@ def get_section_stock_infos_df(tickers: str, target: str, section: str) -> Optio
 def get_stock_infos_df(tickers: str, target: str) -> Optional[DataFrame]:
     return pd.concat(
         [
-            get_section_stock_infos_df(tickers, target, "Summary"),
-            get_section_stock_infos_df(tickers, target, "Financials"),
-            get_section_stock_infos_df(tickers, target, "Price Returns"),
+            get_section_stock_infos_df(tickers, target, section)
+            for section in APP_SETTINGS["commands"]["company_compare"]["metrics"]
         ]
     ).rename(columns={"display_name": "Name"})
 

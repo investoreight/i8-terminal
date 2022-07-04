@@ -19,7 +19,7 @@ from i8_terminal.types.user_watchlists_param_type import UserWatchlistsParamType
 def prepare_watchlist_stocks_df(name: str) -> Optional[pd.DataFrame]:
     watchlist = investor8_sdk.UserApi().get_watchlist_by_name_user_id(name=name, user_id=USER_SETTINGS.get("user_id"))
     watchlist_stocks_df = get_current_metrics_df(
-        ",".join(watchlist.tickers), "company_name,stock_exchange,price.r,change,52_week_low,52_week_high,marketcap"
+        ",".join(watchlist.tickers), APP_SETTINGS["metric_view"]["watchlist_summary"]["metrics"]
     )
     return watchlist_stocks_df
 
