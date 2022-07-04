@@ -95,7 +95,7 @@ class I8Completer(ClickCompleter):
                         incomplete if incomplete else " ", False, param_type
                     ):
                         choices.append(Completion(text_type(idf.upper()), -len(incomplete), display_meta=name))
-                elif type(matched_param.type) in [UserWatchlistsParamType, MetricViewParamType]:
+                elif type(matched_param.type) is UserWatchlistsParamType:
                     filter_choices = False
                     parts = ctx.incomplete.split(",")
                     incomplete = parts[-1] if len(parts) > 0 else " "
@@ -103,6 +103,12 @@ class I8Completer(ClickCompleter):
                         incomplete if incomplete else " ", True
                     ):
                         choices.append(Completion(text_type(watchlist), -len(incomplete)))
+                elif type(matched_param.type) is MetricViewParamType:
+                    filter_choices = False
+                    parts = ctx.incomplete.split(",")
+                    incomplete = parts[-1] if len(parts) > 0 else " "
+                    for (metric_view, desc) in matched_param.type.get_suggestions(incomplete if incomplete else " ", True):  # type: ignore
+                        choices.append(Completion(text_type(metric_view), -len(incomplete)))
         else:
             for param in command.params:
                 if isinstance(param, click.Option):
