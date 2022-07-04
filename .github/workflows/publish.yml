@@ -80,7 +80,7 @@ jobs:
   publish_msi_win:
     runs-on: windows-latest
     needs: [test]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/feature/adds-github-automatic-release'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
