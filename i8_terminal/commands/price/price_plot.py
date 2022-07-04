@@ -15,15 +15,16 @@ from rich.console import Console
 from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.price import price
 from i8_terminal.common.cli import get_click_command_path, pass_command
-from i8_terminal.common.price import get_historical_price_df
+from i8_terminal.common.layout import format_metrics_df
 from i8_terminal.types.indicator_param_type import IndicatorParamType
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
 
+from i8_terminal.common.metrics import find_similar_indicator, get_indicators_list, get_metrics_display_names, get_period_start_date  # isort:skip
+
 from i8_terminal.common.utils import PlotType, get_period_code, get_period_days, validate_ticker  # isort:skip
 
 from i8_terminal.app.layout import get_date_range, get_plot_default_layout  # isort:skip
-from i8_terminal.common.metrics import find_similar_indicator, get_indicators_list  # isort:skip
 from i8_terminal.types.chart_param_type import ChartParamType, get_chart_param_types  # isort:skip
 
 
@@ -38,9 +39,7 @@ def get_matched_indicators(indicators_list: List[str]) -> List[str]:
     return matched_indicators
 
 
-def get_indicators_df(
-    tickers: List[str], indicators: str, period: str, from_date: Optional[str], to_date: Optional[str]
-) -> DataFrame:
+def get_indicators_df(tickers: List[str], indicators: str, period: str, from_date: Optional[str], to_date: Optional[str]) -> DataFrame:
     historical_indicators = {}
     if not to_date:
         to_date = arrow.now().datetime.strftime("%Y-%m-%d")
@@ -79,25 +78,35 @@ def get_indicator_categories(indicators: List[str]) -> Dict[str, List[str]]:
     return indicator_categories
 
 
-def get_data_df(
-    tickers: List[str], period: str, indicators: List[str], from_date: Optional[str], to_date: Optional[str]
-) -> Optional[DataFrame]:
-    period_code = get_period_code(period)
-    hist_price_df = get_historical_price_df(tickers, period_code, from_date, to_date)
-    if hist_price_df is None:
-        return None
-    hist_price_df = hist_price_df[["Ticker", "Date", "close", "open", "high", "low", "volume"]]
-    rename_cols = {"close": "Close", "open": "Open", "high": "High", "low": "Low"}
-    hist_price_df.rename(columns=rename_cols, inplace=True)
-    if indicators:
-        indicators_df = get_indicators_df(tickers, ",".join(indicators), period, from_date, to_date)
-        merged_df = pd.merge(hist_price_df, indicators_df, on=["Ticker", "Date"])
-        merged_df = merged_df.set_index("Date")
-        merged_df.rename(columns={"ma12": "MA12", "ma26": "MA26", "ma52": "MA52", "rsi14_d": "RSI"}, inplace=True)
-        return merged_df[list(rename_cols.values()) + indicators]
+def get_data_df(tickers: List[str], period: str, indicators: List[str], from_date: Optional[str], to_date: Optional[str]) -> Optional[DataFrame]:
+    indicators.append("close,open,low,high")
+    if from_date:
+        if not to_date:
+            to_date = datetime.now().strftime("%Y-%m-%d")
     else:
-        hist_price_df = hist_price_df.set_index("Date")
-        return hist_price_df[list(rename_cols.values())]
+        from_date = get_period_start_date(period)
+        to_date = datetime.now().strftime("%Y-%m-%d")
+    historical_prices = investor8_sdk.MetricsApi().get_historical_metrics(
+        symbols=",".join(tickers),
+        metrics=",".join(indicators),
+        from_date=from_date,
+        to_date=to_date,
+    )
+    df = pd.DataFrame.from_records(
+        [
+            (ticker, metric, period_value.period, period_value.period_date_time, period_value.value)
+            for ticker, metric_dict in historical_prices.data.items()
+            for metric, period_value_list in metric_dict.items()
+            for period_value in period_value_list
+        ],
+        columns=["ticker", "metric_name", "period", "period_datetime", "value"],
+    )
+    metadata_df = pd.DataFrame([h.to_dict() for h in historical_prices.metadata])
+    df = pd.merge(df, metadata_df, on="metric_name")
+    df = format_metrics_df(df, "console")
+    df = df.pivot(index="period_datetime", columns="display_name", values="value")
+    df.index.name = "Date"
+    return df
 
 
 def create_fig(
@@ -138,10 +147,10 @@ def create_fig(
         fig.add_trace(
             go.Candlestick(
                 x=df.index,
-                open=df["Open"],
-                high=df["High"],
-                low=df["Low"],
-                close=df["Close"],
+                open=df["Open Price"],
+                high=df["High Price"],
+                low=df["Low Price"],
+                close=df["Close Price"],
                 name="Price",
                 showlegend=False,
             ),
@@ -149,23 +158,25 @@ def create_fig(
             col=1,
         )
     else:
-        fig.add_trace(go.Scatter(x=df.index, y=df["Close"], name="Close"), row=1, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=df["Close Price"], name="Close"), row=1, col=1)
         fig.update_traces(hovertemplate="%{y:$.2f} %{x}")
 
     for idx, (k, ind) in enumerate(indicator_categories.items()):
         for m in ind:
             if m == "volume":
-                fig.add_trace(go.Bar(x=df.index, y=df[m], name="Volume", showlegend=False), row=idx + 1, col=1)
+                fig.add_trace(
+                    go.Bar(x=df.index, y=df[get_metrics_display_names([m])[0]], name="Volume", showlegend=False),
+                    row=idx + 1,
+                    col=1,
+                )
             else:
-                fig.add_trace(go.Scatter(x=df.index, y=df[m], name=m), row=idx + 1, col=1)
+                fig.add_trace(go.Scatter(x=df.index, y=df[get_metrics_display_names([m])[0]], name=m), row=idx + 1, col=1)
 
     dt_all = pd.date_range(start=df.index[-1], end=df.index[0])
     dt_obs = [d.strftime("%Y-%m-%d") for d in df.index]
     dt_breaks = [d for d in dt_all.strftime("%Y-%m-%d").tolist() if not d in dt_obs]
 
-    fig.update_xaxes(
-        rangeslider_visible=False, spikemode="across", spikesnap="cursor", rangebreaks=[dict(values=dt_breaks)]
-    )
+    fig.update_xaxes(rangeslider_visible=False, spikemode="across", spikesnap="cursor", rangebreaks=[dict(values=dt_breaks)])
     if range_selector:
         fig.update_xaxes(rangeselector=get_date_range(get_period_code(period)))
     fig.update_layout(
@@ -249,7 +260,7 @@ def plot(
         click.echo(f"`{chart_type}` is not valid chart type.")
         return
     period = period.replace(" ", "").upper()
-    indicators_list = indicators.replace(" ", "").upper().split(",") if indicators else []
+    indicators_list = indicators.replace(" ", "").split(",") if indicators else []
     indicators_list = get_matched_indicators(indicators_list)
     indicator_categories = get_indicator_categories(indicators_list)
     ticker = ticker.upper()
