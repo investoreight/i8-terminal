@@ -20,7 +20,7 @@ def prepare_watchlist_stocks_df(name: str) -> Optional[pd.DataFrame]:
     watchlist = investor8_sdk.UserApi().get_watchlist_by_name_user_id(name=name, user_id=USER_SETTINGS.get("user_id"))
     watchlist_stocks_df = get_current_metrics_df(
         ",".join(watchlist.tickers),
-        "total_revenue,net_income,basic_eps,net_cash_from_operating_activities,total_assets,total_liabilities",
+        APP_SETTINGS["metric_view"]["watchlist_financials"]["metrics"],
     )
     return watchlist_stocks_df
 

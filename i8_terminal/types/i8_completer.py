@@ -13,6 +13,7 @@ from i8_terminal.types.command_parser import CommandParser
 from i8_terminal.types.fin_period_param_type import FinancialsPeriodParamType
 from i8_terminal.types.indicator_param_type import IndicatorParamType
 from i8_terminal.types.metric_param_type import MetricParamType
+from i8_terminal.types.metric_view_param_type import MetricViewParamType
 from i8_terminal.types.period_type_param_type import PeriodTypeParamType
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
@@ -102,6 +103,12 @@ class I8Completer(ClickCompleter):
                         incomplete if incomplete else " ", True
                     ):
                         choices.append(Completion(text_type(watchlist), -len(incomplete)))
+                elif type(matched_param.type) is MetricViewParamType:
+                    filter_choices = False
+                    parts = ctx.incomplete.split(",")
+                    incomplete = parts[-1] if len(parts) > 0 else " "
+                    for (metric_view, desc) in matched_param.type.get_suggestions(incomplete if incomplete else " ", True):  # type: ignore
+                        choices.append(Completion(text_type(metric_view), -len(incomplete)))
         else:
             for param in command.params:
                 if isinstance(param, click.Option):
