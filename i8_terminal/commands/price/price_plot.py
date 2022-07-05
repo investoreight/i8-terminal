@@ -16,11 +16,15 @@ from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.price import price
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.layout import format_metrics_df
+from i8_terminal.common.metrics import (
+    find_similar_indicator,
+    get_indicators_list,
+    get_metrics_display_names,
+    get_period_start_date,
+)
 from i8_terminal.types.indicator_param_type import IndicatorParamType
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
-
-from i8_terminal.common.metrics import find_similar_indicator, get_indicators_list, get_metrics_display_names, get_period_start_date  # isort:skip
 
 from i8_terminal.common.utils import PlotType, get_period_code, get_period_days, validate_ticker  # isort:skip
 
@@ -39,7 +43,9 @@ def get_matched_indicators(indicators_list: List[str]) -> List[str]:
     return matched_indicators
 
 
-def get_indicators_df(tickers: List[str], indicators: str, period: str, from_date: Optional[str], to_date: Optional[str]) -> DataFrame:
+def get_indicators_df(
+    tickers: List[str], indicators: str, period: str, from_date: Optional[str], to_date: Optional[str]
+) -> DataFrame:
     historical_indicators = {}
     if not to_date:
         to_date = arrow.now().datetime.strftime("%Y-%m-%d")
@@ -78,7 +84,9 @@ def get_indicator_categories(indicators: List[str]) -> Dict[str, List[str]]:
     return indicator_categories
 
 
-def get_data_df(tickers: List[str], period: str, indicators: List[str], from_date: Optional[str], to_date: Optional[str]) -> Optional[DataFrame]:
+def get_data_df(
+    tickers: List[str], period: str, indicators: List[str], from_date: Optional[str], to_date: Optional[str]
+) -> Optional[DataFrame]:
     indicators.append("close,open,low,high")
     if from_date:
         if not to_date:
@@ -170,13 +178,17 @@ def create_fig(
                     col=1,
                 )
             else:
-                fig.add_trace(go.Scatter(x=df.index, y=df[get_metrics_display_names([m])[0]], name=m), row=idx + 1, col=1)
+                fig.add_trace(
+                    go.Scatter(x=df.index, y=df[get_metrics_display_names([m])[0]], name=m), row=idx + 1, col=1
+                )
 
     dt_all = pd.date_range(start=df.index[-1], end=df.index[0])
     dt_obs = [d.strftime("%Y-%m-%d") for d in df.index]
     dt_breaks = [d for d in dt_all.strftime("%Y-%m-%d").tolist() if not d in dt_obs]
 
-    fig.update_xaxes(rangeslider_visible=False, spikemode="across", spikesnap="cursor", rangebreaks=[dict(values=dt_breaks)])
+    fig.update_xaxes(
+        rangeslider_visible=False, spikemode="across", spikesnap="cursor", rangebreaks=[dict(values=dt_breaks)]
+    )
     if range_selector:
         fig.update_xaxes(rangeselector=get_date_range(get_period_code(period)))
     fig.update_layout(

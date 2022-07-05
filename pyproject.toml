@@ -1,5 +1,5 @@
 [tool.black]
-line-length = 150
+line-length = 120
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -14,3 +14,6 @@ exclude = '''
   | dist
 )/
 '''
+
+[tool.isort]
+profile = 'black'
