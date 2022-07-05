@@ -15,10 +15,10 @@ from i8_terminal.config import APP_SETTINGS, SETTINGS_FOLDER
 
 def get_indicators_list(indicator: Optional[str] = None) -> List[str]:
     indicators_dict = {
-        "Momentum": ["MA5", "MA12", "MA26", "MA52", "EMA5", "EMA12", "EMA26", "EMA52"],
-        "RSI": ["RSI_7D", "RSI_14D", "RSI_1M", "RSI_3M"],
-        "Alpha": ["Alpha_1W", "Alpha_2W", "Alpha_1M", "Alpha_3M", "Alpha_6M", "Alpha_1Y", "Alpha_2Y", "Alpha_5Y"],
-        "Beta": ["Beta_1W", "Beta_2W", "Beta_1M", "Beta_3M", "Beta_6M", "Beta_1Y", "Beta_2Y", "Beta_5Y"],
+        "Momentum": ["ma5", "ma12", "ma26", "ma52", "ema5", "ema12", "ema26", "ema52"],
+        "RSI": ["rsi_7d", "rsi_14d", "rsi_1m", "rsi_3m"],
+        "Alpha": ["alpha_1w", "alpha_2w", "alpha_1m", "alpha_3m", "alpha_6m", "alpha_1y", "alpha_2y", "alpha_5y"],
+        "Beta": ["beta_1w", "beta_2w", "beta_1m", "beta_3m", "beta_6m", "beta_1y", "beta_2y", "beta_5y"],
         "Volume": ["volume"],
     }
     if indicator:
@@ -42,15 +42,15 @@ def find_similar_fin_metric(metric: str) -> Optional[str]:
 
 
 def find_similar_indicator(indicator: str) -> Optional[str]:
-    default_indicators = {"RSI": "RSI_14D", "ALPHA": "Alpha_1Y", "BETA": "Beta_1Y", "VOLUME": "volume"}
-    defualt_ind = default_indicators.get(indicator.upper())
+    default_indicators = {"rsi": "rsi_14d", "alpha": "alpha_1y", "beta": "beta_1y"}
+    defualt_ind = default_indicators.get(indicator)
     if defualt_ind:
         return defualt_ind
     indicators_list = get_indicators_list()
     best_match_similarity = 0.0
     best_match = ""
     for ind in indicators_list:
-        sim = similarity(indicator.upper(), ind.upper())
+        sim = similarity(indicator, ind)
         if sim > best_match_similarity:
             best_match_similarity = sim
             best_match = ind
