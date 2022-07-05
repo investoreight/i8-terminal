@@ -1,6 +1,7 @@
 from typing import Optional
 
 import click
+import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from rich.console import Console
@@ -52,12 +53,17 @@ def get_section_stock_infos_df(tickers: str, target: str, section: str) -> Optio
 
 
 def get_stock_infos_df(tickers: str, target: str) -> Optional[DataFrame]:
-    return pd.concat(
-        [
-            get_section_stock_infos_df(tickers, target, section)
-            for section in APP_SETTINGS["commands"]["company_compare"]["metrics"]
-        ]
-    ).rename(columns={"display_name": "Name"})
+    return (
+        pd.concat(
+            [
+                get_section_stock_infos_df(tickers, target, section)
+                for section in APP_SETTINGS["commands"]["company_compare"]["metrics"]
+            ]
+        )
+        .rename(columns={"display_name": "Name"})
+        .astype(object)
+        .replace(np.nan, "N/A")
+    )
 
 
 def companies_df2tree(df: DataFrame, tickers: str) -> Tree:
@@ -68,21 +74,21 @@ def companies_df2tree(df: DataFrame, tickers: str) -> Tree:
     tree = Tree(Panel(plot_title, width=50))
     # Add header table to tree
     header_table = Table(
-        width=60 + (col_width * (len(tickers_list) - 1)), show_lines=False, show_header=False, box=None
+        width=50 + (col_width * (len(tickers_list) - 1)), show_lines=False, show_header=False, box=None
     )
-    header_table.add_column(width=45, style="magenta")
+    header_table.add_column(width=35, style="magenta")
     for p in tickers_list:
-        header_table.add_column(width=col_width, justify="center", style="magenta")
+        header_table.add_column(width=col_width, justify="right", style="magenta")
     header_table.add_row("Ticker", *tickers_list)
     tree.add(header_table)
 
     for sec_name, sec_values in df.groupby("Section", sort=False):
         sec_branch = tree.add(f"[cyan]{sec_name}")
         for i, r in sec_values.iterrows():
-            t = Table(width=56 + (col_width * (len(tickers_list) - 1)), show_lines=False, show_header=False, box=None)
-            t.add_column(width=41)
+            t = Table(width=46 + (col_width * (len(tickers_list) - 1)), show_lines=False, show_header=False, box=None)
+            t.add_column(width=31)
             for tk in tickers_list:
-                t.add_column(width=col_width, justify="center")
+                t.add_column(width=col_width, justify="right")
             t.add_row(r["Name"], *[f"{d}" for d in r[tickers_list].values])
             sec_branch.add(t)
 
