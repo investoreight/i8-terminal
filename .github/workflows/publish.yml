@@ -80,7 +80,7 @@ jobs:
   publish_msi_win:
     runs-on: windows-latest
     needs: [test]
-    if: github.ref == 'refs/heads/feature/adds-github-automatic-release'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -105,13 +105,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: Release ${{ steps.version.outputs.version }}
+          release_name: i8 Terminal v${{ steps.version.outputs.version }}
           tag_name: v${{ steps.version.outputs.version }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          #body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
