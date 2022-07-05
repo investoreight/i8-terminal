@@ -55,10 +55,10 @@ def metrics(name: str, metrics: str, export_path: Optional[str], view_name: Opti
     """
     console = Console()
     if not metrics and not view_name:
-        console.print("The metrics or view_name options must be entered", style="yellow")
+        console.print("The 'metrics' or 'view_name' parameter must be provided", style="yellow")
         return
     if view_name and metrics:
-        console.print("The metrics and view_name options are not compatible to use together", style="yellow")
+        console.print("The 'metrics' or 'view_name' options are mutually exclusive", style="yellow")
         return
     if view_name:
         metrics = APP_SETTINGS["metric_view"][view_name]["metrics"]
