@@ -6,12 +6,14 @@ from rich.console import Console
 from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import pass_command
 from i8_terminal.common.layout import df2Table
+from i8_terminal.common.metrics import (
+    get_current_metrics_df,
+    prepare_current_metrics_formatted_df,
+)
 from i8_terminal.common.utils import export_data
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.metric_param_type import MetricParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
-
-from i8_terminal.common.metrics import get_current_metrics_df, prepare_current_metrics_formatted_df  # isort:skip
 
 
 @metrics.command()

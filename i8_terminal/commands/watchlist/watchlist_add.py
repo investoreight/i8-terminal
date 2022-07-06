@@ -10,8 +10,7 @@ from i8_terminal.commands.watchlist import watchlist
 from i8_terminal.common.cli import pass_command
 from i8_terminal.config import USER_SETTINGS
 from i8_terminal.types.ticker_param_type import TickerParamType
-
-from i8_terminal.types.user_watchlists_param_type import UserWatchlistsParamType  # isort:skip
+from i8_terminal.types.user_watchlists_param_type import UserWatchlistsParamType
 
 
 def add_tickers_to_watchlist(name: str, tickers: List[str]) -> None:

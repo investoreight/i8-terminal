@@ -11,24 +11,21 @@ from i8_terminal.app.layout import get_plot_default_layout
 from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.financials import financials
 from i8_terminal.common.cli import get_click_command_path, pass_command
-from i8_terminal.common.metrics import get_all_financial_metrics_df
-from i8_terminal.common.utils import PlotType, export_data
-from i8_terminal.config import APP_SETTINGS
-from i8_terminal.types.period_type_param_type import PeriodTypeParamType
-
-from i8_terminal.types.fin_statement_param_type import FinancialStatementParamType  # isort:skip
-
-from i8_terminal.types.fin_identifier_param_type import FinancialsIdentifierParamType  # isort:skip
-
-from i8_terminal.common.financials import (  # isort:skip
+from i8_terminal.common.financials import (
+    fin_df2export_df,
+    fin_df2Tree,
     find_similar_statement,
     get_statements_codes,
     get_statements_disp_name,
-    fin_df2export_df,
-    fin_df2Tree,
     parse_identifier,
     prepare_financials_df,
 )
+from i8_terminal.common.metrics import get_all_financial_metrics_df
+from i8_terminal.common.utils import PlotType, export_data
+from i8_terminal.config import APP_SETTINGS
+from i8_terminal.types.fin_identifier_param_type import FinancialsIdentifierParamType
+from i8_terminal.types.fin_statement_param_type import FinancialStatementParamType
+from i8_terminal.types.period_type_param_type import PeriodTypeParamType
 
 
 def get_standardized_financials(
