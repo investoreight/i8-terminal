@@ -6,6 +6,7 @@ import uuid
 from typing import Any, Dict
 
 import yaml
+from mergedeep import merge
 from rich.style import Style
 
 from i8_terminal.i8_exception import I8Exception
@@ -95,11 +96,12 @@ def restore_user_settings() -> None:
 def update_settings() -> None:
     current_app_settings = load_app_settings()
     latest_app_settings = load_latest_app_settings()
-    new_settings = find_dicts_diff(latest_app_settings, current_app_settings)
-    if new_settings:
-        new_app_settings = {**current_app_settings, **new_settings}
+    app_new_settings = find_dicts_diff(latest_app_settings, current_app_settings)
+    user_new_settings = find_dicts_diff(current_app_settings, latest_app_settings)
+    if app_new_settings or user_new_settings:
+        new_settings = merge(current_app_settings, latest_app_settings)
         with open(APP_SETTINGS_PATH, "w") as f:
-            yaml.dump(new_app_settings, f)
+            yaml.dump(new_settings, f)
 
 
 def get_table_style(profile_name: str = "default") -> Dict[str, Any]:
@@ -122,6 +124,8 @@ def is_user_logged_in() -> bool:
     return True
 
 
+update_settings()
+
 if "USER_SETTINGS" not in globals():
     init_settings()
     USER_SETTINGS = load_user_settings()
@@ -130,5 +134,3 @@ if "USER_SETTINGS" not in globals():
 if not USER_SETTINGS.get("app_instance_id"):
     user_setting = {"app_instance_id": uuid.uuid4().hex}
     save_user_settings(user_setting)
-
-update_settings()
