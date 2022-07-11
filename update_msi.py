@@ -1,9 +1,9 @@
 import codecs
 import os
-from typing import Any
+from typing import Any, Dict, Optional
 
+import requests
 import wget
-from investor8_sdk import SettingsApi
 
 
 def read(rel_path: str) -> str:
@@ -30,37 +30,44 @@ def get_version() -> Any:
         raise RuntimeError("Unable to find version string.")
 
 
-def get_latest_version() -> Any:
-    resp = None
-    try:
-        resp = SettingsApi().check_i8t_version(get_version())
-    except:
-        pass
-    if resp:
-        return resp.to_dict().get("latest_version")
-
-    return resp
-
-
-def is_latest_version() -> Any:
-    latest_version = get_latest_version()
+def is_latest_version(latest_version: str) -> Any:
     if latest_version:
         app_version = get_version()
         return app_version == latest_version
     return None
 
 
-if __name__ == "__main__":
-    if not is_latest_version():
-        msi_url = (
-            f"https://www.investoreight.com/media/i8-terminal-{get_latest_version()}-win64.msi"  # get latest msi url
-        )
-        local_file = f"i8-terminal-{get_latest_version()}-win64.msi"
+def get_latest_release_metadata() -> Optional[Dict[str, Any]]:
+    resp = requests.get("https://api.github.com/repos/investoreight/i8-terminal/releases/latest")
+    if resp.status_code != 200:
+        print("No new release found.")
+        return None
+    msi_url = None
+    release_metadata = resp.json()
+    if release_metadata.get("assets"):
+        msi_url = release_metadata.get("assets")[0].get("browser_download_url")
+
+    return {"version": release_metadata["tag_name"][1:], "msi_url": msi_url}
+
+
+def run_update() -> Any:
+    release_metadata = get_latest_release_metadata()
+    if not release_metadata:
+        return None
+    if not is_latest_version(latest_version=release_metadata["version"]):
+        if not release_metadata["msi_url"]:
+            print("Error while finding latest release!")
+            return
+        local_file = f"i8-terminal-{release_metadata['version']}-win64.msi"
         try:
-            downloaded_msi = wget.download(msi_url, local_file)
+            downloaded_msi = wget.download(release_metadata["msi_url"], local_file)
             if downloaded_msi:
                 os.system(local_file)  # Open downloaded MSI
         except:
             print("No new release found.")
     else:
         print("Latest version of i8-terminal is already installed.")
+
+
+if __name__ == "__main__":
+    run_update()
