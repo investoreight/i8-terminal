@@ -1,4 +1,4 @@
-name: Test and Publish i8 Terminal to PyPi
+name: Test, Publish i8 Terminal to PyPi and Release MSI
 on: [pull_request, push]
 
 jobs:
@@ -77,3 +77,46 @@ jobs:
           pip3 install mkdocs-material
           pip3 install i8-terminal
           mkdocs gh-deploy --force --clean --verbose
+  publish_msi_win:
+    runs-on: windows-latest
+    needs: [test]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+          architecture: x64
+      - name: Set Package Version
+        run: echo "::set-output name=version::$(python setup.py -V)"
+        id: version
+      - name: Build package & create msi
+        run: |
+          pip3 install -r requirements.txt
+          pip3 install -r requirements-pub.txt
+          python setup_cx.py bdist_msi
+
+      - name: Release MSI
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: i8 Terminal v${{ steps.version.outputs.version }}
+          tag_name: v${{ steps.version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./dist/i8-terminal-${{ steps.version.outputs.version }}-win64.msi
+          asset_name: i8-terminal-${{ steps.version.outputs.version }}.msi
+          asset_content_type: application/msi
