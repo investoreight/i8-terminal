@@ -36,4 +36,7 @@ def find_dicts_diff(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, A
                 result[k] = dict1[k]
         else:
             result[k] = dict1[k]
+    for k in dict2:
+        if k not in dict1:
+            result[k] = dict2[k]
     return result

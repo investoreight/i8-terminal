@@ -8,13 +8,15 @@ from rich.console import Console
 from i8_terminal.commands.watchlist import watchlist
 from i8_terminal.common.cli import pass_command
 from i8_terminal.common.layout import df2Table
+from i8_terminal.common.metrics import (
+    get_current_metrics_df,
+    prepare_current_metrics_formatted_df,
+)
 from i8_terminal.common.utils import export_data
 from i8_terminal.config import APP_SETTINGS, USER_SETTINGS
 from i8_terminal.types.metric_param_type import MetricParamType
-
-from i8_terminal.common.metrics import get_current_metrics_df, prepare_current_metrics_formatted_df  # isort:skip
-
-from i8_terminal.types.user_watchlists_param_type import UserWatchlistsParamType  # isort:skip
+from i8_terminal.types.metric_view_param_type import MetricViewParamType
+from i8_terminal.types.user_watchlists_param_type import UserWatchlistsParamType
 
 
 def prepare_watchlist_stocks_df(name: str, metrics: str) -> Optional[pd.DataFrame]:
@@ -35,12 +37,14 @@ def prepare_watchlist_stocks_df(name: str, metrics: str) -> Optional[pd.DataFram
     "--metrics",
     "-m",
     type=MetricParamType(),
-    required=True,
     help="Comma-separated list of daily metrics.",
 )
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
+@click.option(
+    "--view_name", "view_name", "-v", type=MetricViewParamType(), help="Metric view name in configuration file."
+)
 @pass_command
-def metrics(name: str, metrics: str, export_path: Optional[str]) -> None:
+def metrics(name: str, metrics: str, export_path: Optional[str], view_name: Optional[str]) -> None:
     """
     Lists and compares watchlist companies based on a given list of metrics.
 
@@ -50,6 +54,14 @@ def metrics(name: str, metrics: str, export_path: Optional[str]) -> None:
 
     """
     console = Console()
+    if not metrics and not view_name:
+        console.print("The 'metrics' or 'view_name' parameter must be provided", style="yellow")
+        return
+    if view_name and metrics:
+        console.print("The 'metrics' or 'view_name' options are mutually exclusive", style="yellow")
+        return
+    if view_name:
+        metrics = APP_SETTINGS["metric_view"][view_name]["metrics"]
     with console.status("Fetching data...", spinner="material"):
         df = prepare_watchlist_stocks_df(name, metrics)
     if df is None:

@@ -5,11 +5,12 @@ from rich.console import Console
 
 from i8_terminal.commands.watchlist import watchlist
 from i8_terminal.common.cli import pass_command
+from i8_terminal.common.metrics import (
+    get_current_metrics_df,
+    prepare_current_metrics_formatted_df,
+)
 from i8_terminal.config import APP_SETTINGS, USER_SETTINGS
-
-from i8_terminal.common.metrics import get_current_metrics_df, prepare_current_metrics_formatted_df  # isort:skip
-
-from i8_terminal.types.user_watchlists_param_type import UserWatchlistsParamType  # isort:skip
+from i8_terminal.types.user_watchlists_param_type import UserWatchlistsParamType
 
 
 def export_watchlist_data(
