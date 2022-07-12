@@ -8,8 +8,7 @@ from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.document import Document
 
 from i8_terminal.types.command_parser import CommandParser
-
-from i8_terminal.types.fin_identifier_param_type import FinancialsIdentifierParamType  # isort:skip
+from i8_terminal.types.fin_identifier_param_type import FinancialsIdentifierParamType
 
 
 class I8AutoSuggest(AutoSuggest):

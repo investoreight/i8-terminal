@@ -7,17 +7,18 @@ from pandas.core.frame import DataFrame
 from plotly.graph_objects import Figure
 from rich.console import Console
 
+from i8_terminal.app.layout import get_date_range, get_plot_default_layout
 from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.price import price
 from i8_terminal.common.cli import get_click_command_path, pass_command
+from i8_terminal.common.price import (
+    get_historical_price_df,
+    get_historical_price_export_df,
+)
 from i8_terminal.common.utils import PlotType, export_data, get_period_code
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
-
-from i8_terminal.common.price import get_historical_price_df, get_historical_price_export_df  # isort:skip
-
-from i8_terminal.app.layout import get_date_range, get_plot_default_layout  # isort:skip
 
 
 def get_price_data(
