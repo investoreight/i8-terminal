@@ -58,8 +58,8 @@ jobs:
 
   publish_ghdoc:
     runs-on: ubuntu-latest
-    needs: [test, publish_pypi]
-    if: github.ref == 'refs/heads/main'
+    needs: [test]
+    if: github.ref == 'refs/heads/fix/pipeline-error'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
