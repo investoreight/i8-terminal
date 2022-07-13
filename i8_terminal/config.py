@@ -98,8 +98,14 @@ def update_settings() -> None:
     latest_app_settings = load_latest_app_settings()
     app_new_settings = find_dicts_diff(latest_app_settings, current_app_settings)
     user_new_settings = find_dicts_diff(current_app_settings, latest_app_settings)
+    logging.error("CURRENT:", current_app_settings)
+    logging.error("LATEST:", latest_app_settings)
+    logging.error("APP NEW SETTINGS:", app_new_settings)
+    logging.error("USER NEW SETTINGS:", user_new_settings)
     if app_new_settings or user_new_settings:
+        logging.error("MUST MERGE")
         new_settings = merge(current_app_settings, latest_app_settings)
+        logging.error("MERGED", new_settings)
         with open(APP_SETTINGS_PATH, "w") as f:
             yaml.dump(new_settings, f)
 

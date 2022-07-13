@@ -76,6 +76,7 @@ jobs:
           pip3 install mkdocs-click
           pip3 install mkdocs-material
           pip3 install i8-terminal
+          echo "ls"
           mkdocs gh-deploy --force --clean --verbose
   publish_msi_win:
     runs-on: windows-latest
