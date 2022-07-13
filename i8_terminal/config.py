@@ -124,10 +124,9 @@ def is_user_logged_in() -> bool:
     return True
 
 
-update_settings()
-
 if "USER_SETTINGS" not in globals():
     init_settings()
+    update_settings()
     USER_SETTINGS = load_user_settings()
     APP_SETTINGS = load_app_settings()
 
