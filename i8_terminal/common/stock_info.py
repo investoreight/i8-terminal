@@ -30,7 +30,7 @@ def sort_stocks(df: pd.DataFrame) -> pd.DataFrame:
 def get_stocks_df() -> pd.DataFrame:
     companies_path = f"{SETTINGS_FOLDER}/companies.csv"
     if os.path.exists(companies_path) and not is_cached_file_expired(companies_path):
-        stocks_df = pd.read_csv(companies_path)
+        stocks_df = pd.read_csv(companies_path, keep_default_na=False)
     else:
         results = investor8_sdk.StockInfoApi().get_all_active_companies()
         stocks_df = pd.DataFrame([d.to_dict() for d in results])[["ticker", "name"]]
