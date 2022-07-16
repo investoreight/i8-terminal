@@ -16,7 +16,6 @@ from i8_terminal.app.layout import get_date_range, get_plot_default_layout
 from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.price import price
 from i8_terminal.common.cli import get_click_command_path, pass_command
-from i8_terminal.common.layout import format_metrics_df
 from i8_terminal.common.metrics import (
     find_similar_indicator,
     get_indicators_list,
