@@ -114,8 +114,8 @@ def get_data_df(
     )
     metadata_df = pd.DataFrame([h.to_dict() for h in historical_prices.metadata])
     df = pd.merge(df, metadata_df, on="metric_name")
-    df = format_metrics_df(df, "console")
     df = df.pivot(index="period_datetime", columns="display_name", values="value")
+    df = df[df.columns].astype(float)
     df.index.name = "Date"
     return df
 
