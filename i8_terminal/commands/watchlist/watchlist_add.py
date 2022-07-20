@@ -8,6 +8,7 @@ from rich.style import Style
 from i8_terminal.app.layout import get_terminal_command_layout
 from i8_terminal.commands.watchlist import watchlist
 from i8_terminal.common.cli import pass_command
+from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.config import USER_SETTINGS
 from i8_terminal.types.ticker_param_type import TickerParamType
 from i8_terminal.types.user_watchlists_param_type import UserWatchlistsParamType
@@ -26,7 +27,14 @@ def add_tickers_to_watchlist(name: str, tickers: List[str]) -> None:
     required=True,
     help="Name of the watchlist.",
 )
-@click.option("--tickers", "-k", type=TickerParamType(), required=True, help="Comma-separated list of tickers.")
+@click.option(
+    "--tickers",
+    "-k",
+    type=TickerParamType(),
+    required=True,
+    callback=validate_tickers,
+    help="Comma-separated list of tickers.",
+)
 @pass_command
 def add(name: str, tickers: str) -> None:
     """

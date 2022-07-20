@@ -6,7 +6,7 @@ from rich.console import Console
 from i8_terminal.commands.financials import financials
 from i8_terminal.common.cli import pass_command
 from i8_terminal.common.financials import available_fin_df2tree
-from i8_terminal.common.utils import validate_ticker
+from i8_terminal.common.stock_info import validate_ticker
 from i8_terminal.types.ticker_param_type import TickerParamType
 
 

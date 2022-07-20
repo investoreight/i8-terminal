@@ -8,6 +8,7 @@ from rich.style import Style
 from i8_terminal.app.layout import get_terminal_command_layout
 from i8_terminal.commands.watchlist import watchlist
 from i8_terminal.common.cli import pass_command
+from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.config import USER_SETTINGS
 from i8_terminal.types.user_watchlist_tickers_param_type import (
     UserWatchlistTickersParamType,
@@ -30,7 +31,12 @@ def remove_tickers_from_watchlist(name: str, tickers: List[str]) -> None:
     help="Name of the watchlist.",
 )
 @click.option(
-    "--tickers", "-k", type=UserWatchlistTickersParamType(), required=True, help="Comma-separated list of tickers."
+    "--tickers",
+    "-k",
+    type=UserWatchlistTickersParamType(),
+    required=True,
+    callback=validate_tickers,
+    help="Comma-separated list of tickers.",
 )
 @pass_command
 def rm(name: str, tickers: str) -> None:

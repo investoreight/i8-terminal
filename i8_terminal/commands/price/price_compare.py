@@ -15,6 +15,7 @@ from i8_terminal.common.price import (
     get_historical_price_df,
     get_historical_price_export_df,
 )
+from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import PlotType, export_data, get_period_code
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
@@ -89,7 +90,14 @@ def create_fig(df: DataFrame, period_code: int, cmd_context: Dict[str, Any], ran
 )
 @click.option("--from_date", "-f", type=DateTime(), help="Histotical price from date.")
 @click.option("--to_date", "-t", type=DateTime(), help="Histotical price to date.")
-@click.option("--tickers", "-k", type=TickerParamType(), required=True, help="Comma-separated list of tickers.")
+@click.option(
+    "--tickers",
+    "-k",
+    type=TickerParamType(),
+    required=True,
+    callback=validate_tickers,
+    help="Comma-separated list of tickers.",
+)
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
 def compare(

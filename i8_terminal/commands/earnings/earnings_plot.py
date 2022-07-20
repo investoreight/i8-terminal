@@ -13,6 +13,7 @@ from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.earnings import earnings
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.formatting import format_number
+from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import PlotType
 from i8_terminal.types.metric_param_type import MetricParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
@@ -71,7 +72,14 @@ def create_fig(df: DataFrame, cmd_context: Dict[str, Any]) -> go.Figure:
 @earnings.command()
 @click.pass_context
 @click.option("--metric", "-m", type=MetricParamType(), default="basiceps", help="Metric name.")
-@click.option("--tickers", "-k", type=TickerParamType(), required=True, help="Comma-separated list of tickers.")
+@click.option(
+    "--tickers",
+    "-k",
+    type=TickerParamType(),
+    required=True,
+    callback=validate_tickers,
+    help="Comma-separated list of tickers.",
+)
 @pass_command
 def plot(ctx: click.Context, metric: str, tickers: str) -> None:
     """

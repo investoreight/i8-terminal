@@ -22,12 +22,8 @@ from i8_terminal.common.metrics import (
     get_metrics_display_names,
     get_period_start_date,
 )
-from i8_terminal.common.utils import (
-    PlotType,
-    get_period_code,
-    get_period_days,
-    validate_ticker,
-)
+from i8_terminal.common.stock_info import validate_ticker
+from i8_terminal.common.utils import PlotType, get_period_code, get_period_days
 from i8_terminal.types.chart_param_type import ChartParamType, get_chart_param_types
 from i8_terminal.types.indicator_param_type import IndicatorParamType
 from i8_terminal.types.price_period_param_type import PricePeriodParamType

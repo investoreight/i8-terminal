@@ -10,7 +10,8 @@ from i8_terminal.common.cli import pass_command
 from i8_terminal.common.formatting import get_formatter
 from i8_terminal.common.layout import df2Table, format_df
 from i8_terminal.common.price import get_historical_price_list_df
-from i8_terminal.common.utils import export_data, get_period_code, validate_ticker
+from i8_terminal.common.stock_info import validate_ticker
+from i8_terminal.common.utils import export_data, get_period_code
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
