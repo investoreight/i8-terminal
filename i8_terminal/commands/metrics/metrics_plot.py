@@ -17,6 +17,7 @@ from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.metrics import get_period_start_date
+from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import PlotType
 from i8_terminal.types.chart_param_type import ChartParamType
 from i8_terminal.types.metric_param_type import MetricParamType
@@ -167,7 +168,14 @@ def create_fig(
 
 @metrics.command()
 @click.pass_context
-@click.option("--tickers", "-k", type=TickerParamType(), required=True, help="Comma-separated list of tickers.")
+@click.option(
+    "--tickers",
+    "-k",
+    type=TickerParamType(),
+    required=True,
+    callback=validate_tickers,
+    help="Comma-separated list of tickers.",
+)
 @click.option(
     "--metrics",
     "-m",

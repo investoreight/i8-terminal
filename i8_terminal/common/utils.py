@@ -4,7 +4,6 @@ from difflib import SequenceMatcher
 from typing import Any, Dict, Optional
 
 import arrow
-import click
 import pandas as pd
 from rich.console import Console
 
@@ -68,13 +67,6 @@ def export_data(
         console.print(f"Data is saved on: {export_path}")
     else:
         console.print("export_path is not valid")
-
-
-def validate_ticker(ctx: click.Context, param: str, value: str) -> Optional[str]:
-    if value and len(value.replace(" ", "").split(",")) > 1:
-        click.echo(click.style(f"`{value}` is not a valid ticker name.", fg="yellow"))
-        ctx.exit()
-    return value
 
 
 def is_cached_file_expired(file_path: str) -> bool:
