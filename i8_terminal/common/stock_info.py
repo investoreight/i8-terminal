@@ -1,6 +1,7 @@
 import os
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
+import click
 import investor8_sdk
 import pandas as pd
 
@@ -42,3 +43,26 @@ def get_stocks_df() -> pd.DataFrame:
 def get_stocks() -> List[Tuple[str, str]]:
     df = get_stocks_df()
     return list(df.to_records(index=False))
+
+
+def validate_ticker(ctx: click.Context, param: str, value: str) -> Optional[str]:
+    if value and len(value.replace(" ", "").split(",")) > 1:
+        click.echo(click.style(f"`{value}` is not a valid ticker name.", fg="yellow"))
+        ctx.exit()
+    if value and value.replace(" ", "").upper() not in set(get_stocks_df()["ticker"]):
+        click.echo(click.style(f"`{value}` is not a valid ticker name.", fg="yellow"))
+        ctx.exit()
+    return value
+
+
+def validate_tickers(ctx: click.Context, param: str, value: str) -> Optional[str]:
+    invalid_tickers = [*set(value.replace(" ", "").upper().split(",")) - set(get_stocks_df()["ticker"])]
+    if value and invalid_tickers:
+        click.echo(
+            click.style(
+                f"`{', '.join(invalid_tickers)}` {'are not valid ticker names.' if len(invalid_tickers) > 1 else 'is not a valid ticker name.'}",
+                fg="yellow",
+            )
+        )
+        ctx.exit()
+    return value

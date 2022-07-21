@@ -13,6 +13,7 @@ from i8_terminal.commands.company import company
 from i8_terminal.common.cli import pass_command
 from i8_terminal.common.layout import format_metrics_df
 from i8_terminal.common.metrics import get_current_metrics_df
+from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.ticker_param_type import TickerParamType
 
@@ -132,7 +133,14 @@ def export_companies_data(
 
 
 @company.command()
-@click.option("--tickers", "-k", type=TickerParamType(), required=True, help="Comma-separated list of tickers.")
+@click.option(
+    "--tickers",
+    "-k",
+    type=TickerParamType(),
+    required=True,
+    callback=validate_tickers,
+    help="Comma-separated list of tickers.",
+)
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
 def compare(tickers: str, export_path: Optional[str]) -> None:

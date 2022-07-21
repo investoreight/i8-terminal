@@ -16,19 +16,14 @@ from i8_terminal.app.layout import get_date_range, get_plot_default_layout
 from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.price import price
 from i8_terminal.common.cli import get_click_command_path, pass_command
-from i8_terminal.common.layout import format_metrics_df
 from i8_terminal.common.metrics import (
     find_similar_indicator,
     get_indicators_list,
     get_metrics_display_names,
     get_period_start_date,
 )
-from i8_terminal.common.utils import (
-    PlotType,
-    get_period_code,
-    get_period_days,
-    validate_ticker,
-)
+from i8_terminal.common.stock_info import validate_ticker
+from i8_terminal.common.utils import PlotType, get_period_code, get_period_days
 from i8_terminal.types.chart_param_type import ChartParamType, get_chart_param_types
 from i8_terminal.types.indicator_param_type import IndicatorParamType
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
@@ -114,8 +109,8 @@ def get_data_df(
     )
     metadata_df = pd.DataFrame([h.to_dict() for h in historical_prices.metadata])
     df = pd.merge(df, metadata_df, on="metric_name")
-    df = format_metrics_df(df, "console")
     df = df.pivot(index="period_datetime", columns="display_name", values="value")
+    df = df[df.columns].astype(float)
     df.index.name = "Date"
     return df
 

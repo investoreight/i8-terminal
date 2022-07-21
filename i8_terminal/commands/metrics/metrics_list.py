@@ -10,6 +10,7 @@ from i8_terminal.common.metrics import (
     get_current_metrics_df,
     prepare_current_metrics_formatted_df,
 )
+from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import export_data
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.metric_param_type import MetricParamType
@@ -17,7 +18,14 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 
 
 @metrics.command()
-@click.option("--tickers", "-k", type=TickerParamType(), required=True, help="Comma-separated list of tickers.")
+@click.option(
+    "--tickers",
+    "-k",
+    type=TickerParamType(),
+    required=True,
+    callback=validate_tickers,
+    help="Comma-separated list of tickers.",
+)
 @click.option(
     "--metrics",
     "-m",

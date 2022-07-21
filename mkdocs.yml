@@ -6,9 +6,8 @@ theme:
     primary: black
 
 nav:
-  - index.md
-  - Getting started:
-    - get_started/index.md
+  - Getting started: get_started/index.md
+  - Commands Reference: index.md
 
 markdown_extensions:
     - attr_list
