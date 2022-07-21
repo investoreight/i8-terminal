@@ -40,22 +40,19 @@ def get_historical_financials_df(
     )
     df = pd.DataFrame.from_records(
         [
-            (ticker, metric, period_value.period, period_value.value, period_value.period_date_time)
+            (ticker, metric, period_value.period, period_value.value)
             for ticker, metric_dict in hist_financials.data.items()
             for metric, period_value_list in metric_dict.items()
             for period_value in period_value_list
         ],
-        columns=["Ticker", "metric_name", "Period", "Value", "PeriodDateTime"],
+        columns=["Ticker", "metric_name", "Period", "Value"],
     )
     metadata_df = pd.DataFrame([h.to_dict() for h in hist_financials.metadata])
     df = pd.merge(df, metadata_df, on="metric_name")
     df.rename(columns={"display_name": "Metric"}, inplace=True)
-    df = (
-        pd.pivot_table(df, index=["Period", "PeriodDateTime"], columns=["Ticker", "Metric"], values=["Value"])
-        .reset_index(level=0)
-        .sort_values("PeriodDateTime")
-    )
-    df = df.dropna()
+    df = pd.pivot_table(df, index="Period", columns=["Ticker", "Metric"], values=["Value"]).reset_index(level=0)
+    df["ReversedPeriod"] = df["Period"].apply(lambda x: f"{x.split(' ')[1]}{x.split(' ')[0]}")
+    df = df.sort_values("ReversedPeriod").dropna()
     metric_display_names = list(set(metadata_df[metadata_df.metric_name.isin(metrics)]["display_name"]))
     df.index.name = f"Historical {' and '.join(metric_display_names)}"
     return df, metric_display_names
