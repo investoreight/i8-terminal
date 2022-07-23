@@ -27,22 +27,21 @@ def get_upcoming_earnings_df_by_ticker(ticker: str) -> DataFrame:
 
 def format_upcoming_earnings_df(df: DataFrame, target: str) -> DataFrame:
     formatters = {
-        "latest_price": get_formatter("number", target),
+        "latest_price": get_formatter("price", target),
         "change": get_formatter("perc", target),
         "fyq": get_formatter("fyq", target),
         "eps_ws": get_formatter("number", target),
+        "revenue_ws": get_formatter("financial", target),
     }
     col_names = {
         "ticker": "Ticker",
         "name": "Name",
-        "exchange": "Exchange",
-        "sector": "Sector",
         "latest_price": "Price",
         "change": "Change",
         "actual_report_date": "Report Date",
         "fyq": "Period",
-        "call_time": "Call Time",
-        "eps_ws": "EPS Cons.",
+        "eps_ws": "EPS Estimate",
+        "revenue_ws": "Revenue Estimate",
     }
     return format_df(df, col_names, formatters)
 
@@ -56,10 +55,9 @@ def format_upcoming_earnings_df_by_ticker(df: DataFrame, target: str) -> DataFra
     }
     col_names = {
         "actual_report_time": "Date",
-        "call_time": "Call Time",
         "fyq": "Period",
-        "eps_ws": "EPS Cons.",
-        "revenue_ws": "Revenue Cons.",
+        "eps_ws": "EPS Estimate",
+        "revenue_ws": "Revenue Estimate",
     }
     return format_df(df, col_names, formatters)
 
