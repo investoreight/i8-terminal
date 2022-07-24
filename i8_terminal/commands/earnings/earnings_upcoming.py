@@ -40,6 +40,7 @@ def format_upcoming_earnings_df(df: DataFrame, target: str) -> DataFrame:
         "change": "Change",
         "actual_report_date": "Report Date",
         "fyq": "Period",
+        "call_time": "Call Time",
         "eps_ws": "EPS Estimate",
         "revenue_ws": "Revenue Estimate",
     }
@@ -56,6 +57,7 @@ def format_upcoming_earnings_df_by_ticker(df: DataFrame, target: str) -> DataFra
     col_names = {
         "actual_report_time": "Date",
         "fyq": "Period",
+        "call_time": "Call Time",
         "eps_ws": "EPS Estimate",
         "revenue_ws": "Revenue Estimate",
     }
