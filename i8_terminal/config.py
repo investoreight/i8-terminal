@@ -99,7 +99,7 @@ def update_settings() -> None:
     app_new_settings = find_dicts_diff(latest_app_settings, current_app_settings)
     user_new_settings = find_dicts_diff(current_app_settings, latest_app_settings)
     if app_new_settings or user_new_settings:
-        new_settings = merge(current_app_settings, latest_app_settings)
+        new_settings = merge({}, latest_app_settings, current_app_settings)
         with open(APP_SETTINGS_PATH, "w") as f:
             yaml.dump(new_settings, f)
 
