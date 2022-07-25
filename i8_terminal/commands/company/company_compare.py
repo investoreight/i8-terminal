@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Dict, Optional
 
 import click
 import numpy as np
@@ -17,18 +17,12 @@ from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.ticker_param_type import TickerParamType
 
-metrics = {
-    "Summary": "company_name,stock_exchange,sector,industry_group,marketcap,pe_ratio_ttm,price,change",
-    "Financials": "operating_revenue,total_revenue,total_gross_profit,other_income,basic_eps,diluted_eps,adj_basic_eps",
-    "Price Returns": "return_1w,return_1m,return_3m,return_6m,return_ytd,return_1y,return_2y,return_5y",
-}
 
-
-def get_section_stock_infos_df(tickers: str, target: str, section: str) -> Optional[DataFrame]:
-    df = get_current_metrics_df(tickers, APP_SETTINGS["commands"]["company_compare"]["metrics"][section])
+def get_section_stock_infos_df(tickers: str, target: str, section: Dict[str, str]) -> Optional[DataFrame]:
+    df = get_current_metrics_df(tickers, section["metrics"])
     if df is None:
         return None
-    if section == "Financials":
+    if section["name"] == "Financials":
         fyq_rows = []
         for ticker, ticker_df in df.groupby("Ticker"):
             fyq_rows.append(
@@ -44,7 +38,7 @@ def get_section_stock_infos_df(tickers: str, target: str, section: str) -> Optio
         df = pd.concat([pd.DataFrame(fyq_rows), df], ignore_index=True, axis=0)
     formatted_df = format_metrics_df(df, target)
     formatted_df = formatted_df.pivot(index="display_name", columns="Ticker", values="value").reset_index(level=0)
-    formatted_df["Section"] = section
+    formatted_df["Section"] = section["name"]
     sorter = df["display_name"].unique()
     sorter_index = dict(zip(sorter, range(len(sorter))))
     formatted_df["Rank"] = formatted_df["display_name"].map(sorter_index)
@@ -58,7 +52,7 @@ def get_stock_infos_df(tickers: str, target: str) -> Optional[DataFrame]:
         pd.concat(
             [
                 get_section_stock_infos_df(tickers, target, section)
-                for section in APP_SETTINGS["commands"]["company_compare"]["metrics"]
+                for section in APP_SETTINGS["commands"]["company_compare"]["metric_groups"]
             ]
         )
         .rename(columns={"display_name": "Name"})
