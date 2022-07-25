@@ -42,6 +42,10 @@ def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dic
         "Level": "right",
         "EPS Estimate": "right",
         "Revenue Estimate": "right",
+        "EPS Beat Rate": "right",
+        "Revenue Beat Rate": "right",
+        "EPS Surprise": "right",
+        "Revenue Surprise": "right",
     }
     for c in df.columns:
         table.add_column(c, justify=columns_justify.get(c, default_justify.get(c, "left")))
