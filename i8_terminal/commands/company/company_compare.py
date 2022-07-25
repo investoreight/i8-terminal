@@ -14,7 +14,7 @@ from i8_terminal.common.cli import pass_command
 from i8_terminal.common.layout import format_metrics_df
 from i8_terminal.common.metrics import get_current_metrics_df
 from i8_terminal.common.stock_info import validate_tickers
-from i8_terminal.config import APP_SETTINGS
+from i8_terminal.config import APP_SETTINGS, get_table_style
 from i8_terminal.types.ticker_param_type import TickerParamType
 
 
@@ -77,10 +77,18 @@ def companies_df2tree(df: DataFrame, tickers: str) -> Tree:
     header_table.add_row("Ticker", *tickers_list)
     tree.add(header_table)
 
+    table_style = get_table_style("company_compare")
+
     for sec_name, sec_values in df.groupby("Section", sort=False):
-        sec_branch = tree.add(f"[cyan]{sec_name}")
-        for i, r in sec_values.iterrows():
-            t = Table(width=46 + (col_width * (len(tickers_list) - 1)), show_lines=False, show_header=False, box=None)
+        sec_branch = tree.add(f"[magenta]{sec_name}")
+        for i, r in sec_values.reset_index().iterrows():
+            t = Table(
+                width=46 + (col_width * (len(tickers_list) - 1)),
+                show_lines=False,
+                show_header=False,
+                box=None,
+                row_styles=[table_style["row_styles"][i % 2]],
+            )
             t.add_column(width=31)
             for tk in tickers_list:
                 t.add_column(width=col_width, justify="right")

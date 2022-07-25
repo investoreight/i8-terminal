@@ -21,6 +21,15 @@ styles:
       alternate_row:
         color: "cyan"
       show_lines: false
+    company_compare:
+      alternate_row:
+        color: cyan
+      header:
+        bold: true
+        color: magenta
+      row:
+        color: white
+      show_lines: false    
   terminal:
     command:
       color: "magenta"
