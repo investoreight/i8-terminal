@@ -1,6 +1,7 @@
 import contextlib
 import logging
 import os
+import socket
 import sys
 import webbrowser
 from threading import Timer
@@ -148,6 +149,14 @@ def serve_plot(fig: go.Figure, cmd_context: Dict[str, Any]) -> None:
     APP.title = f"i8 Terminal: {cmd_context['plot_title']}"
     app_url = f"http://localhost:{APP_SETTINGS['app']['port']}/"
     console = Console()
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        is_port_in_use = s.connect_ex(("localhost", APP_SETTINGS["app"]["port"])) == 0
+    if is_port_in_use:
+        console.print(
+            "Port number 8085 is already in use. Please make sure that only one instance of i8-terminal runs at a time!",
+            style="yellow",
+        )
+        return
     with open(os.devnull, "w") as f, contextlib.redirect_stderr(f):
         Timer(2, lambda: webbrowser.open_new(app_url)).start()
         console.print(
