@@ -6,9 +6,10 @@ theme:
     primary: black
 
 nav:
-  - Getting started: get_started/index.md
   - Commands Reference: index.md
-
+  - Getting started: get_started/index.md
+  - Metrics: metrics/index.md
+  
 markdown_extensions:
     - attr_list
     - mkdocs-click
