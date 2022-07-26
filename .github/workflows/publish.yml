@@ -71,12 +71,14 @@ jobs:
           architecture: x64
 
       - name: Build documentation & publish to ghpages
+        env:
+          I8_CORE_API_KEY: ${{ secrets.I8_CORE_API_KEY }}
         run: |
-          pip3 install mkdocs
-          pip3 install mkdocs-click
-          pip3 install mkdocs-material
+          pip3 install -r requirements-docs.txt
           pip3 install i8-terminal
+          python docs/generate_metrics.py
           mkdocs gh-deploy --force --clean --verbose
+  
   publish_msi_win:
     runs-on: windows-latest
     needs: [test]
