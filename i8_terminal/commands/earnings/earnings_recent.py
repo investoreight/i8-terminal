@@ -19,7 +19,7 @@ def get_recent_earnings_df(size: int) -> pd.DataFrame:
 
 def format_recent_earnings_df(df: pd.DataFrame, target: str) -> pd.DataFrame:
     formatters = {
-        "latest_price": get_formatter("number", target),
+        "latest_price": get_formatter("price", target),
         "change": get_formatter("perc", target),
         "fyq": get_formatter("fyq", target),
         "eps_ws": get_formatter("number", target),
@@ -35,10 +35,10 @@ def format_recent_earnings_df(df: pd.DataFrame, target: str) -> pd.DataFrame:
         "actual_report_date": "Report Date",
         "fyq": "Period",
         "call_time": "Call Time",
-        "eps_ws": "Eps Cons.",
-        "eps_actual": "Eps Actual.",
-        "revenue_ws": "Revenue Cons.",
-        "revenue_actual": "Revenue Actual.",
+        "eps_ws": "EPS Estimate",
+        "eps_actual": "EPS Actual",
+        "revenue_ws": "Revenue Estimate",
+        "revenue_actual": "Revenue Actual",
     }
     return format_df(df, col_names, formatters)
 
