@@ -35,13 +35,13 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 )
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
-def list(tickers: str, metrics: str, export_path: Optional[str]) -> None:
+def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
     """
     Lists the given metrics and indicators for a given list of companies. TICKERS is a comma-separated list of tickers.
 
     Examples:
 
-    `i8 metrics list --metrics total_revenue,net_income,price_to_earnings --tickers AMD,INTC,QCOM`
+    `i8 metrics current --metrics total_revenue,net_income,price_to_earnings --tickers AMD,INTC,QCOM`
     """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
