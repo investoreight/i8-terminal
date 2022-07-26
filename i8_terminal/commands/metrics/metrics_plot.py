@@ -134,7 +134,7 @@ def create_fig(
         if len(metrics) > 1:
             fig["layout"][f"xaxis{metric_idx+1}"]["dtick"] = round(len(metric_df["Period"]) / 10)
 
-    fig.update_traces(hovertemplate="%{y:.2f} %{x}")
+    fig.update_traces(hovertemplate="%{y} %{x}")
     fig.update_xaxes(
         rangeslider_visible=False,
         spikemode="across",
@@ -252,6 +252,8 @@ def plot(
         df = get_historical_metrics_df(
             tickers_list, metrics_list, period, period_type, cast(str, from_date), cast(str, to_date)
         )
+        for m in [*set(metric.split(".")[0] for metric in set(metrics.split(","))) - set(df["metric_name"])]:
+            console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
         cmd_context["plot_title"] = f"Historical {' and '.join(list(set(df['Metric'])))}"
         status.update("Generating plot...")
         fig = create_fig(df, cmd_context, tickers_list, chart_type)
