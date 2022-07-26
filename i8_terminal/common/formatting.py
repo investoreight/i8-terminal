@@ -119,6 +119,7 @@ _formatters_map = {
     ("number_int", "store"): lambda x: int(x),
     ("perc", "console"): lambda x: format_number(x, decimal=2, unit="percentage", colorize=True),
     ("perc", "store"): lambda x: format_number(x, exportize=True),
+    ("number_perc", "console"): lambda x: format_number(x, decimal=2, unit="percentage"),
     ("date", "console"): lambda x: format_date(x),
     ("date", "store"): lambda x: format_date(x),
     ("str", "store"): lambda x: x,

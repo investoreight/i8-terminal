@@ -17,6 +17,8 @@ def get_upcoming_earnings_df(size: int) -> DataFrame:
     earnings = investor8_sdk.EarningsApi().get_upcoming_earnings(size=size)
     earnings = [d.to_dict() for d in earnings]
     df = DataFrame(earnings)
+    df["eps_beat_rate"] = df["eps_beat_rate"] * 100
+    df["revenue_beat_rate"] = df["revenue_beat_rate"] * 100
     return df
 
 
@@ -24,7 +26,10 @@ def get_upcoming_earnings_df_by_ticker(tickers: str) -> DataFrame:
     upcoming_earnings = []
     for tk in tickers.replace(" ", "").upper().split(","):
         upcoming_earnings.extend([investor8_sdk.EarningsApi().get_upcoming_earning(tk)])
-    return DataFrame([h.to_dict() for h in upcoming_earnings])
+    df = DataFrame([h.to_dict() for h in upcoming_earnings])
+    df["eps_beat_rate"] = df["eps_beat_rate"] * 100
+    df["revenue_beat_rate"] = df["revenue_beat_rate"] * 100
+    return df
 
 
 def format_upcoming_earnings_df(df: DataFrame, target: str) -> DataFrame:
@@ -33,14 +38,13 @@ def format_upcoming_earnings_df(df: DataFrame, target: str) -> DataFrame:
         "change": get_formatter("perc", target),
         "fyq": get_formatter("fyq", target),
         "eps_ws": get_formatter("number", target),
-        "eps_beat_rate": get_formatter("perc", target),
+        "eps_beat_rate": get_formatter("number_perc", target),
         "revenue_ws": get_formatter("financial", target),
-        "revenue_beat_rate": get_formatter("perc", target),
+        "revenue_beat_rate": get_formatter("number_perc", target),
     }
     col_names = {
         "ticker": "Ticker",
         "name": "Name",
-        "sector": "Sector",
         "latest_price": "Price",
         "change": "Change",
         "actual_report_date": "Report Date",
@@ -58,14 +62,12 @@ def format_upcoming_earnings_df_by_ticker(df: DataFrame, target: str) -> DataFra
     formatters = {
         "fyq": get_formatter("fyq", target),
         "eps_ws": get_formatter("number", target),
-        "eps_beat_rate": get_formatter("perc", target),
+        "eps_beat_rate": get_formatter("number_perc", target),
         "revenue_ws": get_formatter("financial", target),
-        "revenue_beat_rate": get_formatter("perc", target),
+        "revenue_beat_rate": get_formatter("number_perc", target),
     }
     col_names = {
         "ticker": "Ticker",
-        "name": "Name",
-        "sector": "Sector",
         "actual_report_date": "Report Date",
         "fyq": "Period",
         "call_time": "Call Time",
