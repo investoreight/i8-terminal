@@ -52,7 +52,7 @@ def search(keyword: str) -> None:
     with console.status("Fetching data...", spinner="material"):
         df = search_metrics_df(keyword)
     if df is None:
-        console.print(f"No metrics found for keyword {keyword}", style="yellow")
+        console.print(f"No metrics found for keyword '{keyword}'", style="yellow")
         return
     df_formatted = format_metrics_df(df)
     table = df2Table(df_formatted)
