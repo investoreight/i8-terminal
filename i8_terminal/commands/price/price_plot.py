@@ -1,5 +1,6 @@
+import cmd
 from datetime import datetime
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional, Tuple, Union, cast
 
 import arrow
 import click
@@ -224,6 +225,44 @@ def create_fig(
     return fig
 
 
+def create_plot(
+    ticker: str,
+    period: str,
+    indicators: str,
+    from_date: Optional[datetime],
+    to_date: Optional[datetime],
+    chart_type: str,
+    description: Optional[str] = "",
+) -> Tuple[Optional[go.Figure], Optional[Dict[str, Any]]]:
+    if not chart_type in [t[0] for t in get_chart_param_types()]:
+        click.echo(f"`{chart_type}` is not valid chart type.")
+        return None, None
+    period = period.replace(" ", "").upper()
+    indicators_list = indicators.replace(" ", "").split(",") if indicators else []
+    indicators_list = get_matched_indicators(indicators_list)
+    indicator_categories = get_indicator_categories(indicators_list)
+    ticker = ticker.upper()
+    plot_title = f"{ticker} historical prices"
+    cmd_context = {
+        "command_path": description,
+        "tickers": ticker,
+        "plot_title": plot_title,
+        "plot_type": PlotType.CHART.value,
+    }
+
+    console = Console()
+    with console.status("Fetching data...", spinner="material") as status:
+        df = get_data_df([ticker], period, indicators_list, cast(str, from_date), cast(str, to_date))
+        if df is None:
+            status.stop()
+            console.print("No data found!")
+            return None, None
+        status.update("Generating plot...")
+        fig = create_fig(df, period, indicator_categories, cmd_context, chart_type, range_selector=False)
+
+    return fig, cmd_context
+
+
 @price.command()
 @click.pass_context
 @click.option("--ticker", "-k", type=TickerParamType(), required=True, callback=validate_ticker, help="Company ticker.")
@@ -266,36 +305,17 @@ def plot(
 
     `i8 price plot --period 1M --indicators volume --ticker MSFT --chart_type candlestick`
     """
-    if not chart_type in [t[0] for t in get_chart_param_types()]:
-        click.echo(f"`{chart_type}` is not valid chart type.")
-        return
-    period = period.replace(" ", "").upper()
     indicators_list = indicators.replace(" ", "").split(",") if indicators else []
     indicators_list = get_matched_indicators(indicators_list)
-    indicator_categories = get_indicator_categories(indicators_list)
-    ticker = ticker.upper()
-    plot_title = f"{ticker} historical prices"
+
     command_path_parsed_options_dict = {"--indicators": ",".join(indicators_list)}
     if from_date:
         command_path_parsed_options_dict["--from_date"] = from_date.strftime("%Y-%m-%d")
     if to_date:
         command_path_parsed_options_dict["--to_date"] = to_date.strftime("%Y-%m-%d")
+
     command_path = get_click_command_path(ctx, command_path_parsed_options_dict)
-    cmd_context = {
-        "command_path": command_path,
-        "tickers": ticker,
-        "plot_title": plot_title,
-        "plot_type": PlotType.CHART.value,
-    }
-
-    console = Console()
-    with console.status("Fetching data...", spinner="material") as status:
-        df = get_data_df([ticker], period, indicators_list, cast(str, from_date), cast(str, to_date))
-        if df is None:
-            status.stop()
-            console.print("No data found!")
-            return
-        status.update("Generating plot...")
-        fig = create_fig(df, period, indicator_categories, cmd_context, chart_type, range_selector=False)
-
-    serve_plot(fig, cmd_context)
+    fig, cmd_context = create_plot(ticker, period, indicators, from_date, to_date, chart_type, command_path)
+    if fig != None and cmd_context != None:
+        # TODO: Fix the type error
+        serve_plot(fig, cmd_context)  # type: ignore

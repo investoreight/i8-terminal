@@ -1,13 +1,16 @@
 import enum
 import os
+import sys
+import warnings
 from difflib import SequenceMatcher
 from typing import Any, Dict, Optional
 
 import arrow
+import investor8_sdk
 import pandas as pd
 from rich.console import Console
 
-from i8_terminal.config import APP_SETTINGS
+from i8_terminal.config import APP_SETTINGS, USER_SETTINGS
 
 
 class PlotType(enum.Enum):
@@ -72,3 +75,13 @@ def export_data(
 def is_cached_file_expired(file_path: str) -> bool:
     mtime = arrow.get(os.path.getmtime(file_path))
     return bool(mtime < arrow.utcnow().shift(hours=-APP_SETTINGS.get("cache", {}).get("age", 48)))
+
+
+def no_warnings():
+    warnings.filterwarnings("ignore")
+
+
+def initialize_api():
+    investor8_sdk.ApiClient().configuration.api_key["apiKey"] = USER_SETTINGS.get("i8_core_api_key")
+    investor8_sdk.ApiClient().configuration.api_key["Authorization"] = USER_SETTINGS.get("i8_core_token")
+    investor8_sdk.ApiClient().configuration.api_key_prefix["Authorization"] = "Bearer"

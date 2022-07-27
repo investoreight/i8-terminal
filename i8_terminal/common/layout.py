@@ -2,6 +2,7 @@ from pydoc import locate
 from typing import Any, Dict
 
 import numpy as np
+import plotly.graph_objects as go
 from pandas import DataFrame
 from rich.table import Table
 
