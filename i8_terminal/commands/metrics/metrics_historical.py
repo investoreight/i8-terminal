@@ -236,10 +236,18 @@ def historical(
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in df.groupby("Metric"):
         columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
-    table = df2Table(
+    formatted_df = (
         format_metrics_df(df, "console")
         .pivot(index=["Ticker", "Period"], columns="Metric", values="value")
-        .reset_index(),
+        .reset_index()
+    )
+    formatted_df["reversed_period"] = formatted_df.apply(
+        lambda row: f"{row.Period.split(' ')[1]} {row.Period.split(' ')[0]}", axis=1
+    )
+    formatted_df.sort_values(["Ticker", "reversed_period"], ascending=False, inplace=True)
+    formatted_df.drop(columns=["reversed_period"], inplace=True)
+    table = df2Table(
+        formatted_df,
         columns_justify=columns_justify,
     )
     console.print(table)
