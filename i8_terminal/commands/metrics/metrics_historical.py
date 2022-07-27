@@ -1,6 +1,5 @@
-from datetime import datetime
 from pydoc import locate
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List
 
 import click
 import investor8_sdk
@@ -8,7 +7,6 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from click.types import DateTime
 from pandas import DataFrame
 from plotly.subplots import make_subplots
 from rich.console import Console
@@ -18,14 +16,11 @@ from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.layout import df2Table, format_metrics_df
-from i8_terminal.common.metrics import get_period_start_date
 from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import PlotType
 from i8_terminal.types.chart_param_type import ChartParamType
 from i8_terminal.types.metric_param_type import MetricParamType
 from i8_terminal.types.output_param_type import OutputParamType
-from i8_terminal.types.period_type_param_type import PeriodTypeParamType
-from i8_terminal.types.price_period_param_type import PricePeriodParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
 
 
