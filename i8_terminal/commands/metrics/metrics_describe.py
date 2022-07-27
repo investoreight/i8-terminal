@@ -9,14 +9,19 @@ from i8_terminal.types.metric_param_type import MetricParamType
 
 
 def get_metric_info_table(metric: str) -> Table:
-    metric_display_name, metric_unit, metric_short_desc = get_metric_info(metric)
-    metric_info_table = Table.grid()
-    metric_info_table.add_column(justify="left", width=18)
+    header_color = "cyan"
+    metric_info = get_metric_info(metric)
+    metric_info_table = Table(padding=(0, 1), box=None)
+    metric_info_table.add_column(justify="right", width=25)
     metric_info_table.add_column(justify="left")
-    metric_info_table.add_row("Metric Name:", metric)
-    metric_info_table.add_row("Display Name:", metric_display_name)
-    metric_info_table.add_row("Unit:", metric_unit)
-    metric_info_table.add_row("Description:", metric_short_desc)
+    metric_info_table.add_row(f"[{header_color}]Metric Name[/{header_color}]", metric)
+    metric_info_table.add_row(f"[{header_color}]Display Name[/{header_color}]", metric_info["display_name"])
+    metric_info_table.add_row(f"[{header_color}]Unit[/{header_color}]", metric_info["unit"])
+    metric_info_table.add_row(f"[{header_color}]Type[/{header_color}]", metric_info["type"])
+    metric_info_table.add_row(f"[{header_color}]Display Format[/{header_color}]", metric_info["display_format"])
+    metric_info_table.add_row(f"[{header_color}]Url[/{header_color}]", f"https://docs.i8terminal.io/metrics/{metric}/")
+    metric_info_table.add_row(f"[{header_color}]Description[/{header_color}]", metric_info["description"])
+    metric_info_table.add_row(f"[{header_color}]Remarks[/{header_color}]", "")
     return metric_info_table
 
 
