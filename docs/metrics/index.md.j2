@@ -1,0 +1,8 @@
+# Metrics and Indicators
+
+i8 Terminal uses more than 500 built-in financial metrics and indicators that are used in several commands and can be used to implement custom analysis. 
+
+| Name    |  Display Name  | Type   |
+| ---     | ---            | ---    | 
+{% for m in metrics %}| [{{ m.metric_name }}](./{{ m.metric_name }}.md) | {{ m.display_name }} | {{ m.type }} |
+{% endfor %}

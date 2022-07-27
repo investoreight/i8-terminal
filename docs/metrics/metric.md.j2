@@ -1,0 +1,17 @@
+# {{ m.display_name }}
+
+{{ description }}
+
+{{ m.remarks }}
+
+## Additional Details
+
+| Metric Name  | Type   | Default Period Type |
+| ---          | ---    | ---                 |
+| {{ m.metric_name }} | {{ m.type }} | {{ m.period_type_default }} |
+
+## Formatting Details
+
+| Data Format | Display Format | Unit |
+| ---         | ---            | ---  |
+| {{ m.data_format }} | {{ m.display_format }} | {{ m.unit }} |

@@ -67,8 +67,10 @@ commands:
   company_compare:
       metric_groups:
         - name: "Summary"
-          metrics: "company_name,stock_exchange,sector,industry_group,marketcap,pe_ratio_ttm,price,change"
+          metrics: "company_name,sector,industry_group,price,change,marketcap,pe_ratio_ttm"
         - name: "Financials"
-          metrics: "operating_revenue,total_revenue,total_gross_profit,other_income,basic_eps,diluted_eps,adj_basic_eps"
-        - name: "Price Returns"
           metrics: "return_1w,return_1m,return_3m,return_6m,return_ytd,return_1y,return_2y,return_5y"
+        - name: "Performance"
+          metrics: "pe_ratio_ttm,current_ratio,quick_ratio,price_to_book,revenue_growth,dividend_yield,roe"
+        - name: "Key Ratios"
+          metrics: pe_ratio_ttm,current_ratio,quick_ratio,price_to_book,revenue_growth,dividend_yield,roe
