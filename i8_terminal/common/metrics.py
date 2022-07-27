@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 import arrow
 import investor8_sdk
