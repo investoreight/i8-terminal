@@ -91,14 +91,19 @@ def get_metrics_display_names(metrics: List[str]) -> List[str]:
     return list(set(all_metrics[all_metrics.metric_name.isin(metrics)]["display_name"]))
 
 
-def get_metric_info(name: str) -> Tuple[str, str, str]:
+def get_metric_info(name: str) -> Dict[str, str]:
     all_metrics = get_all_metrics_df()
     metric = all_metrics.loc[all_metrics.metric_name == name].replace(np.nan, "", regex=True).to_dict("records")[0]
-    return (
-        metric["display_name"],
-        metric["unit"],
-        metric["description"] if "description" in metric.keys() and metric["description"] else "No Description",
-    )
+    return {
+        "display_name": metric["display_name"],
+        "unit": metric["unit"],
+        "type": metric.get("type", ""),
+        "display_format": metric.get("display_format", ""),
+        "default_period_type": metric.get("default_period_type", ""),
+        "description": metric["description"]
+        if "description" in metric.keys() and metric["description"]
+        else "No Description",
+    }
 
 
 def get_period_start_date(period: str) -> str:
