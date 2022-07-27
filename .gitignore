@@ -45,3 +45,4 @@ notebooks/.ipynb_checkpoints
 .mypy_cashe
 
 .history
+docs/metrics/*.md

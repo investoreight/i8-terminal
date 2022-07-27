@@ -1,5 +1,5 @@
-from datetime import datetime
-from typing import Any, Dict, List, Optional, cast
+from pydoc import locate
+from typing import Any, Dict, List
 
 import click
 import investor8_sdk
@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from click.types import DateTime
 from pandas import DataFrame
 from plotly.subplots import make_subplots
 from rich.console import Console
@@ -16,45 +15,22 @@ from i8_terminal.app.layout import get_plot_default_layout
 from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import get_click_command_path, pass_command
-from i8_terminal.common.metrics import get_period_start_date
+from i8_terminal.common.layout import df2Table, format_metrics_df
 from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import PlotType
 from i8_terminal.types.chart_param_type import ChartParamType
 from i8_terminal.types.metric_param_type import MetricParamType
-from i8_terminal.types.period_type_param_type import PeriodTypeParamType
-from i8_terminal.types.price_period_param_type import PricePeriodParamType
+from i8_terminal.types.output_param_type import OutputParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
 
 
 def get_historical_metrics_df(
     tickers: List[str],
     metrics: List[str],
-    period: str,
-    period_type: str,
-    from_date: Optional[str],
-    to_date: Optional[str],
 ) -> DataFrame:
-    metrics_period_type = (
-        [f"{metric}.{period_type}" for metric in metrics] if period_type else [metric for metric in metrics]
+    historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
+        symbols=",".join(tickers), metrics=",".join(metrics), from_period_offset=-10, to_period_offset=0
     )
-    if from_date:
-        if not to_date:
-            to_date = datetime.now().strftime("%Y-%m-%d")
-        historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
-            symbols=",".join(tickers),
-            metrics=",".join(metrics_period_type),
-            from_date=from_date,
-            to_date=to_date,
-        )
-    else:
-        from_date = get_period_start_date(period)
-        to_date = datetime.now().strftime("%Y-%m-%d")
-        historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
-            symbols=",".join(tickers),
-            metrics=",".join(metrics_period_type),
-            from_date=from_date,
-            to_date=to_date,
-        )
     df = pd.DataFrame.from_records(
         [
             (ticker, metric, period_value.period, period_value.period_date_time, period_value.value)
@@ -66,8 +42,10 @@ def get_historical_metrics_df(
     )
     metadata_df = pd.DataFrame([h.to_dict() for h in historical_metrics.metadata])
     df = pd.merge(df, metadata_df, on="metric_name")
-    df.rename(columns={"display_name": "Metric"}, inplace=True)
-    df["Value"] = df["Value"].astype(df["data_format"].values[0])
+    df.rename(columns={"display_name": "Metric", "Value": "value"}, inplace=True)
+    df["value"] = df.apply(
+        lambda metric: locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value), axis=1  # type: ignore
+    )
     return df
 
 
@@ -101,7 +79,7 @@ def create_fig(
         row_width=row_width,
     )
 
-    for metric, metric_df in df.groupby("Metric"):
+    for metric, metric_df in df.groupby("Metric", sort=False):
         metric_idx = metrics.index(metric)
         for ticker, ticker_df in metric_df.sort_values(["PeriodDateTime"]).groupby("Ticker"):
             idx = tickers.index(ticker)
@@ -109,7 +87,7 @@ def create_fig(
                 fig.add_trace(
                     go.Bar(
                         x=ticker_df["Period"],
-                        y=ticker_df["Value"],
+                        y=ticker_df["value"],
                         name=ticker,
                         marker=dict(color=px.colors.qualitative.Plotly[idx]),
                         legendgroup=f"group{idx}",
@@ -122,7 +100,7 @@ def create_fig(
                 fig.add_trace(
                     go.Scatter(
                         x=ticker_df["Period"],
-                        y=ticker_df["Value"],
+                        y=ticker_df["value"],
                         name=ticker,
                         marker=dict(color=px.colors.qualitative.Plotly[idx]),
                         legendgroup=f"group{idx}",
@@ -134,11 +112,18 @@ def create_fig(
         if len(metrics) > 1:
             fig["layout"][f"xaxis{metric_idx+1}"]["dtick"] = round(len(metric_df["Period"]) / 10)
 
-    fig.update_traces(hovertemplate="%{y:.2f} %{x}")
+    fig.update_traces(hovertemplate="%{y} %{x}")
+    df["Reversed Period"] = df.apply(lambda row: f"{row.Period.split(' ')[1]} {row.Period.split(' ')[0]}", axis=1)
+    sorted_periods = [
+        f"{reversed_period.split(' ')[1]} {reversed_period.split(' ')[0]}"
+        for reversed_period in sorted(set(df["Reversed Period"]))
+    ]
     fig.update_xaxes(
         rangeslider_visible=False,
         spikemode="across",
         spikesnap="cursor",
+        categoryorder="array",
+        categoryarray=sorted_periods,
     )
 
     fig.update_layout(
@@ -184,62 +169,51 @@ def create_fig(
     help="Comma-separated list of daily metrics.",
 )
 @click.option(
-    "--period",
+    "--output",
+    "-o",
+    type=OutputParamType(),
+    default="terminal",
+    help="Output can be terminal or plot type.",
+)
+@click.option(
+    "--plot_type",
     "-p",
-    type=PricePeriodParamType(),
-    default="1Y",
-    help="Historical price period.",
-)
-@click.option(
-    "--period_type",
-    "-m",
-    type=PeriodTypeParamType(),
-    help="Period by which you want to view the report. Possible values are `FY` for yearly, `Q` for quarterly, and `TTM` for TTM reports.",
-)
-@click.option("--from_date", "-f", type=DateTime(), help="Histotical financials from date.")
-@click.option("--to_date", "-t", type=DateTime(), help="Histotical financials to date.")
-@click.option(
-    "--chart_type",
-    "-c",
     type=ChartParamType([("bar", "Bar chart"), ("line", "Line chart")]),
     default="line",
-    help="Chart can be bar or line chart.",
+    help="Plot can be bar or line chart.",
 )
 @pass_command
-def plot(
+def historical(
     ctx: click.Context,
     tickers: str,
     metrics: str,
-    chart_type: str,
-    period: str,
-    period_type: str,
-    from_date: Optional[datetime],
-    to_date: Optional[datetime],
+    output: str,
+    plot_type: str,
 ) -> None:
     """
     Compares and plots daily metrics of given companies. TICKERS is a comma-separated list of tickers.
 
     Examples:
 
-    `i8 metrics plot --metrics price_to_earnings --period 5Y --tickers AMD,INTC,QCOM`
+    `i8 metrics historical --metrics price_to_earnings --period 5Y --tickers AMD,INTC,QCOM`
     """
-    period = period.replace(" ", "").upper()
     metrics_list = metrics.replace(" ", "").split(",")
     if len(metrics_list) > 2:
         click.echo("You can enter up to 2 daily metrics.")
         return
-    command_path_parsed_options_dict = {}
-    if from_date:
-        command_path_parsed_options_dict["--from_date"] = from_date.strftime("%Y-%m-%d")
-    if to_date:
-        command_path_parsed_options_dict["--to_date"] = to_date.strftime("%Y-%m-%d")
+    command_path_parsed_options_dict = {
+        "--tickers": tickers,
+        "--metrics": metrics,
+        "--output": output,
+        "--plot_type": plot_type,
+    }
     command_path = get_click_command_path(ctx, command_path_parsed_options_dict)
     tickers_list = tickers.replace(" ", "").upper().split(",")
     if len(tickers_list) > 5:
         click.echo("You can enter up to 5 tickers.")
         return
-    if not chart_type in ["bar", "line"]:
-        click.echo(f"`{chart_type}` is not valid chart type.")
+    if not plot_type in ["bar", "line"]:
+        click.echo(f"`{plot_type}` is not valid chart type.")
         return
     cmd_context = {
         "command_path": command_path,
@@ -249,11 +223,31 @@ def plot(
 
     console = Console()
     with console.status("Fetching data...", spinner="material") as status:
-        df = get_historical_metrics_df(
-            tickers_list, metrics_list, period, period_type, cast(str, from_date), cast(str, to_date)
-        )
-        cmd_context["plot_title"] = f"Historical {' and '.join(list(set(df['Metric'])))}"
-        status.update("Generating plot...")
-        fig = create_fig(df, cmd_context, tickers_list, chart_type)
+        df = get_historical_metrics_df(tickers_list, metrics_list)
+        if output == "plot":
+            cmd_context["plot_title"] = f"Historical {' and '.join(list(set(df['Metric'])))}"
+            status.update("Generating plot...")
+            fig = create_fig(df, cmd_context, tickers_list, plot_type)
 
-    serve_plot(fig, cmd_context)
+    if output == "plot":
+        serve_plot(fig, cmd_context)
+        return
+
+    columns_justify: Dict[str, Any] = {}
+    for metric_display_name, metric_df in df.groupby("Metric"):
+        columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
+    formatted_df = (
+        format_metrics_df(df, "console")
+        .pivot(index=["Ticker", "Period"], columns="Metric", values="value")
+        .reset_index()
+    )
+    formatted_df["reversed_period"] = formatted_df.apply(
+        lambda row: f"{row.Period.split(' ')[1]} {row.Period.split(' ')[0]}", axis=1
+    )
+    formatted_df.sort_values(["Ticker", "reversed_period"], ascending=False, inplace=True)
+    formatted_df.drop(columns=["reversed_period"], inplace=True)
+    table = df2Table(
+        formatted_df,
+        columns_justify=columns_justify,
+    )
+    console.print(table)
