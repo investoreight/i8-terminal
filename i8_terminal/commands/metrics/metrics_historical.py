@@ -198,8 +198,11 @@ def historical(
     `i8 metrics historical --metrics price_to_earnings --period 5Y --tickers AMD,INTC,QCOM`
     """
     metrics_list = metrics.replace(" ", "").split(",")
-    if len(metrics_list) > 2:
-        click.echo("You can enter up to 2 daily metrics.")
+    if not output in ["terminal", "plot"]:
+        click.echo(click.style(f"`{output}` is not valid output type.", fg="yellow"))
+        return
+    if output == "plot" and len(metrics_list) > 2:
+        click.echo(click.style("For the `plot` output type you can enter up to only two metrics.", fg="yellow"))
         return
     command_path_parsed_options_dict = {
         "--tickers": tickers,
@@ -210,10 +213,10 @@ def historical(
     command_path = get_click_command_path(ctx, command_path_parsed_options_dict)
     tickers_list = tickers.replace(" ", "").upper().split(",")
     if len(tickers_list) > 5:
-        click.echo("You can enter up to 5 tickers.")
+        click.echo(click.style("You can enter up to 5 tickers.", fg="yellow"))
         return
     if not plot_type in ["bar", "line"]:
-        click.echo(f"`{plot_type}` is not valid chart type.")
+        click.echo(click.style(f"`{plot_type}` is not valid chart type.", fg="yellow"))
         return
     cmd_context = {
         "command_path": command_path,
