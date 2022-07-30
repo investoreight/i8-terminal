@@ -129,3 +129,8 @@ _formatters_map = {
 
 def get_formatter(name: str, target: str) -> Any:
     return _formatters_map[(name, target)]
+
+
+def styling_markdown_text(text: str) -> str:
+    text = re.sub("```\n([^`]*)\n```", "[magenta]\\1[/magenta]", text)
+    return re.sub("`([^`]*)`", "[white]\\1[/white]", text)  # TODO: This can be change
