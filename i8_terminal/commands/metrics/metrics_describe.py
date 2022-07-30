@@ -1,6 +1,5 @@
 import click
 from rich.console import Console
-from rich.markdown import Markdown
 from rich.table import Table
 
 from i8_terminal.commands.metrics import metrics
