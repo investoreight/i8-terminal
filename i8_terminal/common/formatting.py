@@ -132,5 +132,6 @@ def get_formatter(name: str, target: str) -> Any:
 
 
 def styling_markdown_text(text: str) -> str:
+    text = text.replace("#", "")  # Ignore headings
     text = re.sub("```\n([^`]*)\n```", "[magenta]\\1[/magenta]", text)
-    return re.sub("`([^`]*)`", "[white]\\1[/white]", text)  # TODO: This can be change
+    return re.sub("`([^`]*)`", "[magenta]\\1[/magenta]", text)

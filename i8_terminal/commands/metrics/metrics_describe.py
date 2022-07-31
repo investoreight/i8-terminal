@@ -21,7 +21,9 @@ def get_metric_info_table(metric: str) -> Table:
     metric_info_table.add_row(f"[{h_color}]Type[/{h_color}]", metric_info["type"])
     metric_info_table.add_row(f"[{h_color}]Display Format[/{h_color}]", metric_info["display_format"])
     metric_info_table.add_row(f"[{h_color}]Default Period type[/{h_color}]", metric_info["default_period_type"])
-    metric_info_table.add_row(f"[{h_color}]Url[/{h_color}]", f"https://docs.i8terminal.io/metrics/{metric}/")
+    metric_info_table.add_row(
+        f"[{h_color}]Url[/{h_color}]", f"[blue]https://docs.i8terminal.io/metrics/{metric}/[/blue]"
+    )
     metric_info_table.add_row(f"[{h_color}]Description[/{h_color}]", styling_markdown_text(metric_info["description"]))
     metric_info_table.add_row(f"[{h_color}]Remarks[/{h_color}]", styling_markdown_text(metric_info["remarks"]))
     return metric_info_table
