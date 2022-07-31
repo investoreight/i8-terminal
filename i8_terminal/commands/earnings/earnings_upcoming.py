@@ -10,6 +10,8 @@ from i8_terminal.common.cli import pass_command
 from i8_terminal.common.formatting import get_formatter
 from i8_terminal.common.layout import df2Table, format_df
 from i8_terminal.common.stock_info import validate_tickers
+from i8_terminal.common.utils import export_data
+from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.ticker_param_type import TickerParamType
 
 
@@ -38,9 +40,9 @@ def format_upcoming_earnings_df(df: DataFrame, target: str) -> DataFrame:
         "change": get_formatter("perc", target),
         "fyq": get_formatter("fyq", target),
         "eps_ws": get_formatter("number", target),
-        "eps_beat_rate": get_formatter("number_perc", target),
+        "eps_beat_rate": get_formatter("number_perc" if target == "console" else "perc", target),
         "revenue_ws": get_formatter("financial", target),
-        "revenue_beat_rate": get_formatter("number_perc", target),
+        "revenue_beat_rate": get_formatter("number_perc" if target == "console" else "perc", target),
     }
     col_names = {
         "ticker": "Ticker",
@@ -62,9 +64,9 @@ def format_upcoming_earnings_df_by_ticker(df: DataFrame, target: str) -> DataFra
     formatters = {
         "fyq": get_formatter("fyq", target),
         "eps_ws": get_formatter("number", target),
-        "eps_beat_rate": get_formatter("number_perc", target),
+        "eps_beat_rate": get_formatter("number_perc" if target == "console" else "perc", target),
         "revenue_ws": get_formatter("financial", target),
-        "revenue_beat_rate": get_formatter("number_perc", target),
+        "revenue_beat_rate": get_formatter("number_perc" if target == "console" else "perc", target),
     }
     col_names = {
         "ticker": "Ticker",
@@ -83,8 +85,9 @@ def format_upcoming_earnings_df_by_ticker(df: DataFrame, target: str) -> DataFra
 @click.option(
     "--tickers", "-k", type=TickerParamType(), callback=validate_tickers, help="Comma-separated list of tickers."
 )
+@click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
-def upcoming(tickers: Optional[str]) -> None:
+def upcoming(tickers: Optional[str], export_path: Optional[str]) -> None:
     """
     Lists upcoming company earnings.
 
@@ -98,6 +101,14 @@ def upcoming(tickers: Optional[str]) -> None:
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         df = get_upcoming_earnings_df_by_ticker(tickers) if tickers else get_upcoming_earnings_df(size=20)
+    if export_path:
+        export_data(
+            format_upcoming_earnings_df_by_ticker(df, "store") if tickers else format_upcoming_earnings_df(df, "store"),
+            export_path,
+            column_width=18,
+            column_format=APP_SETTINGS["styles"]["xlsx"]["financials"]["column"],
+        )
+        return
     df_formatted = (
         format_upcoming_earnings_df_by_ticker(df, "console") if tickers else format_upcoming_earnings_df(df, "console")
     )
