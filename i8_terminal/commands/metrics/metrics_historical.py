@@ -41,7 +41,7 @@ def get_historical_metrics_df(
         columns=["Ticker", "metric_name", "Period", "PeriodDateTime", "Value"],
     )
     metadata_df = pd.DataFrame([h.to_dict() for h in historical_metrics.metadata])
-    df = pd.merge(df, metadata_df, on="metric_name")
+    df = pd.merge(df, metadata_df, on="metric_name").replace("string", "str")
     df.rename(columns={"display_name": "Metric", "Value": "value"}, inplace=True)
     df["value"] = df.apply(
         lambda metric: locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value), axis=1  # type: ignore
