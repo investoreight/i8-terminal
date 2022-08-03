@@ -25,7 +25,8 @@ def get_metric_info_table(metric: str) -> Table:
         f"[{h_color}]Url[/{h_color}]", f"[blue]https://docs.i8terminal.io/metrics/{metric}/[/blue]"
     )
     metric_info_table.add_row(f"[{h_color}]Description[/{h_color}]", styling_markdown_text(metric_info["description"]))
-    metric_info_table.add_row(f"[{h_color}]Remarks[/{h_color}]", styling_markdown_text(metric_info["remarks"]))
+    if metric_info["remarks"]:
+        metric_info_table.add_row(f"[{h_color}]Remarks[/{h_color}]", styling_markdown_text(metric_info["remarks"]))
     return metric_info_table
 
 

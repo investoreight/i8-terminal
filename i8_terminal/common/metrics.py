@@ -101,7 +101,7 @@ def get_metric_info(name: str) -> Dict[str, str]:
         "display_format": metric.get("display_format", ""),
         "default_period_type": metric.get("period_type_default", ""),
         "description": metric.get("description", "No Description"),
-        "remarks": metric.get("remarks", "No Remarks"),
+        "remarks": metric.get("remarks"),
     }
 
 
