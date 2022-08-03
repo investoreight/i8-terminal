@@ -17,7 +17,7 @@ from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.layout import df2Table, format_metrics_df
 from i8_terminal.common.stock_info import validate_tickers
-from i8_terminal.common.utils import PlotType
+from i8_terminal.common.utils import PlotType, reverse_period
 from i8_terminal.types.chart_param_type import ChartParamType
 from i8_terminal.types.metric_param_type import MetricParamType
 from i8_terminal.types.output_param_type import OutputParamType
@@ -114,11 +114,8 @@ def create_fig(
             fig["layout"][f"xaxis{metric_idx+1}"]["dtick"] = round(len(metric_df["Period"]) / 10)
 
     fig.update_traces(hovertemplate="%{y} %{x}")
-    df["Reversed Period"] = df.apply(lambda row: f"{row.Period.split(' ')[1]} {row.Period.split(' ')[0]}", axis=1)
-    sorted_periods = [
-        f"{reversed_period.split(' ')[1]} {reversed_period.split(' ')[0]}"
-        for reversed_period in sorted(set(df["Reversed Period"]))
-    ]
+    df["Reversed Period"] = df.apply(lambda row: reverse_period(row.Period), axis=1)
+    sorted_periods = [reverse_period(reversed_period) for reversed_period in sorted(set(df["Reversed Period"]))]
     fig.update_xaxes(
         rangeslider_visible=False,
         spikemode="across",
@@ -246,15 +243,14 @@ def historical(
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in df.groupby("Metric"):
         columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
+    df = df.groupby(["Ticker", "Period"]).head(1)
     formatted_df = (
         format_metrics_df(df, "console")
         .pivot(index=["Ticker", "Period"], columns="Metric", values="value")
         .reset_index()
     )
     formatted_df["reversed_period"] = formatted_df.apply(
-        lambda row: f"{row.Period.split(' ')[1]} {row.Period.split(' ')[0]}"
-        if len(row.Period.split(" ")) > 1
-        else row.Period,
+        lambda row: reverse_period(row.Period),
         axis=1,
     )
     formatted_df.sort_values(["Ticker", "reversed_period"], ascending=False, inplace=True)
