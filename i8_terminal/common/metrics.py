@@ -99,10 +99,9 @@ def get_metric_info(name: str) -> Dict[str, str]:
         "unit": metric["unit"],
         "type": metric.get("type", ""),
         "display_format": metric.get("display_format", ""),
-        "default_period_type": metric.get("default_period_type", ""),
-        "description": metric["description"]
-        if "description" in metric.keys() and metric["description"]
-        else "No Description",
+        "default_period_type": metric.get("period_type_default", ""),
+        "description": metric.get("description", "No Description"),
+        "remarks": metric.get("remarks"),
     }
 
 
