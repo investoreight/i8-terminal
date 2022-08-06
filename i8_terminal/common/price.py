@@ -80,8 +80,8 @@ def get_historical_price_export_df(
 def get_historical_price_list_df(
     tickers: List[str],
     period_code: int,
-    from_date: Optional[str],
-    to_date: Optional[str],
+    from_date: Optional[str] = None,
+    to_date: Optional[str] = None,
 ) -> Optional[DataFrame]:
     df = get_historical_price_df(tickers, period_code, from_date, to_date)
     if df is None:

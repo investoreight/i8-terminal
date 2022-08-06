@@ -44,4 +44,5 @@ notebooks/.ipynb_checkpoints
 .user
 .mypy_cashe
 
+.history/
 docs/metrics/*.md

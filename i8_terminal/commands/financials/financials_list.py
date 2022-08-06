@@ -1,8 +1,10 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import click
 import investor8_sdk
 import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
 from rich.console import Console
 
 from i8_terminal.commands.financials import financials
@@ -52,6 +54,44 @@ def get_standardized_financials(
     if not fins:
         return None
     return prepare_financials_df(fins, period_size, include_ticker=False, exportize=exportize)
+
+
+def get_financials_df(
+    ticker: str, statement: str = "income_statement", period_type: str = "FY"
+) -> Optional[pd.DataFrame]:
+    proper_tags = [
+        "Operating Revenue",
+        "Total Revenue",
+        "Operating Cost of Revenue",
+        "Total Cost of Revenue",
+        "Total Gross Profit",
+        "Selling, General & Admin Expense",
+        "Research & Development Expense",
+        "Total Operating Expenses",
+        "Total Operating Income",
+        "Other Income / (Expense), net",
+        "Total Other Income / (Expense), net",
+        "Total Pre-Tax Income",
+        "Income Tax Expense",
+        "Net Income / (Loss) Continuing Operations",
+        "Consolidated Net Income / (Loss)",
+        "Net Income / (Loss) Attributable to Common Shareholders",
+        "Weighted Average Basic Shares Outstanding",
+        "Basic Earnings per Share",
+        "Weighted Average Diluted Shares Outstanding",
+        "Diluted Earnings per Share",
+        "Weighted Average Basic & Diluted Shares Outstanding",
+        "Cash Dividends to Common per Share",
+    ]
+    data = get_standardized_financials(
+        identifiers_dict={"ticker": ticker}, statement=statement, period_type=period_type
+    )
+    if data is not None:
+        df = data["data"]
+
+        df["tag"] = proper_tags
+        return df
+    return None
 
 
 @financials.command()
@@ -125,3 +165,72 @@ def list(identifier: str, statement: str, period_type: Optional[str], export_pat
             title=f"{identifiers_dict['ticker'].upper()} {get_statements_disp_name(matched_statement)}",
         )
         console.print(tree)
+
+
+def visualize_financials(df: pd.DataFrame, ticker: str) -> Tuple[go.Figure, go.Figure, go.Figure, go.Figure, go.Figure]:
+    visible = ["tag", "2021\n(Annual)", "2020\n(Annual)", "2019\n(Annual)", "2018\n(Annual)"]
+    revenu_filter = [
+        "Operating Revenue",
+        "Total Revenue",
+        "Operating Cost of Revenue",
+        "Total Cost of Revenue",
+        "Total Gross Profit",
+    ]
+    net_incom_filter = ["Consolidated Net Income / (Loss)", "Net Income / (Loss) Continuing Operations"]
+    expense_filter = ["Selling, General & Admin Expense", "Research & Development Expense", "Total Operating Expenses"]
+    income_filtere = [
+        "Total Operating Income",
+        "Other Income / (Expense), net",
+        "Total Other Income / (Expense), net",
+        "Total Pre-Tax Income",
+        "Income Tax Expense",
+        "Net Income / (Loss) Continuing Operations",
+        "Consolidated Net Income / (Loss) ",
+        "Net Income / (Loss) Attributable to Common Shareholders",
+    ]
+    suplements_filter = [
+        "Weighted Average Basic Shares Outstanding",
+        "Basic Earnings per Share",
+        "Weighted Average Diluted Shares Outstanding",
+        "Diluted Earnings per Share",
+        "Weighted Average Basic & Diluted Shares Outstanding",
+        "Cash Dividends to Common per Share",
+    ]
+
+    df_revenue = df.loc[df["tag"].isin(revenu_filter)]
+    df_net_income = df.loc[df["tag"].isin(net_incom_filter)]
+    df_expense = df.loc[df["tag"].isin(expense_filter)]
+    df_income = df.loc[df["tag"].isin(income_filtere)]
+    df_suplement = df.loc[df["tag"].isin(suplements_filter)]
+
+    fig_revenue = make_table_figure(df_revenue, visible, "Revenue", ticker)
+    fig_net_income = make_table_figure(df_net_income, visible, "Net Income", ticker)
+    fig_expense = make_table_figure(df_expense, visible, "Expense", ticker)
+    fig_income = make_table_figure(df_income, visible, "Income", ticker)
+    fig_supplement = make_table_figure(df_suplement, visible, "Supplements", ticker)
+
+    return fig_revenue, fig_expense, fig_income, fig_supplement, fig_net_income
+
+
+def make_table_figure(df: pd.DataFrame, visible: List[str], name: str, ticker: str) -> go.Figure:
+    fig_table = go.Figure(
+        data=[
+            go.Table(
+                columnwidth=[5, 3, 3, 3, 3],
+                header=dict(
+                    values=["" if v == "tag" else f"<b>{v}</b>" for v in visible],
+                    font=dict(color="white", size=12),
+                    fill_color="#015560",
+                    align="center",
+                ),
+                cells=dict(
+                    values=[df[c] for c in visible],
+                    fill_color=[["#00b08f"] * 5, ["white"] * 20],
+                    align=["left"] * df.shape[0] + ["center"] * df.shape[0] * (df.shape[1] - 1),
+                ),
+            )
+        ]
+    )
+    fig_table.update_layout(title=f"{ticker} - {name}", font=dict(color="#015560"))
+    fig_table.update_layout(width=1000, height=500)
+    return fig_table
