@@ -72,3 +72,11 @@ def export_data(
 def is_cached_file_expired(file_path: str) -> bool:
     mtime = arrow.get(os.path.getmtime(file_path))
     return bool(mtime < arrow.utcnow().shift(hours=-APP_SETTINGS.get("cache", {}).get("age", 48)))
+
+
+def reverse_period(period: str) -> str:
+    """
+    If period is fyq type (eg. 'Q 2021'), the function will change it to '2021 Q'.
+    """
+    splitted_period = period.split(" ")
+    return f"{splitted_period[1]} {splitted_period[0]}" if len(splitted_period) > 1 else period

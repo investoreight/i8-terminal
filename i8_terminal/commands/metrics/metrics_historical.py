@@ -17,7 +17,7 @@ from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.layout import df2Table, format_metrics_df
 from i8_terminal.common.stock_info import validate_tickers
-from i8_terminal.common.utils import PlotType
+from i8_terminal.common.utils import PlotType, reverse_period
 from i8_terminal.types.chart_param_type import ChartParamType
 from i8_terminal.types.metric_param_type import MetricParamType
 from i8_terminal.types.output_param_type import OutputParamType
@@ -42,6 +42,7 @@ def get_historical_metrics_df(
     )
     metadata_df = pd.DataFrame([h.to_dict() for h in historical_metrics.metadata])
     df = pd.merge(df, metadata_df, on="metric_name")
+    df[["data_format", "display_format"]] = df[["data_format", "display_format"]].replace("string", "str")
     df.rename(columns={"display_name": "Metric", "Value": "value"}, inplace=True)
     df["value"] = df.apply(
         lambda metric: locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value), axis=1  # type: ignore
@@ -113,11 +114,8 @@ def create_fig(
             fig["layout"][f"xaxis{metric_idx+1}"]["dtick"] = round(len(metric_df["Period"]) / 10)
 
     fig.update_traces(hovertemplate="%{y} %{x}")
-    df["Reversed Period"] = df.apply(lambda row: f"{row.Period.split(' ')[1]} {row.Period.split(' ')[0]}", axis=1)
-    sorted_periods = [
-        f"{reversed_period.split(' ')[1]} {reversed_period.split(' ')[0]}"
-        for reversed_period in sorted(set(df["Reversed Period"]))
-    ]
+    df["Reversed Period"] = df.apply(lambda row: reverse_period(row.Period), axis=1)
+    sorted_periods = [reverse_period(reversed_period) for reversed_period in sorted(set(df["Reversed Period"]))]
     fig.update_xaxes(
         rangeslider_visible=False,
         spikemode="across",
@@ -227,6 +225,12 @@ def historical(
     console = Console()
     with console.status("Fetching data...", spinner="material") as status:
         df = get_historical_metrics_df(tickers_list, metrics_list)
+        if len(df["default_period_type"].unique()) > 1:
+            console.print(
+                "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type. Check `metrics describe` command to find more about metrics.",
+                style="yellow",
+            )
+            return
         if output == "plot":
             cmd_context["plot_title"] = f"Historical {' and '.join(list(set(df['Metric'])))}"
             status.update("Generating plot...")
@@ -239,13 +243,15 @@ def historical(
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in df.groupby("Metric"):
         columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
+    df = df.groupby(["Ticker", "Period"]).head(1)
     formatted_df = (
         format_metrics_df(df, "console")
         .pivot(index=["Ticker", "Period"], columns="Metric", values="value")
         .reset_index()
     )
     formatted_df["reversed_period"] = formatted_df.apply(
-        lambda row: f"{row.Period.split(' ')[1]} {row.Period.split(' ')[0]}", axis=1
+        lambda row: reverse_period(row.Period),
+        axis=1,
     )
     formatted_df.sort_values(["Ticker", "reversed_period"], ascending=False, inplace=True)
     formatted_df.drop(columns=["reversed_period"], inplace=True)
