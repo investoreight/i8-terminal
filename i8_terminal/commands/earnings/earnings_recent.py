@@ -1,3 +1,6 @@
+from typing import Optional
+
+import click
 import investor8_sdk
 import pandas as pd
 from rich.console import Console
@@ -7,6 +10,8 @@ from i8_terminal.common.cli import pass_command
 from i8_terminal.common.formatting import get_formatter
 from i8_terminal.common.layout import df2Table, format_df
 from i8_terminal.common.stock_info import get_stocks_df
+from i8_terminal.common.utils import export_data
+from i8_terminal.config import APP_SETTINGS
 
 
 def get_recent_earnings_df(size: int) -> pd.DataFrame:
@@ -44,8 +49,9 @@ def format_recent_earnings_df(df: pd.DataFrame, target: str) -> pd.DataFrame:
 
 
 @earnings.command()
+@click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
-def recent() -> None:
+def recent(export_path: Optional[str]) -> None:
     """
     Lists recent company earnings.
 
@@ -57,6 +63,14 @@ def recent() -> None:
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         df = get_recent_earnings_df(size=20)
+    if export_path:
+        export_data(
+            format_recent_earnings_df(df, "store"),
+            export_path,
+            column_width=18,
+            column_format=APP_SETTINGS["styles"]["xlsx"]["financials"]["column"],
+        )
+        return
     df_formatted = format_recent_earnings_df(df, "console")
     table = df2Table(df_formatted)
     console.print(table)
