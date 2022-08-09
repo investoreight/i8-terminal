@@ -18,7 +18,7 @@ from i8_terminal.commands.financials import financials
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.metrics import find_similar_fin_metric
 from i8_terminal.common.stock_info import validate_tickers
-from i8_terminal.common.utils import PlotType
+from i8_terminal.common.utils import PlotType, reverse_period
 from i8_terminal.types.chart_param_type import ChartParamType, get_chart_param_types
 from i8_terminal.types.metric_param_type import MetricParamType
 from i8_terminal.types.period_type_param_type import PeriodTypeParamType
@@ -51,7 +51,7 @@ def get_historical_financials_df(
     df = pd.merge(df, metadata_df, on="metric_name")
     df.rename(columns={"display_name": "Metric"}, inplace=True)
     df = pd.pivot_table(df, index="Period", columns=["Ticker", "Metric"], values=["Value"]).reset_index(level=0)
-    df["ReversedPeriod"] = df["Period"].apply(lambda x: f"{x.split(' ')[1]}{x.split(' ')[0]}")
+    df["ReversedPeriod"] = df["Period"].apply(lambda x: reverse_period(x))
     df = df.sort_values("ReversedPeriod").dropna()
     metric_display_names = list(set(metadata_df[metadata_df.metric_name.isin(metrics)]["display_name"]))
     df.index.name = f"Historical {' and '.join(metric_display_names)}"

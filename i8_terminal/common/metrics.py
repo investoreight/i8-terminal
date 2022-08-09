@@ -127,7 +127,9 @@ def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFr
     metrics_data_df = pd.DataFrame([m.to_dict() for m in metrics.data])
     metrics_data_df.rename(columns={"metric": "metric_name", "symbol": "Ticker"}, inplace=True)
     metrics_metadata_df = pd.DataFrame([m.to_dict() for m in metrics.metadata])
-    return pd.merge(metrics_data_df, metrics_metadata_df, on="metric_name").replace("string", "str")
+    df = pd.merge(metrics_data_df, metrics_metadata_df, on="metric_name")
+    df[["data_format", "display_format"]] = df[["data_format", "display_format"]].replace("string", "str")
+    return df
 
 
 def prepare_current_metrics_formatted_df(df: DataFrame, target: str) -> DataFrame:
