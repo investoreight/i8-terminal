@@ -10,6 +10,9 @@ import plotly.graph_objects as go
 from pandas import DataFrame
 from plotly.subplots import make_subplots
 from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.tree import Tree
 
 from i8_terminal.app.layout import get_plot_default_layout
 from i8_terminal.app.plot_server import serve_plot
@@ -18,6 +21,7 @@ from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.layout import df2Table, format_metrics_df
 from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import PlotType, reverse_period
+from i8_terminal.config import get_table_style
 from i8_terminal.types.chart_param_type import ChartParamType
 from i8_terminal.types.metric_param_type import MetricParamType
 from i8_terminal.types.output_param_type import OutputParamType
@@ -149,6 +153,46 @@ def create_fig(
     return fig
 
 
+def historical_metrics_df2tree(df: DataFrame) -> Tree:
+    df = df.pivot(index=["Metric", "Ticker"], columns="Period", values="value").reset_index()
+    tickers = list(df["Ticker"].unique())
+    reversed_periods = [reverse_period(p) for p in list(df.columns[2:])]
+    reversed_periods.sort(reverse=True)
+    sorted_periods = [reverse_period(rp) for rp in reversed_periods]
+    col_width = 15
+    plot_title = f"Comparison of {', '.join(tickers)}"
+    tree = Tree(Panel(plot_title, width=50))
+    # Add header table to tree
+    header_table = Table(
+        width=55 + (col_width * (len(sorted_periods) - 1)), show_lines=False, show_header=False, box=None
+    )
+    header_table.add_column(width=15, style="magenta")
+    for p in list(df):
+        header_table.add_column(width=col_width, justify="right", style="magenta")
+    header_table.add_row("Period", *sorted_periods)
+    tree.add(header_table)
+
+    table_style = get_table_style("metrics_historical")
+
+    for metric, metric_values in df.groupby("Metric", sort=False):
+        metric_branch = tree.add(f"[magenta]{metric}")
+        for i, r in metric_values.reset_index().iterrows():
+            t = Table(
+                width=22 + (col_width * (len(sorted_periods) - 1)),
+                show_lines=False,
+                show_header=False,
+                box=None,
+                row_styles=[table_style["row_styles"][i % 2]],
+            )
+            t.add_column(width=11)
+            for period in sorted_periods:
+                t.add_column(width=col_width, justify="right")
+            t.add_row(r["Ticker"], *[f"{d}" if d is not np.nan else "-" for d in r[sorted_periods].values])
+            metric_branch.add(t)
+
+    return tree
+
+
 @metrics.command()
 @click.pass_context
 @click.option(
@@ -180,14 +224,9 @@ def create_fig(
     default="line",
     help="Plot can be bar or line chart.",
 )
+@click.option("--pivot", "-pv", is_flag=True, default=False, help="Output will be pivot table.")
 @pass_command
-def historical(
-    ctx: click.Context,
-    tickers: str,
-    metrics: str,
-    output: str,
-    plot_type: str,
-) -> None:
+def historical(ctx: click.Context, tickers: str, metrics: str, output: str, plot_type: str, pivot: bool) -> None:
     """
     Compares and plots daily metrics of given companies. TICKERS is a comma-separated list of tickers.
 
@@ -225,6 +264,7 @@ def historical(
     console = Console()
     with console.status("Fetching data...", spinner="material") as status:
         df = get_historical_metrics_df(tickers_list, metrics_list)
+        df = df.sort_values(["PeriodDateTime"], ascending=False).groupby(["Ticker", "Metric", "Period"]).head(1)
         if len(df["default_period_type"].unique()) > 1:
             console.print(
                 "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type. Check `metrics describe` command to find more about metrics.",
@@ -239,16 +279,15 @@ def historical(
     if output == "plot":
         serve_plot(fig, cmd_context)
         return
-
+    formatted_df = format_metrics_df(df, "console")
+    if pivot:
+        tree = historical_metrics_df2tree(formatted_df)
+        console.print(tree)
+        return
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in df.groupby("Metric"):
         columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
-    df = df.groupby(["Ticker", "Period"]).head(1)
-    formatted_df = (
-        format_metrics_df(df, "console")
-        .pivot(index=["Ticker", "Period"], columns="Metric", values="value")
-        .reset_index()
-    )
+    formatted_df = formatted_df.pivot(index=["Ticker", "Period"], columns="Metric", values="value").reset_index()
     formatted_df["reversed_period"] = formatted_df.apply(
         lambda row: reverse_period(row.Period),
         axis=1,
