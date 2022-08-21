@@ -105,6 +105,7 @@ def init_commands() -> None:
         """Open company detail page in investoreight.com"""
         url = f"https://www.investoreight.com/stock/{ticker}"
         webbrowser.open(url)
+        console.print(f"[blue]{url}[/blue]")
 
 
 def print_welcome_msg() -> None:
