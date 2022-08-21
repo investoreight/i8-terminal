@@ -160,7 +160,7 @@ def historical_metrics_df2tree(df: DataFrame) -> Tree:
     reversed_periods.sort(reverse=True)
     sorted_periods = [reverse_period(rp) for rp in reversed_periods]
     col_width = 15
-    plot_title = f"Comparison of {', '.join(tickers)}"
+    plot_title = f"Historical {' and '.join(list(set(df['Metric'])))}"
     tree = Tree(Panel(plot_title, width=50))
     # Add header table to tree
     header_table = Table(
