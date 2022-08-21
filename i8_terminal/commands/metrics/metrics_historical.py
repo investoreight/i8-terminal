@@ -155,7 +155,6 @@ def create_fig(
 
 def historical_metrics_df2tree(df: DataFrame) -> Tree:
     df = df.pivot(index=["Metric", "Ticker"], columns="Period", values="value").reset_index()
-    tickers = list(df["Ticker"].unique())
     reversed_periods = [reverse_period(p) for p in list(df.columns[2:])]
     reversed_periods.sort(reverse=True)
     sorted_periods = [reverse_period(rp) for rp in reversed_periods]
