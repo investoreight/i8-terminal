@@ -9,6 +9,7 @@ from prompt_toolkit.document import Document
 
 from i8_terminal.types.command_parser import CommandParser
 from i8_terminal.types.fin_identifier_param_type import FinancialsIdentifierParamType
+from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 
 
 class I8AutoSuggest(AutoSuggest):
@@ -54,5 +55,17 @@ class I8AutoSuggest(AutoSuggest):
                 elif matched_param.name == "path":
                     if len(ctx.incomplete) < 1:
                         return Suggestion("[path]/[filename].[xlsx]")
+                elif type(matched_param.type) is MetricIdentifierParamType:
+                    parts_num = 2
+                    parts = ctx.incomplete.split(",")
+                    incomplete = parts[-1] if len(parts) > 0 else " "
+                    sub_parts = incomplete.split(".")
+                    if len(sub_parts) > 1:
+                        parts_num = 1
+
+                    if len(incomplete) < 1:
+                        return Suggestion("Metric.[Period]")
+                    elif parts_num == 1:
+                        return Suggestion("[Period]")
 
         return None

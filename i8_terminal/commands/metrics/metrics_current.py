@@ -13,7 +13,7 @@ from i8_terminal.common.metrics import (
 from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import export_data
 from i8_terminal.config import APP_SETTINGS
-from i8_terminal.types.metric_param_type import MetricParamType
+from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
 
 
@@ -29,7 +29,7 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 @click.option(
     "--metrics",
     "-m",
-    type=MetricParamType(),
+    type=MetricIdentifierParamType(),
     default="pe_ratio_ttm",
     help="Comma-separated list of daily metrics.",
 )
