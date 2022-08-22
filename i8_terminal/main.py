@@ -20,14 +20,18 @@ status = console.status("Starting Up...", spinner="material")
 status.start()
 
 
+import webbrowser
+
 import click
 import investor8_sdk
 from click_repl import repl
 from investor8_sdk.rest import ApiException
 
 from i8_terminal.commands import cli
+from i8_terminal.common.stock_info import validate_ticker
 from i8_terminal.types.i8_auto_suggest import I8AutoSuggest
 from i8_terminal.types.i8_completer import I8Completer
+from i8_terminal.types.ticker_param_type import TickerParamType
 
 
 def init_commands() -> None:
@@ -86,6 +90,22 @@ def init_commands() -> None:
         cls_screen()
         if not all:
             print_welcome_msg()
+
+    @cli.command()
+    @click.option(
+        "--ticker",
+        "-k",
+        type=TickerParamType(),
+        required=True,
+        callback=validate_ticker,
+        help="Ticker or company name.",
+    )
+    @pass_command
+    def browse(ticker: str) -> None:
+        """Open company detail page in investoreight.com"""
+        url = f"https://www.investoreight.com/stock/{ticker}"
+        webbrowser.open(url)
+        console.print(f"[blue]{url}[/blue]")
 
 
 def print_welcome_msg() -> None:
