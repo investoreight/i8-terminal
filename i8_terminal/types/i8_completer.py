@@ -122,7 +122,7 @@ class I8Completer(ClickCompleter):
                         param_type = "metric"
                     incomplete = sub_parts[-1] if len(sub_parts) > 0 else " "
                     for (idf, name) in matched_param.type.get_suggestions(incomplete if incomplete else " ", False, param_type, sub_parts[0]):  # type: ignore
-                        choices.append(Completion(text_type(idf.upper()), -len(incomplete), display_meta=name))
+                        choices.append(Completion(text_type(idf), -len(incomplete), display_meta=name))
         else:
             for param in command.params:
                 if isinstance(param, click.Option):
