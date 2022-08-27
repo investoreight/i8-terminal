@@ -27,9 +27,16 @@ PERIODS: Dict[str, List[Tuple[str, str]]] = {
     "fin_statement": [
         ("mrq", "most recent quarter"),
         ("mry", "most recent year"),
+        ("ttm", "most recent year"),
+        ("ytd", "most recent year"),
         *[(f"{i}qa", f"{i} quarter{'s' if i > 1 else ''} ago") for i in range(1, 3)],
         *[(f"{i}ya", f"{i} year{'s' if i > 1 else ''} ago") for i in range(1, 3)],
         *[(f"q{i}_{y}", f"Fiscal quarter {i} {y}") for i in range(1, 5) for y in range(datetime.now().year, 2008, -1)],
+        *[
+            (f"q{i}_ttm_{y}", f"Fiscal quarter {i} {y}")
+            for i in range(1, 5)
+            for y in range(datetime.now().year, 2008, -1)
+        ],
         *[(f"fy_{y}", f"Fiscal year {y}") for y in range(datetime.now().year, 2008, -1)],
     ],
     "earnings": [
