@@ -118,7 +118,7 @@ def get_period_start_date(period: str) -> str:
 
 
 def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFrame]:
-    metrics = investor8_sdk.MetricsApi().get_current_metrics_0(
+    metrics = investor8_sdk.MetricsApi().get_current_metrics(
         symbols=tickers,
         metrics=metricsList,
     )
