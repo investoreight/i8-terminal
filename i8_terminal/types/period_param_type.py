@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
-from i8_terminal.common.metrics import get_all_metrics_df
+from i8_terminal.common.metrics import get_all_metrics_types_dict
 from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
 
 PERIODS: Dict[str, List[Tuple[str, str]]] = {
@@ -48,19 +48,14 @@ PERIODS: Dict[str, List[Tuple[str, str]]] = {
 }
 
 
-def get_periods(metric: Optional[str]) -> List[Tuple[str, str]]:
-    if not metric:
-        return []
-    df = get_all_metrics_df()[["metric_name", "type"]]
-    type = list(df[df.metric_name == metric]["type"])[0]
-    return PERIODS[type]
-
-
 class PeriodParamType(AutoCompleteChoice):
     name = "period"
+    metrics: Dict[str, str] = {}
 
     def get_suggestions(self, keyword: str, pre_populate: bool = True, metric: str = None) -> List[Tuple[str, str]]:
-        self.set_choices(get_periods(metric))
+        if not self.is_loaded:
+            self.metrics = get_all_metrics_types_dict()
+        self.set_choices(PERIODS.get(self.metrics[metric if metric else ""], []))
 
         if pre_populate and keyword.strip() == "":
             return self._choices[: self.size]
