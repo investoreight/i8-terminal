@@ -139,3 +139,8 @@ def prepare_current_metrics_formatted_df(df: DataFrame, target: str) -> DataFram
         .reset_index(level=0)
         .reindex(np.insert(df["display_name"].unique(), 0, "Ticker"), axis=1)
     )
+
+
+def get_all_metrics_types_dict() -> Dict[str, str]:
+    df = get_all_metrics_df()[["metric_name", "type"]]
+    return dict([(i, j) for i, j in zip(df.metric_name, df.type)])
