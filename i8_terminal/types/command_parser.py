@@ -33,7 +33,7 @@ class CommandParser:
     def parse(self, document: Document) -> Union[CompleterContext, None]:
         tokens = document.text.split(" ")
         used_options = [p for p in tokens if p.startswith("-")]
-        last_option = tokens[-2] if len(tokens) > 3 and tokens[-2].startswith("-") else None
+        last_option = tokens[-2] if len(tokens) > 2 and tokens[-2].startswith("-") else None
 
         try:
             args = shlex.split(document.text_before_cursor)

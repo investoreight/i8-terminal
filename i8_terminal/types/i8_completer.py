@@ -14,6 +14,7 @@ from i8_terminal.types.fin_identifier_param_type import FinancialsIdentifierPara
 from i8_terminal.types.fin_period_param_type import FinancialsPeriodParamType
 from i8_terminal.types.fin_statement_param_type import FinancialStatementParamType
 from i8_terminal.types.indicator_param_type import IndicatorParamType
+from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 from i8_terminal.types.metric_param_type import MetricParamType
 from i8_terminal.types.metric_view_param_type import MetricViewParamType
 from i8_terminal.types.output_param_type import OutputParamType
@@ -109,6 +110,21 @@ class I8Completer(ClickCompleter):
                     incomplete = parts[-1] if len(parts) > 0 else " "
                     for (metric_view, desc) in matched_param.type.get_suggestions(incomplete if incomplete else " ", True):  # type: ignore
                         choices.append(Completion(text_type(metric_view), -len(incomplete)))
+                elif type(matched_param.type) is MetricIdentifierParamType:
+                    param_type = "metric"
+                    filter_choices = False
+                    parts = ctx.incomplete.split(",")
+                    incomplete = parts[-1] if len(parts) > 0 else " "
+                    sub_parts = incomplete.split(".")
+                    if len(sub_parts) > 1:
+                        param_type = "period"
+                    else:
+                        param_type = "metric"
+                    incomplete = sub_parts[-1] if len(sub_parts) > 0 else " "
+                    for (idf, name) in matched_param.type.get_suggestions(
+                        incomplete if incomplete else " ", False, param_type, sub_parts[0]
+                    ):
+                        choices.append(Completion(text_type(idf), -len(incomplete), display_meta=name))
         else:
             for param in command.params:
                 if isinstance(param, click.Option):
