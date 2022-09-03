@@ -1,6 +1,5 @@
 import enum
 import os
-import sys
 import warnings
 from difflib import SequenceMatcher
 from typing import Any, Dict, Optional
@@ -77,11 +76,11 @@ def is_cached_file_expired(file_path: str) -> bool:
     return bool(mtime < arrow.utcnow().shift(hours=-APP_SETTINGS.get("cache", {}).get("age", 48)))
 
 
-def no_warnings():
+def no_warnings() -> None:
     warnings.filterwarnings("ignore")
 
 
-def initialize_api():
+def initialize_api() -> None:
     investor8_sdk.ApiClient().configuration.api_key["apiKey"] = USER_SETTINGS.get("i8_core_api_key")
     investor8_sdk.ApiClient().configuration.api_key["Authorization"] = USER_SETTINGS.get("i8_core_token")
     investor8_sdk.ApiClient().configuration.api_key_prefix["Authorization"] = "Bearer"

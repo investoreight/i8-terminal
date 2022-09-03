@@ -1,11 +1,10 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import click
 import investor8_sdk
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 from rich.console import Console
 
 from i8_terminal.commands.financials import financials
@@ -57,36 +56,9 @@ def get_standardized_financials(
     return prepare_financials_df(fins, period_size, include_ticker=False, exportize=exportize)
 
 
-def dummy(
-    identifiers_dict: Dict[str, str],
-    statement: str,
-    period_type: Optional[str],
-    period_size: int = 4,
-    exportize: Optional[bool] = False,
-):
-    fins = []
-    if identifiers_dict.get("fiscal_period"):
-        fins = [
-            investor8_sdk.FinancialsApi().get_financials_single(
-                ticker=identifiers_dict["ticker"],
-                stat_code=statement,
-                fiscal_year=identifiers_dict.get("fiscal_year"),
-                fiscal_period=identifiers_dict.get("fiscal_period"),
-            )
-        ]
-    else:
-        period_type = "FY" if not period_type else period_type
-        fins = investor8_sdk.FinancialsApi().get_list_standardized_financials(
-            ticker=identifiers_dict["ticker"],
-            stat_code=statement,
-            period_type=period_type,
-            end_year=identifiers_dict.get("fiscal_year", ""),
-        )
-        fins
-    return fins
-
-
-def get_financials_df(ticker: str, statement="income_statement", period_type="FY") -> pd.DataFrame:
+def get_financials_df(
+    ticker: str, statement: str = "income_statement", period_type: str = "FY"
+) -> Optional[pd.DataFrame]:
     proper_tags = [
         "Operating Revenue",
         "Total Revenue",
@@ -111,11 +83,15 @@ def get_financials_df(ticker: str, statement="income_statement", period_type="FY
         "Weighted Average Basic & Diluted Shares Outstanding",
         "Cash Dividends to Common per Share",
     ]
-    df = get_standardized_financials(identifiers_dict={"ticker": ticker}, statement=statement, period_type=period_type)[
-        "data"
-    ]
-    df["tag"] = proper_tags
-    return df
+    data = get_standardized_financials(
+        identifiers_dict={"ticker": ticker}, statement=statement, period_type=period_type
+    )
+    if data is not None:
+        df = data["data"]
+
+        df["tag"] = proper_tags
+        return df
+    return None
 
 
 @financials.command()
@@ -191,12 +167,7 @@ def list(identifier: str, statement: str, period_type: Optional[str], export_pat
         console.print(tree)
 
 
-def visualize_financials(df, ticker):
-    fig = make_subplots(
-        rows=5,
-        cols=1,
-        # subplot_titles=('Revenue', 'title 2', 'title 3','title 4', 'title 5')
-    )
+def visualize_financials(df: pd.DataFrame, ticker: str) -> Tuple[go.Figure, go.Figure, go.Figure, go.Figure, go.Figure]:
     visible = ["tag", "2021\n(Annual)", "2020\n(Annual)", "2019\n(Annual)", "2018\n(Annual)"]
     revenu_filter = [
         "Operating Revenue",
@@ -233,15 +204,15 @@ def visualize_financials(df, ticker):
     df_suplement = df.loc[df["tag"].isin(suplements_filter)]
 
     fig_revenue = make_table_figure(df_revenue, visible, "Revenue", ticker)
-    # fig_net_income = make_table_figure(df_net_income, visible, "Net Income", ticker)
+    fig_net_income = make_table_figure(df_net_income, visible, "Net Income", ticker)
     fig_expense = make_table_figure(df_expense, visible, "Expense", ticker)
     fig_income = make_table_figure(df_income, visible, "Income", ticker)
     fig_supplement = make_table_figure(df_suplement, visible, "Supplements", ticker)
 
-    return fig_revenue, fig_expense, fig_income, fig_supplement
+    return fig_revenue, fig_expense, fig_income, fig_supplement, fig_net_income
 
 
-def make_table_figure(df, visible, name, ticker):
+def make_table_figure(df: pd.DataFrame, visible: List[str], name: str, ticker: str) -> go.Figure:
     fig_table = go.Figure(
         data=[
             go.Table(
