@@ -1,0 +1,1 @@
+from .earnings_services import get_earnings_list as list 
