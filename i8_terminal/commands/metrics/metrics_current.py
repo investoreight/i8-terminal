@@ -13,7 +13,7 @@ from i8_terminal.common.metrics import (
 from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import export_data
 from i8_terminal.config import APP_SETTINGS
-from i8_terminal.types.metric_param_type import MetricParamType
+from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
 
 
@@ -29,7 +29,7 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 @click.option(
     "--metrics",
     "-m",
-    type=MetricParamType(),
+    type=MetricIdentifierParamType(),
     default="pe_ratio_ttm",
     help="Comma-separated list of daily metrics.",
 )
@@ -53,7 +53,7 @@ def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
         console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
     if export_path:
         export_data(
-            prepare_current_metrics_formatted_df(df, "store"),
+            prepare_current_metrics_formatted_df(df, "store", include_period=True),
             export_path,
             column_width=18,
             column_format=APP_SETTINGS["styles"]["xlsx"]["financials"]["column"],
@@ -62,5 +62,7 @@ def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
         columns_justify: Dict[str, Any] = {}
         for metric_display_name, metric_df in df.groupby("display_name"):
             columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
-        table = df2Table(prepare_current_metrics_formatted_df(df, "console"), columns_justify=columns_justify)
+        table = df2Table(
+            prepare_current_metrics_formatted_df(df, "console", include_period=True), columns_justify=columns_justify
+        )
         console.print(table)
