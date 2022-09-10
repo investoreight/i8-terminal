@@ -4,7 +4,7 @@ from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
 
 
 def get_period_types() -> List[Tuple[str, str]]:
-    return [("Q", "Quarterly"), ("FY", "Anual"), ("TTM", "Trailing 12-month")]
+    return [("D", "Daily"), ("Q", "Quarterly"), ("FY", "Anual"), ("TTM", "Trailing 12-month"), ("YTD", "Year to date")]
 
 
 class PeriodTypeParamType(AutoCompleteChoice):
