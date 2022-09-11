@@ -1,5 +1,5 @@
 from pydoc import locate
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import click
 import investor8_sdk
@@ -25,13 +25,17 @@ from i8_terminal.config import get_table_style
 from i8_terminal.types.chart_param_type import ChartParamType
 from i8_terminal.types.metric_param_type import MetricParamType
 from i8_terminal.types.output_param_type import OutputParamType
+from i8_terminal.types.period_type_param_type import PeriodTypeParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
 
 
 def get_historical_metrics_df(
     tickers: List[str],
     metrics: List[str],
+    period_type: Optional[str],
 ) -> DataFrame:
+    if period_type:
+        metrics = [f"{metric}.{period_type}" for metric in metrics]
     historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
         symbols=",".join(tickers), metrics=",".join(metrics), from_period_offset=-10, to_period_offset=0
     )
@@ -224,8 +228,16 @@ def historical_metrics_df2tree(df: DataFrame) -> Tree:
     help="Plot can be bar or line chart.",
 )
 @click.option("--pivot", "-pv", is_flag=True, default=False, help="Output will be pivot table.")
+@click.option(
+    "--period_type",
+    "-t",
+    type=PeriodTypeParamType(),
+    help="Period by which you want to view the report. Possible values are `D` for daily, `FY` for yearly, `Q` for quarterly, `TTM` for TTM reports, `YTD` for YTD reports.",
+)
 @pass_command
-def historical(ctx: click.Context, tickers: str, metrics: str, output: str, plot_type: str, pivot: bool) -> None:
+def historical(
+    ctx: click.Context, tickers: str, metrics: str, output: str, plot_type: str, pivot: bool, period_type: Optional[str]
+) -> None:
     """
     Compares and plots daily metrics of given companies. TICKERS is a comma-separated list of tickers.
 
@@ -262,7 +274,7 @@ def historical(ctx: click.Context, tickers: str, metrics: str, output: str, plot
 
     console = Console()
     with console.status("Fetching data...", spinner="material") as status:
-        df = get_historical_metrics_df(tickers_list, metrics_list)
+        df = get_historical_metrics_df(tickers_list, metrics_list, period_type)
         df = df.sort_values(["PeriodDateTime"], ascending=False).groupby(["Ticker", "Metric", "Period"]).head(1)
         if len(df["default_period_type"].unique()) > 1:
             console.print(
