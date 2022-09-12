@@ -2,8 +2,16 @@ import re
 from datetime import date
 from typing import Any, Optional, Union
 
+from enum import Enum
 import arrow
 import numpy as np
+
+
+class color(Enum):
+    i8_dark = "#015560"
+    i8_light = "#00b08f"
+    i8_red = "#ef553b"
+    i8_green = "#00cc96"
 
 
 def make_svg_responsive(svg_str: str) -> str:
