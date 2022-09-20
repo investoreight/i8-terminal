@@ -239,11 +239,13 @@ def historical(
     ctx: click.Context, tickers: str, metrics: str, output: str, plot_type: str, pivot: bool, period_type: Optional[str]
 ) -> None:
     """
-    Compares and plots daily metrics of given companies. TICKERS is a comma-separated list of tickers.
+    Lists, compares and plots metrics of given companies. TICKERS is a comma-separated list of tickers.
 
     Examples:
 
-    `i8 metrics historical --metrics price_to_earnings --period 5Y --tickers AMD,INTC,QCOM`
+    `i8 metrics historical --metrics net_income --tickers AMD,INTC,QCOM --output plot --plot_type bar --period_type Q`
+    `i8 metrics historical --metrics total_revenue,total_assets --tickers AMD,INTC,QCOM --output terminal --period_type FY --pivot`
+
     """
     metrics_list = metrics.replace(" ", "").split(",")
     if not output in ["terminal", "plot"]:
