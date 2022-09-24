@@ -43,16 +43,18 @@ def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
 
     Available periods:
         price, performance and technical metrics:
-            1da = 1day ago,
+            1da = 1 day ago,
             2da = 2 days ago
 
         financial metrics:
             mrq = most recent quarter,
-            mry = most recent year,
+            mry = most recent financial year,
+            ttm = trailing 12 months,
+            ytd = year to date,
             1qa = 1 quarter ago,
             2qa = 2 quarters ago,
-            1ya = 1year ago,
-            2ya = 2years ago
+            1ya = 1 year ago,
+            2ya = 2 years ago
 
         earnings metrics:
             uq = upcoming quarter
