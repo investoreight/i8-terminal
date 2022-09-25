@@ -37,11 +37,36 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 @pass_command
 def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
     """
-    Lists the given metrics and indicators for a given list of companies. TICKERS is a comma-separated list of tickers.
+    Lists the given metrics for a given list of companies. TICKERS is a comma-separated list of tickers.
+    METRICS can be in the below format:
+    {metric}.{period}
+
+    Available periods:
+        price, performance and technical metrics:
+            1da = 1 day ago,
+            2da = 2 days ago
+
+        financial metrics:
+            mrq = most recent quarter,
+            mry = most recent financial year,
+            ttm = trailing 12 months,
+            ytd = year to date,
+            1qa = 1 quarter ago,
+            2qa = 2 quarters ago,
+            1ya = 1 year ago,
+            2ya = 2 years ago
+
+        earnings metrics:
+            uq = upcoming quarter
+            mrq = most recent quarter,
+            1qa = 1 quarter ago,
+            2qa = 2 quarters ago
+
+        You can also use specific period (e.g FY_2020).
 
     Examples:
 
-    `i8 metrics current --metrics total_revenue,net_income,price_to_earnings --tickers AMD,INTC,QCOM`
+    `i8 metrics current --metrics total_revenue.mrq,net_income.2ya,close.1da,total_revenue.FY_2019 --tickers AMD,INTC,QCOM`
     """
     console = Console()
     with console.status("Fetching data...", spinner="material"):

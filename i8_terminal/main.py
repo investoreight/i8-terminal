@@ -102,7 +102,13 @@ def init_commands() -> None:
     )
     @pass_command
     def browse(ticker: str) -> None:
-        """Open company detail page in investoreight.com"""
+        """
+        Open company detail page in investoreight.com
+
+        Examples:
+
+        `i8 browse --ticker MSFT`
+        """
         url = f"https://www.investoreight.com/stock/{ticker}"
         webbrowser.open(url)
         console.print(f"[blue]{url}[/blue]")

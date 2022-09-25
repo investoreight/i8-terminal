@@ -147,7 +147,7 @@ def export_companies_data(
 @pass_command
 def compare(tickers: str, export_path: Optional[str]) -> None:
     """
-    Compare details of the given companies.
+    Compare details of the given companies. TICKERS is a comma-separated list of tickers.
 
     Examples:
 
