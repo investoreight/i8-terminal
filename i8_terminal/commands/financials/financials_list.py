@@ -17,7 +17,7 @@ from i8_terminal.common.financials import (
     prepare_financials_df,
 )
 from i8_terminal.common.metrics import get_all_financial_metrics_df
-from i8_terminal.common.utils import export_data
+from i8_terminal.common.utils import export_data, export_to_html
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.fin_identifier_param_type import FinancialsIdentifierParamType
 from i8_terminal.types.fin_statement_param_type import FinancialStatementParamType
@@ -110,6 +110,15 @@ def list(identifier: str, statement: str, period_type: Optional[str], export_pat
         df = df.astype(object).replace(np.nan, None)  # Replace nan with None
 
     if export_path:
+        if export_path.split(".")[-1] == "html":
+            tree = fin_df2Tree(
+                df,
+                fins["header"],
+                periods_list,
+                title=f"{identifiers_dict['ticker'].upper()} {get_statements_disp_name(matched_statement)}",
+            )
+            export_to_html(tree, export_path)
+            return
         export_df = fin_df2export_df(df, periods_list)
         export_data(
             export_df,

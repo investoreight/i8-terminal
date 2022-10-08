@@ -1,6 +1,7 @@
 import enum
 import os
 from difflib import SequenceMatcher
+from io import StringIO
 from typing import Any, Dict, Optional
 
 import arrow
@@ -80,3 +81,30 @@ def reverse_period(period: str) -> str:
     """
     splitted_period = period.split(" ")
     return f"{splitted_period[1]} {splitted_period[0]}" if len(splitted_period) > 1 else period
+
+
+def export_to_html(data: Any, export_path: str) -> None:
+    console = Console(record=True, file=StringIO())
+    console.print(data)
+    exported_html = console.export_html(
+        inline_styles=True,
+        code_format="""
+        <html>
+            <head>
+                <title>i8 Terminal by Investor8</title>
+            </head>
+            <body>
+                <div>
+                    <img src='https://i8terminal.io/img/TerminalLogo.png' width='16%'>
+                </div>
+                <div>
+                    <pre>{code}</pre>
+                </div
+            </body>
+        </html>
+        """,
+    )
+    with open(export_path, "w", encoding="utf-8") as file:
+        file.write(exported_html)
+    console = Console()
+    console.print(f"Data is saved on: {export_path}")

@@ -10,7 +10,7 @@ from i8_terminal.common.cli import pass_command
 from i8_terminal.common.formatting import get_formatter
 from i8_terminal.common.layout import df2Table, format_df
 from i8_terminal.common.stock_info import validate_ticker
-from i8_terminal.common.utils import export_data
+from i8_terminal.common.utils import export_data, export_to_html
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.ticker_param_type import TickerParamType
 
@@ -64,6 +64,11 @@ def list(ticker: str, export_path: Optional[str]) -> None:
     with console.status("Fetching data...", spinner="material"):
         df = get_hist_earnings_df(ticker, size=10)
     if export_path:
+        if export_path.split(".")[-1] == "html":
+            df_formatted = format_hist_earnings_df(df, "console")
+            table = df2Table(df_formatted)
+            export_to_html(table, export_path)
+            return
         export_data(
             format_hist_earnings_df(df, "store"),
             export_path,

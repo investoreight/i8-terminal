@@ -11,7 +11,7 @@ from i8_terminal.common.formatting import get_formatter
 from i8_terminal.common.layout import df2Table, format_df
 from i8_terminal.common.price import get_historical_price_list_df
 from i8_terminal.common.stock_info import validate_ticker
-from i8_terminal.common.utils import export_data, get_period_code
+from i8_terminal.common.utils import export_data, export_to_html, get_period_code
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
@@ -69,6 +69,11 @@ def list(
         df = get_historical_price_list_df([ticker], period_code, cast(str, from_date), cast(str, to_date))
 
     if export_path:
+        if export_path.split(".")[-1] == "html":
+            df_formatted = format_hist_price_df(df, "console")
+            table = df2Table(df_formatted)
+            export_to_html(table, export_path)
+            return
         df_formatted = format_hist_price_df(df, "store")
         export_data(
             df_formatted,
