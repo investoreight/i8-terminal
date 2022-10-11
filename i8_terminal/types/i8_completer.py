@@ -14,6 +14,7 @@ from i8_terminal.types.fin_identifier_param_type import FinancialsIdentifierPara
 from i8_terminal.types.fin_period_param_type import FinancialsPeriodParamType
 from i8_terminal.types.fin_statement_param_type import FinancialStatementParamType
 from i8_terminal.types.indicator_param_type import IndicatorParamType
+from i8_terminal.types.market_indice_param_type import MarketIndiceParamType
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 from i8_terminal.types.metric_param_type import MetricParamType
 from i8_terminal.types.metric_view_param_type import MetricViewParamType
@@ -57,6 +58,7 @@ class I8Completer(ClickCompleter):
                     FinancialsPeriodParamType,
                     ChartParamType,
                     OutputParamType,
+                    MarketIndiceParamType,
                 ]:
                     filter_choices = False
                     parts = ctx.incomplete.split(",")

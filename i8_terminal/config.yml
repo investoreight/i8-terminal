@@ -83,3 +83,7 @@ commands:
           metrics: "pe_ratio_ttm,current_ratio,quick_ratio,price_to_book,revenue_growth,dividend_yield,roe"
         - name: "Key Ratios"
           metrics: pe_ratio_ttm,current_ratio,quick_ratio,price_to_book,revenue_growth,dividend_yield,roe
+  screen_gainers:
+      metrics: "company_name,price,change"
+  screen_losers:
+      metrics: "company_name,price,change"
