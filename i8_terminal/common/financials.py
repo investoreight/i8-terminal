@@ -225,7 +225,7 @@ def available_fin_df2tree(df: pd.DataFrame, ticker: str) -> Tree:
                 show_lines=False,
                 show_header=False,
                 box=None,
-                style="cyan" if period_type == "FY" or period_type == "TTM" else None,
+                style="cyan" if period_type == "FY" or period_type == "TTM" else None,  # type: ignore
             )
             t.add_column(width=16)
             for st in statement_codes:

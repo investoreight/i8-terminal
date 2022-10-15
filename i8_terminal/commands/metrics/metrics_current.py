@@ -11,7 +11,7 @@ from i8_terminal.common.metrics import (
     prepare_current_metrics_formatted_df,
 )
 from i8_terminal.common.stock_info import validate_tickers
-from i8_terminal.common.utils import export_data
+from i8_terminal.common.utils import export_data, export_to_html
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
@@ -76,7 +76,19 @@ def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
         return
     for m in [*set(metric.split(".")[0] for metric in set(metrics.split(","))) - set(df["metric_name"])]:
         console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
+    columns_justify: Dict[str, Any] = {}
     if export_path:
+        if export_path.split(".")[-1] == "html":
+            for metric_display_name, metric_df in df.groupby("display_name"):
+                columns_justify[metric_display_name] = (
+                    "left" if metric_df["display_format"].values[0] == "str" else "right"
+                )
+            table = df2Table(
+                prepare_current_metrics_formatted_df(df, "console", include_period=True),
+                columns_justify=columns_justify,
+            )
+            export_to_html(table, export_path)
+            return
         export_data(
             prepare_current_metrics_formatted_df(df, "store", include_period=True),
             export_path,
@@ -84,7 +96,6 @@ def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
             column_format=APP_SETTINGS["styles"]["xlsx"]["financials"]["column"],
         )
     else:
-        columns_justify: Dict[str, Any] = {}
         for metric_display_name, metric_df in df.groupby("display_name"):
             columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
         table = df2Table(

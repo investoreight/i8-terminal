@@ -11,12 +11,18 @@ from i8_terminal.app.layout import get_date_range, get_plot_default_layout
 from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.price import price
 from i8_terminal.common.cli import get_click_command_path, pass_command
+from i8_terminal.common.layout import df2Table
 from i8_terminal.common.price import (
     get_historical_price_df,
     get_historical_price_export_df,
 )
 from i8_terminal.common.stock_info import validate_tickers
-from i8_terminal.common.utils import PlotType, export_data, get_period_code
+from i8_terminal.common.utils import (
+    PlotType,
+    export_data,
+    export_to_html,
+    get_period_code,
+)
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
@@ -147,6 +153,10 @@ def compare(
             fig = create_fig(df, period_code, cmd_context)
 
     if export_path:
+        if export_path.split(".")[-1] == "html":
+            table = df2Table(df)
+            export_to_html(table, export_path)
+            return
         export_data(
             df,
             export_path,
