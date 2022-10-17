@@ -21,7 +21,7 @@ from i8_terminal.common.financials import (
     prepare_financials_df,
 )
 from i8_terminal.common.metrics import get_all_financial_metrics_df
-from i8_terminal.common.utils import PlotType, export_data
+from i8_terminal.common.utils import PlotType, export_data, export_to_html
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.fin_identifier_param_type import FinancialsIdentifierParamType
 from i8_terminal.types.fin_statement_param_type import FinancialStatementParamType
@@ -186,6 +186,10 @@ def compare(
     elif plot:
         serve_plot(fig, cmd_context)
     elif export_path:
+        if export_path.split(".")[-1] == "html":
+            tree = fin_df2Tree(df, fins["header"], periods_list, title=plot_title)
+            export_to_html(tree, export_path)
+            return
         export_df = fin_df2export_df(df, periods_list)
         export_data(
             export_df,
