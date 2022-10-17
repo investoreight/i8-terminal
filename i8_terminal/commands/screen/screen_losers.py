@@ -12,6 +12,7 @@ from i8_terminal.common.metrics import (
     get_current_metrics_df,
     prepare_current_metrics_formatted_df,
 )
+from i8_terminal.common.utils import export_data, export_to_html
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.market_indice_param_type import MarketIndiceParamType
 from i8_terminal.types.metric_view_param_type import MetricViewParamType
@@ -39,8 +40,9 @@ def prepare_losers_df(index: str, view_name: Optional[str]) -> Optional[pd.DataF
 @click.option(
     "--view_name", "view_name", "-v", type=MetricViewParamType(), help="Metric view name in configuration file."
 )
+@click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
-def losers(index: str, view_name: Optional[str]) -> None:
+def losers(index: str, view_name: Optional[str], export_path: Optional[str]) -> None:
     """
     Lists today loser companies.
 
@@ -56,9 +58,28 @@ def losers(index: str, view_name: Optional[str]) -> None:
         console.print("No data found for today losers", style="yellow")
         return
     columns_justify: Dict[str, Any] = {}
-    for metric_display_name, metric_df in df.groupby("display_name"):
-        columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
-    table = df2Table(
-        prepare_current_metrics_formatted_df(df, "console").sort_values("Change"), columns_justify=columns_justify
-    )
-    console.print(table)
+    if export_path:
+        if export_path.split(".")[-1] == "html":
+            for metric_display_name, metric_df in df.groupby("display_name"):
+                columns_justify[metric_display_name] = (
+                    "left" if metric_df["display_format"].values[0] == "str" else "right"
+                )
+            table = df2Table(
+                prepare_current_metrics_formatted_df(df, "console").sort_values("Change"),
+                columns_justify=columns_justify,
+            )
+            export_to_html(table, export_path)
+            return
+        export_data(
+            prepare_current_metrics_formatted_df(df, "store").sort_values("Change"),
+            export_path,
+            column_width=18,
+            column_format=APP_SETTINGS["styles"]["xlsx"]["financials"]["column"],
+        )
+    else:
+        for metric_display_name, metric_df in df.groupby("display_name"):
+            columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
+        table = df2Table(
+            prepare_current_metrics_formatted_df(df, "console").sort_values("Change"), columns_justify=columns_justify
+        )
+        console.print(table)
