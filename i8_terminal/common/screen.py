@@ -31,9 +31,7 @@ def render_top_stocks(df: pd.DataFrame, export_path: Optional[str], ascending: b
     change_rows = df.loc[df["metric_name"] == "change"]
     df = pd.concat(
         [
-            pd.DataFrame(
-                change_rows.replace({"change": "change_numbered", "Change": "Change Numbered", "perc": "str"})
-            ),
+            pd.DataFrame(change_rows.replace({"change": "change_numeric", "Change": "Change Numeric", "perc": "str"})),
             df,
         ],
         ignore_index=True,
@@ -42,9 +40,9 @@ def render_top_stocks(df: pd.DataFrame, export_path: Optional[str], ascending: b
     if export_path:
         if export_path.split(".")[-1] == "html":
             formatted_df = prepare_current_metrics_formatted_df(df, "console").sort_values(
-                "Change Numbered", ascending=ascending
+                "Change Numeric", ascending=ascending
             )
-            formatted_df.drop("Change Numbered", axis=1, inplace=True)
+            formatted_df.drop("Change Numeric", axis=1, inplace=True)
             table = df2Table(
                 formatted_df,
                 columns_justify=columns_justify,
@@ -52,9 +50,9 @@ def render_top_stocks(df: pd.DataFrame, export_path: Optional[str], ascending: b
             export_to_html(table, export_path)
             return None
         formatted_df = prepare_current_metrics_formatted_df(df, "store").sort_values(
-            "Change Numbered", ascending=ascending
+            "Change Numeric", ascending=ascending
         )
-        formatted_df.drop("Change Numbered", axis=1, inplace=True)
+        formatted_df.drop("Change Numeric", axis=1, inplace=True)
         export_data(
             formatted_df,
             export_path,
@@ -64,9 +62,9 @@ def render_top_stocks(df: pd.DataFrame, export_path: Optional[str], ascending: b
         return None
     else:
         formatted_df = prepare_current_metrics_formatted_df(df, "console").sort_values(
-            "Change Numbered", ascending=ascending
+            "Change Numeric", ascending=ascending
         )
-        formatted_df.drop("Change Numbered", axis=1, inplace=True)
+        formatted_df.drop("Change Numeric", axis=1, inplace=True)
         table = df2Table(
             formatted_df,
             columns_justify=columns_justify,
