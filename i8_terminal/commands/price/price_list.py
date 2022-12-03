@@ -48,8 +48,8 @@ def format_hist_price_df(df: DataFrame, target: str) -> DataFrame:
     default="1M",
     help="Historical price period.",
 )
-@click.option("--from_date", "-f", type=DateTime(), help="Histotical price from date.")
-@click.option("--to_date", "-t", type=DateTime(), help="Histotical price to date.")
+@click.option("--from_date", "-f", type=DateTime(), help="Historical price from date.")
+@click.option("--to_date", "-t", type=DateTime(), help="Historical price to date.")
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
 def list(

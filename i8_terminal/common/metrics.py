@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import arrow
 import investor8_sdk
@@ -117,7 +117,7 @@ def get_period_start_date(period: str) -> str:
     return period_start_date[period]
 
 
-def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFrame]:
+def get_current_metrics_df(tickers: str, metricsList: Union[str, Any, None]) -> Optional[pd.DataFrame]:
     metrics = investor8_sdk.MetricsApi().get_current_metrics(
         symbols=tickers,
         metrics=metricsList,
