@@ -1,6 +1,5 @@
 from typing import Any, Dict, Optional
 
-import click
 import investor8_sdk
 import pandas as pd
 from click.types import DateTime
