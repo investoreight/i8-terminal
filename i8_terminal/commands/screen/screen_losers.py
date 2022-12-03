@@ -1,5 +1,6 @@
 from typing import Optional, cast
 
+import arrow
 import click
 from click.types import DateTime
 from rich.console import Console
@@ -46,7 +47,7 @@ def losers(
     """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
-        df = get_top_stocks_df("losers", index, view_name, cast(str, date), count, metrics)
+        df = get_top_stocks_df("losers", index, view_name, arrow.get(date).datetime, count, metrics)
     if df is None:
         console.print("No data found for today losers", style="yellow")
         return
