@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
 from i8_terminal.types.fin_period_param_type import FinancialsPeriodParamType
@@ -14,7 +14,7 @@ class FinancialsIdentifierParamType(AutoCompleteChoice):
         self._period_auto_comp = FinancialsPeriodParamType()
 
     def get_suggestions(
-        self, keyword: str, pre_populate: bool = False, param_type: str = None
+        self, keyword: str, pre_populate: bool = False, param_type: Optional[str] = None
     ) -> List[Tuple[str, str]]:
         if param_type == "ticker":
             return self._ticker_auto_comp.get_suggestions(keyword)

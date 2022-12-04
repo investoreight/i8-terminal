@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
 from i8_terminal.types.metric_param_type import MetricParamType
@@ -13,7 +13,7 @@ class MetricIdentifierParamType(AutoCompleteChoice):
         self._period_auto_comp = PeriodParamType()
 
     def get_suggestions(
-        self, keyword: str, pre_populate: bool = True, param_type: str = None, metric: str = None
+        self, keyword: str, pre_populate: bool = True, param_type: Optional[str] = None, metric: Optional[str] = None
     ) -> List[Tuple[str, str]]:
         if param_type == "metric":
             return self._metric_auto_comp.get_suggestions(keyword)

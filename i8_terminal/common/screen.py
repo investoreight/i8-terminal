@@ -1,9 +1,8 @@
 from typing import Any, Dict, Optional
 
+import arrow
 import investor8_sdk
 import pandas as pd
-import arrow
-from click.types import DateTime
 from rich.table import Table
 
 from i8_terminal.common.layout import df2Table
@@ -28,7 +27,9 @@ def get_top_stocks_df(
     else:
         metrics = APP_SETTINGS["commands"]["screen_gainers"]["metrics"] + "," + metrics
     if date is not None:
-        companies_data = investor8_sdk.ScreenerApi().get_top_stocks(category, index=index, _date= arrow.get(date).datetime, count=count)
+        companies_data = investor8_sdk.ScreenerApi().get_top_stocks(
+            category, index=index, _date=arrow.get(date).datetime, count=count
+        )
     else:
         companies_data = investor8_sdk.ScreenerApi().get_top_stocks(category, index=index, count=count)
     if companies_data is None:

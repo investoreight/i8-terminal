@@ -40,16 +40,16 @@ def gainers(
     Lists today winner companies.
 
     Examples:
-    
-    
-    
+
+
+
 
     `i8 screen gainers --index $SPX`
 
     """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
-        df = get_top_stocks_df("winners", index, view_name, date , count, metrics)
+        df = get_top_stocks_df("winners", index, view_name, date, count, metrics)
     if df is None:
         console.print("No data found for today winners", style="yellow")
         return
