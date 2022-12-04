@@ -2,6 +2,7 @@ from typing import Any, Dict, Optional
 
 import investor8_sdk
 import pandas as pd
+import arrow
 from click.types import DateTime
 from rich.table import Table
 
@@ -18,7 +19,7 @@ def get_top_stocks_df(
     category: str,
     index: str,
     view_name: Optional[str],
-    date: Optional[DateTime],
+    date: Optional[str],
     count: Optional[int],
     metrics: Optional[str],
 ) -> Optional[pd.DataFrame]:
@@ -26,7 +27,10 @@ def get_top_stocks_df(
         metrics = APP_SETTINGS["commands"]["screen_gainers"]["metrics"]
     else:
         metrics = APP_SETTINGS["commands"]["screen_gainers"]["metrics"] + "," + metrics
-    companies_data = investor8_sdk.ScreenerApi().get_top_stocks(category, index=index, _date=date, count=count)
+    if date is not None:
+        companies_data = investor8_sdk.ScreenerApi().get_top_stocks(category, index=index, _date= arrow.get(date).datetime, count=count)
+    else:
+        companies_data = investor8_sdk.ScreenerApi().get_top_stocks(category, index=index, count=count)
     if companies_data is None:
         return None
     companies = [company.ticker for company in companies_data]
