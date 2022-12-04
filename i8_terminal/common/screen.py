@@ -1,5 +1,6 @@
 from typing import Any, Dict, Optional
 
+import arrow
 import investor8_sdk
 import pandas as pd
 from rich.table import Table
@@ -13,13 +14,28 @@ from i8_terminal.common.utils import export_data, export_to_html
 from i8_terminal.config import APP_SETTINGS
 
 
-def get_top_stocks_df(category: str, index: str, view_name: Optional[str]) -> Optional[pd.DataFrame]:
-    metrics = APP_SETTINGS["commands"]["screen_gainers"]["metrics"]
-    companies_data = investor8_sdk.ScreenerApi().get_top_stocks(category, index=index)
+def get_top_stocks_df(
+    category: str,
+    index: str,
+    view_name: Optional[str],
+    date: Optional[str],
+    count: Optional[int],
+    metrics: Optional[str],
+) -> Optional[pd.DataFrame]:
+    if metrics is None:
+        metrics = APP_SETTINGS["commands"]["screen_gainers"]["metrics"]
+    else:
+        metrics = APP_SETTINGS["commands"]["screen_gainers"]["metrics"] + "," + metrics
+    if date is not None:
+        companies_data = investor8_sdk.ScreenerApi().get_top_stocks(
+            category, index=index, _date=arrow.get(date).datetime, count=count
+        )
+    else:
+        companies_data = investor8_sdk.ScreenerApi().get_top_stocks(category, index=index, count=count)
     if companies_data is None:
         return None
     companies = [company.ticker for company in companies_data]
-    if view_name:
+    if view_name and metrics:
         metrics = metrics + "," + APP_SETTINGS["metric_view"][view_name]["metrics"]
     return get_current_metrics_df(",".join(companies), metrics)
 

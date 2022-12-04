@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from i8_terminal.common.metrics import get_all_metrics_types_dict
 from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
@@ -62,7 +62,9 @@ class PeriodParamType(AutoCompleteChoice):
     name = "period"
     metrics: Dict[str, str] = {}
 
-    def get_suggestions(self, keyword: str, pre_populate: bool = True, metric: str = None) -> List[Tuple[str, str]]:
+    def get_suggestions(
+        self, keyword: str, pre_populate: bool = True, metric: Optional[str] = None
+    ) -> List[Tuple[str, str]]:
         if not self.is_loaded:
             self.metrics = get_all_metrics_types_dict()
         self.set_choices(PERIODS.get(self.metrics[metric if metric else ""], []))
