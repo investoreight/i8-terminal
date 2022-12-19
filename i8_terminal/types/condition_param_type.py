@@ -15,7 +15,7 @@ class ConditionParamType(AutoCompleteChoice):
     def get_suggestions(self, keyword: str, pre_populate: bool = True, metric: str = None) -> List[Tuple[str, str]]:
         if not self.is_loaded:
             self.metrics_conditions = get_metrics_conditions_dict()
-        self.set_choices([(c, "") for c in self.metrics_conditions.get(metric, "").split(",")])
+        self.set_choices([(c, "") for c in self.metrics_conditions.get(metric, "").split(",")])  # type: ignore
 
         if pre_populate and keyword.strip() == "":
             return self._choices[: self.size]

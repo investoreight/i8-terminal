@@ -2,6 +2,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import click
 import investor8_sdk
+import pandas as pd
 from rich.console import Console
 
 from i8_terminal.commands.screen import screen
@@ -19,8 +20,14 @@ from i8_terminal.types.screening_condition_param_type import ScreeningConditionP
 from i8_terminal.types.sort_order_param_type import SortOrderParamType
 
 
-def get_tickers(condition: str, sort_by: Optional[str], sort_order: Optional[str]) -> Optional[List[str]]:
-    return investor8_sdk.ScreenerApi().search(conditions=condition, order_by=sort_by, order_direction=sort_order)
+def prepare_screen_df(
+    condition: str, metrics: str, sort_by: Optional[str], sort_order: Optional[str]
+) -> Optional[pd.DataFrame]:
+    tickers_list = investor8_sdk.ScreenerApi().search(
+        conditions=condition, order_by=sort_by, order_direction=sort_order
+    )
+    screen_df = get_current_metrics_df(",".join(tickers_list), metrics)
+    return screen_df
 
 
 @screen.command()
@@ -65,12 +72,11 @@ def search(
     if view_name:
         metrics = APP_SETTINGS["metric_view"][view_name]["metrics"]
     with console.status("Fetching data...", spinner="material"):
-        tickers_list = get_tickers(",".join(condition), sort_by, sort_order)
-        df = get_current_metrics_df(",".join(tickers_list), metrics)
+        df = prepare_screen_df(",".join(condition), metrics, sort_by, sort_order)  # type: ignore
     if df is None:
         console.print("No data found for metrics with selected tickers", style="yellow")
         return
-    for m in [*set(metric.split(".")[0] for metric in set(metrics.split(","))) - set(df["metric_name"])]:
+    for m in [*set(metric.split(".")[0] for metric in set(metrics.split(","))) - set(df["metric_name"])]:  # type: ignore
         console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
     columns_justify: Dict[str, Any] = {}
     if export_path:
