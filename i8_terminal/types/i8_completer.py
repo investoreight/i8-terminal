@@ -21,6 +21,8 @@ from i8_terminal.types.metric_view_param_type import MetricViewParamType
 from i8_terminal.types.output_param_type import OutputParamType
 from i8_terminal.types.period_type_param_type import PeriodTypeParamType
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
+from i8_terminal.types.screening_condition_param_type import ScreeningConditionParamType
+from i8_terminal.types.sort_order_param_type import SortOrderParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
 from i8_terminal.types.user_watchlist_tickers_param_type import (
     UserWatchlistTickersParamType,
@@ -59,6 +61,7 @@ class I8Completer(ClickCompleter):
                     ChartParamType,
                     OutputParamType,
                     MarketIndiceParamType,
+                    SortOrderParamType,
                 ]:
                     filter_choices = False
                     parts = ctx.incomplete.split(",")
@@ -127,10 +130,30 @@ class I8Completer(ClickCompleter):
                         incomplete if incomplete else " ", False, param_type, sub_parts[0]
                     ):
                         choices.append(Completion(text_type(idf), -len(incomplete), display_meta=name))
+                elif type(matched_param.type) is ScreeningConditionParamType:
+                    param_type = "metric"
+                    filter_choices = False
+                    parts = ctx.incomplete.split(",")
+                    incomplete = parts[-1] if len(parts) > 0 else " "
+                    period_sub_parts = incomplete.split(".")
+                    condition_sub_parts = incomplete.split(":")
+                    if len(condition_sub_parts) > 1:
+                        param_type = "condition"
+                        incomplete = condition_sub_parts[-1] if len(condition_sub_parts) > 0 else " "
+                    elif len(period_sub_parts) > 1:
+                        param_type = "period"
+                        incomplete = period_sub_parts[-1] if len(period_sub_parts) > 0 else " "
+                    else:
+                        param_type = "metric"
+
+                    for (idf, name) in matched_param.type.get_suggestions(
+                        incomplete if incomplete else " ", False, param_type, period_sub_parts[0]
+                    ):
+                        choices.append(Completion(text_type(idf), -len(incomplete), display_meta=name))
         else:
             for param in command.params:
                 if isinstance(param, click.Option):
-                    if not any(o in ctx.used_options for o in param.opts):
+                    if not any(o in ctx.used_options for o in param.opts) or param.multiple:
                         choices.append(
                             Completion(
                                 text_type(max(param.opts, key=len)),
