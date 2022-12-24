@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import click
 import investor8_sdk
@@ -10,6 +10,7 @@ from i8_terminal.common.cli import pass_command
 from i8_terminal.common.layout import df2Table
 from i8_terminal.common.metrics import (
     get_current_metrics_df,
+    get_metric_info,
     prepare_current_metrics_formatted_df,
 )
 from i8_terminal.common.utils import export_data, export_to_html
@@ -21,10 +22,18 @@ from i8_terminal.types.sort_order_param_type import SortOrderParamType
 
 
 def prepare_screen_df(
-    condition: str, metrics: str, sort_by: Optional[str], sort_order: Optional[str]
+    conditions: List[str], metrics: str, sort_by: Optional[str], sort_order: Optional[str]
 ) -> Optional[pd.DataFrame]:
+    for index, condition in enumerate(conditions):
+        condition_parts = condition.split(":")
+        metric = condition_parts[0]
+        metric_parts = metric.split(".")
+        if len(metric_parts) == 1:
+            metric_default_period_type = get_metric_info(metric_parts[0])["default_period_type"]
+            metric = f"{metric}{'.mrq' if metric_default_period_type == 'Q' else '.mry' if metric_default_period_type == 'FY' else ''}"
+            conditions[index] = f"{metric}:{condition_parts[1]}"
     tickers_list = investor8_sdk.ScreenerApi().search(
-        conditions=condition, order_by=sort_by, order_direction=sort_order
+        conditions=",".join(conditions), order_by=sort_by, order_direction=sort_order
     )
     screen_df = get_current_metrics_df(",".join(tickers_list), metrics)
     return screen_df
@@ -72,7 +81,7 @@ def search(
     if view_name:
         metrics = APP_SETTINGS["metric_view"][view_name]["metrics"]
     with console.status("Fetching data...", spinner="material"):
-        df = prepare_screen_df(",".join(condition), metrics, sort_by, sort_order)  # type: ignore
+        df = prepare_screen_df(list(condition), metrics, sort_by, sort_order)  # type: ignore
     if df is None:
         console.print("No data found for metrics with selected tickers", style="yellow")
         return

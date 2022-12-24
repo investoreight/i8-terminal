@@ -135,8 +135,8 @@ class I8Completer(ClickCompleter):
                     filter_choices = False
                     parts = ctx.incomplete.split(",")
                     incomplete = parts[-1] if len(parts) > 0 else " "
-                    period_sub_parts = incomplete.split(".")
                     condition_sub_parts = incomplete.split(":")
+                    period_sub_parts = condition_sub_parts[0].split(".")
                     if len(condition_sub_parts) > 1:
                         param_type = "condition"
                         incomplete = condition_sub_parts[-1] if len(condition_sub_parts) > 0 else " "
