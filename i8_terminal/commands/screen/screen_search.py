@@ -76,14 +76,17 @@ def search(
         console.print("The 'metrics' or 'view_name' parameter must be provided", style="yellow")
         return
     if view_name and metrics:
-        console.print("The 'metrics' or 'view_name' options are mutually exclusive", style="yellow")
+        console.print(
+            "The 'metrics' or 'view_name' options are mutually exclusive. Provide a value only for one of them.",
+            style="yellow",
+        )
         return
     if view_name:
         metrics = APP_SETTINGS["metric_view"][view_name]["metrics"]
     with console.status("Fetching data...", spinner="material"):
         df = prepare_screen_df(list(condition), metrics, sort_by, sort_order)  # type: ignore
     if df is None:
-        console.print("No data found for metrics with selected tickers", style="yellow")
+        console.print("No data found for the provided screen conditions", style="yellow")
         return
     for m in [*set(metric.split(".")[0] for metric in set(metrics.split(","))) - set(df["metric_name"])]:  # type: ignore
         console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
