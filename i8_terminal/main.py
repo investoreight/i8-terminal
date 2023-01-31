@@ -158,7 +158,18 @@ def main() -> None:
         investor8_sdk.ApiClient().configuration.api_key["Authorization"] = USER_SETTINGS.get("i8_core_token")
         investor8_sdk.ApiClient().configuration.api_key_prefix["Authorization"] = "Bearer"
 
-    cli(obj={})
+    try:
+        cli(obj={})
+    except ApiException as e:
+        if "apiKey" in e.body.decode("utf-8"):
+            console.print(
+                "You need to login before using i8 Terminal. Please login to i8 Terminal using [magenta]user login[/magenta] command."
+            )
+        else:
+            console.print(f"⚠ Error: {e.body.decode('utf-8')}", style="yellow")
+    except Exception as e:
+        display_error = f"- Type: {type(e).__name__}\n- Message: {e}"
+        console.print(f"⚠ Error:\n{display_error}", style="yellow")
 
 
 if __name__ == "__main__":
