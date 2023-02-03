@@ -1,8 +1,8 @@
 import re
 from datetime import date
+from enum import Enum
 from typing import Any, Optional, Union
 
-from enum import Enum
 import arrow
 import numpy as np
 

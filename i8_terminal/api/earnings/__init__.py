@@ -1,1 +1,1 @@
-from .earnings_services import get_earnings_list as list 
+from ...services.earnings import get_earnings_list as list

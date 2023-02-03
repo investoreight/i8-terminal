@@ -12,7 +12,8 @@ from i8_terminal.config import get_table_style
 def format_df(df: DataFrame, cols_map: Dict[str, str], cols_formatters: Dict[str, Any]) -> DataFrame:
     for c, f in cols_formatters.items():
         df[c] = df[c].map(f)
-    return df[cols_map.keys()].rename(columns=cols_map)
+        formatted = df.rename(columns=cols_map)
+    return formatted
 
 
 def format_metrics_df(df: DataFrame, target: str) -> DataFrame:

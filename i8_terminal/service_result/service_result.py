@@ -2,14 +2,12 @@ from typing import Any
 from pandas import DataFrame
 
 
-class ServiceResult():
-
-    def __init__(self, data, context):
+class ServiceResult:
+    def __init__(self, data: DataFrame, context: Any):
         self._data = data
         self._context = context
 
-    
-    def to_df(self, formating="formatted", styling="default"):
+    def to_df(self, formatting: str ="formatted", target: str = "store", styling: str="default") -> DataFrame:
         """
         Args:
             formating: possible options are
@@ -21,40 +19,32 @@ class ServiceResult():
                 `terminal`: terminal styling (e.g. positive change is green),
                 `plotly`: plotly styling
         """
-        if type(self._data) is not DataFrame:
-            raise f"{type(self)} does not support 'to_df()'"
 
         df = self._data
-        if formating != "raw":
-            self._format_df(df)
+        if formatting != "raw":
+            df = self._format_df(df, target)
         if styling != "default":
-            self._style_df(df, styling)
+            df = self._style_df(df, styling)
 
         return df
 
-
-    def to_json(self):
+    def to_json(self) -> Any:
         pass
 
-
-    def to_console(self):
+    def to_console(self) -> None:
         pass
 
-
-    def to_plot(self):
-        pass
-    
-
-    def to_xlsx(self, path: str, formatter=None, styler=None):
+    def to_plot(self) -> Any:
         pass
 
-    
-    def to_csv(self, path: str):
+    def to_xlsx(self, path: str, formatter=None, styler=None) -> Any:
         pass
 
+    def to_csv(self, path: str) -> Any:
+        pass
 
-    def _format_df(self, df):
-        pass        
+    def _format_df(self, df: DataFrame, target: str) -> DataFrame:
+        pass
 
-    def _style_df(self, df, styling):
+    def _style_df(self, df: DataFrame, styling: Any) -> DataFrame:
         pass

@@ -1,46 +1,47 @@
-from i8_terminal.api.service_result import ServiceResult
-from i8_terminal.common.layout import format_df
-from i8_terminal.common.formatting import get_formatter
-from i8_terminal.common.formatting import color
+from typing import Any, List
 
+import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 from pandas import DataFrame
 from plotly.subplots import make_subplots
+
+from i8_terminal.service_result import ServiceResult
+from i8_terminal.common.formatting import color, get_formatter
+from i8_terminal.common.layout import format_df
+from i8_terminal.config import METRICS_METADATA_PATH
 
 
 class EarningsListResult(ServiceResult):
     
-    def __init__(self, data, context=None):
+    def __init__(self, data: DataFrame, context: Any=None):
         super().__init__(data, context)
 
 
-    def _format_df(self, df):
-        # TDOO: formatting and styling logic is coupled. They should be decoupled
-        target = "store"
-        formatters = {
-            "actual_report_time": get_formatter("date", target),
-            "eps_actual": get_formatter("number", target),
-            "eps_ws": get_formatter("number", target),
-            "eps_surprise": get_formatter("colorize_number" if target == "console" else "number", target),
-            "revenue_actual": get_formatter("financial", target),
-            "revenue_ws": get_formatter("financial", target),
-            "revenue_surprise": get_formatter("colorize_financial" if target == "console" else "financial", target),
-        }
-        col_names = {
-            "actual_report_time": "Date",
-            "period": "Period",
-            "call_time": "Call Time",
-            "eps_ws": "EPS Estimate",
-            "eps_actual": "EPS Actual",
-            "eps_surprise": "EPS Surprise",
-            "revenue_ws": "Revenue Estimate",
-            "revenue_actual": "Revenue Actual",
-            "revenue_surprise": "Revenue Surprise",
-        }
+    def _format_df(self, df: DataFrame, target: str) -> DataFrame:
+        metadata = pd.read_csv(METRICS_METADATA_PATH, delimiter=";")
+        formatters = {}
+        col_names = {}
+
+        columns = df.columns.to_list()
+
+        for col in columns:
+            if col not in list(metadata['metric_name']):
+                continue
+
+            metric = metadata[metadata['metric_name'] == col]
+            display_format = metric['display_format'].iloc[0]
+            display_name = metric['display_name'].iloc[0]
+            
+            if not pd.isna(display_format):
+                formatters[col] = get_formatter(display_format, target)
+            
+            if not pd.isna(display_name):
+                col_names[col] = display_name
+
         return format_df(df, col_names, formatters)   
 
-    def __create_plot_traces(self, df, column, beat_color):
+
+    def __create_plot_traces(self, df: DataFrame, column: str, beat_color: str) -> List[Any]:
         fig_traces = []
         
         fig = px.bar(
@@ -58,12 +59,12 @@ class EarningsListResult(ServiceResult):
             fig_traces.append(fig["data"][trace])
         return fig_traces
 
-    def __add_traces_to_fig (self, traces, fig, row, col):
+    def __add_traces_to_fig (self, traces: List[Any], fig: Any, row: int, col:int) -> Any:
         for trace in traces:
             fig.append_trace(trace, row=row, col=col)
         return fig
 
-    def to_plot(self):
+    def to_plot(self) -> Any:
         df = self._data
         df['eps_beat_?'] = ["Yes" if x > 0 else "No" for x in df['eps_surprise']]
         df['revenue_beat_?'] = ["Yes" if x > 0 else "No" for x in df['revenue_surprise']]
@@ -94,3 +95,9 @@ class EarningsListResult(ServiceResult):
         fig.update_layout(width=1000, height=600, showlegend=False)
         return fig
 
+    def to_csv(self, path: str) -> None:
+        self._data.to_csv(path)
+
+    def to_xlsx(self, path: str, formatter=None, styler=None) -> None:
+        df = self.to_df()
+        df.to_excel(path)
