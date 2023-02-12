@@ -7,7 +7,7 @@ class ServiceResult:
         self._data = data
         self._context = context
 
-    def to_df(self, formatting: str ="formatted", target: str = "store", styling: str="default") -> DataFrame:
+    def to_df(self, formatting: str = "formatted", target: str = "store", styling: str = "default") -> DataFrame:
         """
         Args:
             formating: possible options are

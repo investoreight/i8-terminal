@@ -12,10 +12,8 @@ from i8_terminal.config import METRICS_METADATA_PATH
 
 
 class EarningsListResult(ServiceResult):
-    
-    def __init__(self, data: DataFrame, context: Any=None):
+    def __init__(self, data: DataFrame, context: Any = None):
         super().__init__(data, context)
-
 
     def _format_df(self, df: DataFrame, target: str) -> DataFrame:
         metadata = pd.read_csv(METRICS_METADATA_PATH, delimiter=";")
@@ -25,25 +23,24 @@ class EarningsListResult(ServiceResult):
         columns = df.columns.to_list()
 
         for col in columns:
-            if col not in list(metadata['metric_name']):
+            if col not in list(metadata["metric_name"]):
                 continue
 
-            metric = metadata[metadata['metric_name'] == col]
-            display_format = metric['display_format'].iloc[0]
-            display_name = metric['display_name'].iloc[0]
-            
+            metric = metadata[metadata["metric_name"] == col]
+            display_format = metric["display_format"].iloc[0]
+            display_name = metric["display_name"].iloc[0]
+
             if not pd.isna(display_format):
                 formatters[col] = get_formatter(display_format, target)
-            
+
             if not pd.isna(display_name):
                 col_names[col] = display_name
 
-        return format_df(df, col_names, formatters)   
-
+        return format_df(df, col_names, formatters)
 
     def __create_plot_traces(self, df: DataFrame, column: str, beat_color: str) -> List[Any]:
         fig_traces = []
-        
+
         fig = px.bar(
             df,
             x="period",
@@ -51,7 +48,8 @@ class EarningsListResult(ServiceResult):
             category_orders={"period": df["period"]},
             color=beat_color,
             color_discrete_map={"Yes": color.i8_green.value, "No": color.i8_red.value},
-            labels={"eps_beat_?": "Beat?", "eps_actual": "EPS $", "period": ""})
+            labels={"eps_beat_?": "Beat?", "eps_actual": "EPS $", "period": ""},
+        )
 
         fig.update_layout(legend_title_text="EPS Beat?")
         fig.update_layout(title="EPS per Quarter", font=dict(color=color.i8_dark.value))
@@ -59,15 +57,15 @@ class EarningsListResult(ServiceResult):
             fig_traces.append(fig["data"][trace])
         return fig_traces
 
-    def __add_traces_to_fig (self, traces: List[Any], fig: Any, row: int, col:int) -> Any:
+    def __add_traces_to_fig(self, traces: List[Any], fig: Any, row: int, col: int) -> Any:
         for trace in traces:
             fig.append_trace(trace, row=row, col=col)
         return fig
 
     def to_plot(self) -> Any:
         df = self._data
-        df['eps_beat_?'] = ["Yes" if x > 0 else "No" for x in df['eps_surprise']]
-        df['revenue_beat_?'] = ["Yes" if x > 0 else "No" for x in df['revenue_surprise']]
+        df["eps_beat_?"] = ["Yes" if x > 0 else "No" for x in df["eps_surprise"]]
+        df["revenue_beat_?"] = ["Yes" if x > 0 else "No" for x in df["revenue_surprise"]]
         fig = make_subplots(rows=2, cols=2)
         fig_eps_traces = self.__create_plot_traces(df, "eps_actual", "eps_beat_?")
         fig_revenue_traces = self.__create_plot_traces(df, "revenue_actual", "revenue_beat_?")
@@ -81,7 +79,7 @@ class EarningsListResult(ServiceResult):
 
         fig.update_yaxes(title_text="Revenue $", row=1, col=1)
         fig.update_yaxes(title_text="EPS $", row=1, col=2)
-        fig.update_yaxes(title_text="Revenue Surprise (%)",row=2, col=1)
+        fig.update_yaxes(title_text="Revenue Surprise (%)", row=2, col=1)
         fig.update_yaxes(title_text="EPS Surprise (%)", row=2, col=2)
 
         fig.update_xaxes(
