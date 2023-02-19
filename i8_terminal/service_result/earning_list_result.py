@@ -5,10 +5,10 @@ import plotly.express as px
 from pandas import DataFrame
 from plotly.subplots import make_subplots
 
-from i8_terminal.service_result import ServiceResult
 from i8_terminal.common.formatting import color, get_formatter
 from i8_terminal.common.layout import format_df
 from i8_terminal.config import METRICS_METADATA_PATH
+from i8_terminal.service_result import ServiceResult
 
 
 class EarningsListResult(ServiceResult):

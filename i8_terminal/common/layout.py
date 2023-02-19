@@ -12,8 +12,7 @@ from i8_terminal.config import get_table_style
 def format_df(df: DataFrame, cols_map: Dict[str, str], cols_formatters: Dict[str, Any]) -> DataFrame:
     for c, f in cols_formatters.items():
         df[c] = df[c].map(f)
-        formatted = df.rename(columns=cols_map)
-    return formatted
+    return df[cols_map.keys()].rename(columns=cols_map)
 
 
 def format_metrics_df(df: DataFrame, target: str) -> DataFrame:
@@ -51,6 +50,6 @@ def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dic
     for c in df.columns:
         table.add_column(c, justify=columns_justify.get(c, default_justify.get(c, "left")))
     for _, r in df.iterrows():
-        row = [r[c] if r[c] is not np.nan else "-" for c in df.columns]
+        row = [r[c] if r[c] is not np.nan and r[c] is not None else "-" for c in df.columns]
         table.add_row(*row)
     return table

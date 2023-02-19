@@ -1,13 +1,16 @@
 from typing import Any
+
 from pandas import DataFrame
+
+from i8_terminal.service_result.columns_context import ColumnsContext
 
 
 class ServiceResult:
-    def __init__(self, data: DataFrame, context: Any):
-        self._data = data
-        self._context = context
+    def __init__(self, df: DataFrame, cols_context: ColumnsContext):
+        self._df = df
+        self._cols_context = cols_context
 
-    def to_df(self, formatting: str = "formatted", target: str = "store", styling: str = "default") -> DataFrame:
+    def to_df(self, formatting: str = "formatted", styling: str = "default") -> DataFrame:
         """
         Args:
             formating: possible options are
@@ -19,8 +22,7 @@ class ServiceResult:
                 `terminal`: terminal styling (e.g. positive change is green),
                 `plotly`: plotly styling
         """
-
-        df = self._data
+        df = self._df
         if formatting != "raw":
             df = self._format_df(df, target)
         if styling != "default":
@@ -43,8 +45,10 @@ class ServiceResult:
     def to_csv(self, path: str) -> Any:
         pass
 
-    def _format_df(self, df: DataFrame, target: str) -> DataFrame:
-        pass
+    def _format_df(self, df: DataFrame) -> DataFrame:
+        ci_list = self._cols_context.get_col_infos()
+        # rename
+        # call format
 
     def _style_df(self, df: DataFrame, styling: Any) -> DataFrame:
         pass
