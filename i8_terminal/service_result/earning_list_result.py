@@ -5,38 +5,15 @@ import plotly.express as px
 from pandas import DataFrame
 from plotly.subplots import make_subplots
 
-from i8_terminal.common.formatting import color, get_formatter
-from i8_terminal.common.layout import format_df
-from i8_terminal.config import METRICS_METADATA_PATH
+from i8_terminal.common.formatting import color
 from i8_terminal.service_result import ServiceResult
+
+from i8_terminal.service_result.columns_context import ColumnsContext
 
 
 class EarningsListResult(ServiceResult):
-    def __init__(self, data: DataFrame, context: Any = None):
-        super().__init__(data, context)
-
-    def _format_df(self, df: DataFrame, target: str) -> DataFrame:
-        metadata = pd.read_csv(METRICS_METADATA_PATH, delimiter=";")
-        formatters = {}
-        col_names = {}
-
-        columns = df.columns.to_list()
-
-        for col in columns:
-            if col not in list(metadata["metric_name"]):
-                continue
-
-            metric = metadata[metadata["metric_name"] == col]
-            display_format = metric["display_format"].iloc[0]
-            display_name = metric["display_name"].iloc[0]
-
-            if not pd.isna(display_format):
-                formatters[col] = get_formatter(display_format, target)
-
-            if not pd.isna(display_name):
-                col_names[col] = display_name
-
-        return format_df(df, col_names, formatters)
+    def __init__(self, data: DataFrame, columns_context: ColumnsContext):
+        super().__init__(data, columns_context)
 
     def __repr__(self):
         return repr(self._data.head(2))

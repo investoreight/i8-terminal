@@ -5,12 +5,16 @@ from pandas import DataFrame
 from i8_terminal.service_result.columns_context import ColumnsContext
 
 
+from i8_terminal.common.formatting import format_number_v2
+from i8_terminal.common.formatting import format_date
+from i8_terminal.common.layout import format_df
+
 class ServiceResult:
     def __init__(self, df: DataFrame, cols_context: ColumnsContext):
         self._df = df
         self._cols_context = cols_context
 
-    def to_df(self, formatting: str = "formatted", styling: str = "default") -> DataFrame:
+    def to_df(self, format: str = "default", style: str = "default") -> DataFrame:
         """
         Args:
             formating: possible options are
@@ -24,11 +28,8 @@ class ServiceResult:
         """
 
         df = self._data.copy()
-        if formatting != "raw":
-            df = self._format_df(df, target)
-        if styling != "default":
-            df = self._style_df(df, styling)
-
+        df = self._format_df(df, format)
+        df = self._style_df(df, style)
         return df
 
     def to_json(self) -> Any:
@@ -46,10 +47,50 @@ class ServiceResult:
     def to_csv(self, path: str) -> Any:
         pass
 
-    def _format_df(self, df: DataFrame) -> DataFrame:
+    def _format_df(self, df: DataFrame, format: str= "default") -> DataFrame:
         ci_list = self._cols_context.get_col_infos()
         # rename
         # call format
+        display_names = {}
+        formatters = {}
+        for ci in ci_list:
+            display_names[ci.name] = ci.display_name 
+            formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)
+        return format_df(df, display_names, formatters)
 
     def _style_df(self, df: DataFrame, styling: Any) -> DataFrame:
-        pass
+        return df
+    
+    
+    def _get_formatter(self, unit, data_type, format):
+        if format == "raw":
+            if unit == "datetime" and data_type == "datetime":
+                return lambda x: format_date(x) # TODO: Implement a new format_date function with date format
+            else:
+                return lambda x: x
+
+        if data_type == "str" or unit == "string":
+            return lambda x: x
+        if unit == "datetime":
+            if data_type == "datetime":
+                return lambda x: format_date(x)
+            else:
+                return lambda x: x
+        
+        elif format == "default":
+            if data_type in ["int", "unsigned_int"]:
+                return lambda x: format_number_v2(x, percision=0, unit=unit)
+            elif data_type in ["float", "unsigned_float"]:
+                return lambda x: format_number_v2(x, percision=2, unit=unit)
+        
+        elif format == "humanized":
+            if data_type in ["int", "unsigned_int"]:
+                return lambda x: format_number_v2(x, percision=0, unit=unit, humanize=True)
+            elif data_type in ["float", "unsigned_float"]:
+                return lambda x: format_number_v2(x, percision=2, unit=unit, humanize=True)
+        
+        elif format == "millionize":
+            if data_type in ["int", "unsigned_int"]:
+                return lambda x: format_number_v2(x, percision=0, unit=unit, in_millions=True)
+            elif data_type in ["float", "unsigned_float"]:
+                return lambda x: format_number_v2(x, percision=2, unit=unit, in_millions=True)

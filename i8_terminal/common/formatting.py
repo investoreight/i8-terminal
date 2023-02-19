@@ -74,6 +74,48 @@ def format_number(
     return res
 
 
+def format_number_v2(
+    m: int,
+    decimal: int = 2,
+    unit: Optional[str] = None,
+    humanize: bool = False,
+    in_millions: bool = False,
+) -> Optional[Union[str, int]]:
+    res: Optional[Union[str, int]] = None
+    if m is None or np.isnan(m):
+        return "-"
+
+    if in_millions:
+        number = abs(m)
+        if m < 0:
+            res = f"({number // 1e6:,.1f})"
+        else:
+            res = f"{number // 1e6:,.1f}"
+
+    elif humanize:
+        number = abs(m)
+        if number < 1e3:
+            res = f"{m:,.{decimal}f}"
+        if number >= 1e3 and number < 1e6:
+            res = f"{m / 1e3:,.{decimal}f} K"
+        if number >= 1e6 and number < 1e9:
+            res = f"{m / 1e6:,.{decimal}f} M"
+        if number >= 1e9 and number < 1e12:
+            res = f"{m / 1e9:,.{decimal}f} B"
+        if number >= 1e12:
+            res = f"{m / 1e12:,.{decimal}f} T"
+    else:
+        res = f"{m:,.{decimal}f}"
+
+    if unit == "percentage":
+        res = f"{res}%" if m <= 0 else f"+{res}%"
+
+    if unit in ["usd", "usdpershare"]:
+        res = f"${res}"
+
+    return res
+
+
 def format_date(date: date, use_elapsed_format: bool = False, use_precise_format: bool = False) -> Any:
     if use_elapsed_format:
         time_span = arrow.utcnow() - arrow.get(date)
