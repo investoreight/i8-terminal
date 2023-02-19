@@ -1,2 +1,2 @@
-from i8_terminal.api import earnings, financials
+from i8_terminal.api import earnings
 

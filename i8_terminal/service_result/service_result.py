@@ -20,7 +20,7 @@ class ServiceResult:
                 `plotly`: plotly styling
         """
 
-        df = self._data
+        df = self._data.copy()
         if formatting != "raw":
             df = self._format_df(df, target)
         if styling != "default":

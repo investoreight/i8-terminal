@@ -1,1 +1,1 @@
-from ...services.earnings import get_earnings_list as list
+from i8_terminal.services.earnings import get_earnings_list as list

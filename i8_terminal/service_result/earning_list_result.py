@@ -38,6 +38,9 @@ class EarningsListResult(ServiceResult):
 
         return format_df(df, col_names, formatters)
 
+    def __repr__(self):
+        return repr(self._data.head(2))
+
     def __create_plot_traces(self, df: DataFrame, column: str, beat_color: str) -> List[Any]:
         fig_traces = []
 
