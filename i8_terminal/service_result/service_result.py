@@ -22,7 +22,8 @@ class ServiceResult:
                 `terminal`: terminal styling (e.g. positive change is green),
                 `plotly`: plotly styling
         """
-        df = self._df
+
+        df = self._data.copy()
         if formatting != "raw":
             df = self._format_df(df, target)
         if styling != "default":
