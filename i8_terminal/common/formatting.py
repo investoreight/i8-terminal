@@ -76,7 +76,7 @@ def format_number(
 
 def format_number_v2(
     m: int,
-    decimal: int = 2,
+    percision: int = 2,
     unit: Optional[str] = None,
     humanize: bool = False,
     in_millions: bool = False,
@@ -95,17 +95,17 @@ def format_number_v2(
     elif humanize:
         number = abs(m)
         if number < 1e3:
-            res = f"{m:,.{decimal}f}"
+            res = f"{m:,.{percision}f}"
         if number >= 1e3 and number < 1e6:
-            res = f"{m / 1e3:,.{decimal}f} K"
+            res = f"{m / 1e3:,.{percision}f} K"
         if number >= 1e6 and number < 1e9:
-            res = f"{m / 1e6:,.{decimal}f} M"
+            res = f"{m / 1e6:,.{percision}f} M"
         if number >= 1e9 and number < 1e12:
-            res = f"{m / 1e9:,.{decimal}f} B"
+            res = f"{m / 1e9:,.{percision}f} B"
         if number >= 1e12:
-            res = f"{m / 1e12:,.{decimal}f} T"
+            res = f"{m / 1e12:,.{percision}f} T"
     else:
-        res = f"{m:,.{decimal}f}"
+        res = f"{m:,.{percision}f}"
 
     if unit == "percentage":
         res = f"{res}%" if m <= 0 else f"+{res}%"

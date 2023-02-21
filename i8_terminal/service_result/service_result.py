@@ -27,7 +27,7 @@ class ServiceResult:
                 `plotly`: plotly styling
         """
 
-        df = self._data.copy()
+        df = self._df.copy()
         df = self._format_df(df, format)
         df = self._style_df(df, style)
         return df
@@ -55,7 +55,10 @@ class ServiceResult:
         formatters = {}
         for ci in ci_list:
             display_names[ci.name] = ci.display_name 
-            formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)
+            if ci.data_type in ["int", "unsigned_int", "float", "unsigned_float"] and self._df[ci.name].max() < 1e6:
+                formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format="default")
+            else:    
+                formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)
         return format_df(df, display_names, formatters)
 
     def _style_df(self, df: DataFrame, styling: Any) -> DataFrame:
@@ -77,17 +80,15 @@ class ServiceResult:
             else:
                 return lambda x: x
         
-        elif format == "default":
+        if format == "default":
             if data_type in ["int", "unsigned_int"]:
                 return lambda x: format_number_v2(x, percision=0, unit=unit)
             elif data_type in ["float", "unsigned_float"]:
                 return lambda x: format_number_v2(x, percision=2, unit=unit)
         
-        elif format == "humanized":
-            if data_type in ["int", "unsigned_int"]:
-                return lambda x: format_number_v2(x, percision=0, unit=unit, humanize=True)
-            elif data_type in ["float", "unsigned_float"]:
-                return lambda x: format_number_v2(x, percision=2, unit=unit, humanize=True)
+        elif format == "humanize":
+            return lambda x: format_number_v2(x, percision=2, unit=unit, humanize=True)
+            
         
         elif format == "millionize":
             if data_type in ["int", "unsigned_int"]:

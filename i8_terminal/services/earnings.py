@@ -21,12 +21,12 @@ def get_earnings_list(ticker: str, size: int) -> EarningsListResult:
     cc = ColumnsContext([
         ColumnInfo(name="period", col_type="context", display_name="Period", data_type="str", unit="string"),
         ColumnInfo(name="earning_date", col_type="metric"),
-        ColumnInfo(name="earning_call_time", data_type="metric"),
-        ColumnInfo(name="eps_consensus", data_type="metric"),
-        ColumnInfo(name="eps_actual", data_type="metric"),
-        ColumnInfo(name="eps_surprise", data_type="metric"),
-        ColumnInfo(name="revenue_consensus", data_type="metric"),
-        ColumnInfo(name="revenue_actual", data_type="metric"),
-        ColumnInfo(name="revenue_surprise", data_type="metric"),
+        ColumnInfo(name="earning_call_time", col_type="metric"),
+        ColumnInfo(name="eps_consensus", col_type="metric"),
+        # ColumnInfo(name="eps_actual", col_type="metric"),
+        # ColumnInfo(name="eps_surprise", col_type="metric"),
+        ColumnInfo(name="revenue_consensus", col_type="metric"),
+        # ColumnInfo(name="revenue_actual", col_type="metric"),
+        # ColumnInfo(name="revenue_surprise", col_type="metric"),
     ])
     return EarningsListResult(df, cc)

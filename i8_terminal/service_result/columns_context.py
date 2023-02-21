@@ -15,18 +15,17 @@ class ColumnsContext:
 
         for ci in self._col_infos:
             if ci.col_type == "metric":
-                if ci.name not in all_metrics_dict:
+                if ci.name not in all_metrics_dict.keys():
                     raise I8Exception(
                         f"Metric `{ci.name}` is not a known metric! You need to explicitly define the metadata!"
                     )
                 ci.enrich(all_metrics_dict[ci.name])
-        return
 
     def get_metrics_dict(self):
         metrics_df = get_all_metrics_df()
         metrics_dict = {}
         for _, r in metrics_df.iterrows():
-            metrics_df[r["metric_name"]] = ColumnInfo(
+            metrics_dict[r["metric_name"]] = ColumnInfo(
                 r["metric_name"], "metric", r["display_name"], r["data_format"], r["unit"]
             )
         return metrics_dict
