@@ -56,7 +56,10 @@ class ServiceResult:
         for ci in ci_list:
             display_names[ci.name] = ci.display_name 
             if ci.data_type in ["int", "unsigned_int", "float", "unsigned_float"] and self._df[ci.name].max() < 1e6:
-                formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format="default")
+                if format == "raw":
+                    formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)
+                else:    
+                    formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format="default")
             else:    
                 formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)
         return format_df(df, display_names, formatters)

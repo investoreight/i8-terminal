@@ -17,16 +17,16 @@ def get_earnings_list(ticker: str, size: int) -> EarningsListResult:
         "revenue_ws": "revenue_consensus",
         "call_time" : "earning_call_time"
         }, inplace=True)
-    df = df.dropna(axis=1)
+    # df = df.dropna(axis=1)
     cc = ColumnsContext([
         ColumnInfo(name="period", col_type="context", display_name="Period", data_type="str", unit="string"),
         ColumnInfo(name="earning_date", col_type="metric"),
         ColumnInfo(name="earning_call_time", col_type="metric"),
         ColumnInfo(name="eps_consensus", col_type="metric"),
-        # ColumnInfo(name="eps_actual", col_type="metric"),
-        # ColumnInfo(name="eps_surprise", col_type="metric"),
+        ColumnInfo(name="eps_actual", col_type="metric"),
+        ColumnInfo(name="eps_surprise", col_type="metric"),
         ColumnInfo(name="revenue_consensus", col_type="metric"),
-        # ColumnInfo(name="revenue_actual", col_type="metric"),
-        # ColumnInfo(name="revenue_surprise", col_type="metric"),
+        ColumnInfo(name="revenue_actual", col_type="metric"),
+        ColumnInfo(name="revenue_surprise", col_type="metric"),
     ])
     return EarningsListResult(df, cc)
