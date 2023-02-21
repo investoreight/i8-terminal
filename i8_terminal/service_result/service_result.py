@@ -48,8 +48,6 @@ class ServiceResult:
 
     def _format_df(self, df: DataFrame, format: str = "default") -> DataFrame:
         ci_list = self._cols_context.get_col_infos()
-        # rename
-        # call format
         display_names: Dict[str, str] = {}
         formatters: Dict[str, Any] = {}
         for ci in ci_list:
