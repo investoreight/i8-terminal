@@ -11,30 +11,40 @@ PERIODS: Dict[str, List[Tuple[str, str]]] = {
     "technical": [*[(f"{i}da", f"{i} day{'s' if i > 1 else ''} ago") for i in range(1, 3)]],
     "fin_metric": [
         ("mrq", "most recent quarter"),
-        ("mry", "most recent year"),
-        ("ttm", "most recent year"),
-        ("ytd", "most recent year"),
+        ("mry", "most recent financial year"),
+        ("ttm", "trailing 12 months"),
+        ("ytd", "year to date"),
         *[(f"{i}qa", f"{i} quarter{'s' if i > 1 else ''} ago") for i in range(1, 3)],
         *[(f"{i}ya", f"{i} year{'s' if i > 1 else ''} ago") for i in range(1, 3)],
         *[(f"q{i}_{y}", f"Fiscal quarter {i} {y}") for i in range(1, 5) for y in range(datetime.now().year, 2008, -1)],
         *[
-            (f"q{i}_ttm_{y}", f"Fiscal quarter {i} {y}")
-            for i in range(1, 5)
+            (f"q{i}ttm_{y}", f"Fiscal quarter {i} {y}")
+            for i in range(1, 4)
+            for y in range(datetime.now().year, 2008, -1)
+        ],
+        *[
+            (f"q{i}ytd_{y}", f"Fiscal quarter {i} {y}")
+            for i in range(2, 4)
             for y in range(datetime.now().year, 2008, -1)
         ],
         *[(f"fy_{y}", f"Fiscal year {y}") for y in range(datetime.now().year, 2008, -1)],
     ],
     "fin_statement": [
         ("mrq", "most recent quarter"),
-        ("mry", "most recent year"),
-        ("ttm", "most recent year"),
-        ("ytd", "most recent year"),
+        ("mry", "most recent financial year"),
+        ("ttm", "trailing 12 months"),
+        ("ytd", "year to date"),
         *[(f"{i}qa", f"{i} quarter{'s' if i > 1 else ''} ago") for i in range(1, 3)],
         *[(f"{i}ya", f"{i} year{'s' if i > 1 else ''} ago") for i in range(1, 3)],
         *[(f"q{i}_{y}", f"Fiscal quarter {i} {y}") for i in range(1, 5) for y in range(datetime.now().year, 2008, -1)],
         *[
-            (f"q{i}_ttm_{y}", f"Fiscal quarter {i} {y}")
-            for i in range(1, 5)
+            (f"q{i}ttm_{y}", f"Fiscal quarter {i} {y}")
+            for i in range(1, 4)
+            for y in range(datetime.now().year, 2008, -1)
+        ],
+        *[
+            (f"q{i}ytd_{y}", f"Fiscal quarter {i} {y}")
+            for i in range(2, 4)
             for y in range(datetime.now().year, 2008, -1)
         ],
         *[(f"fy_{y}", f"Fiscal year {y}") for y in range(datetime.now().year, 2008, -1)],

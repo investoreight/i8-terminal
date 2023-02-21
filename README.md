@@ -58,6 +58,7 @@ The preferred workflow for contributing to i8 Terminal is to clone the
 
 See [here](https://github.com/investoreight/i8-terminal/blob/main/CONTRIBUTING.md) for guidelines for contributors.
 
+i8 Terminal is built on top of the [Investoreight Core API](https://github.com/investoreight/investor8-sdk).
 
 ## How to Run i8 Terminal
 You can verify whether i8 Terminal is installed successfully by running i8 script:

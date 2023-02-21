@@ -14,6 +14,7 @@ from i8_terminal.common.cli import pass_command
 from i8_terminal.common.layout import format_metrics_df
 from i8_terminal.common.metrics import get_current_metrics_df
 from i8_terminal.common.stock_info import validate_tickers
+from i8_terminal.common.utils import export_to_html
 from i8_terminal.config import APP_SETTINGS, get_table_style
 from i8_terminal.types.ticker_param_type import TickerParamType
 
@@ -147,7 +148,7 @@ def export_companies_data(
 @pass_command
 def compare(tickers: str, export_path: Optional[str]) -> None:
     """
-    Compare details of the given companies.
+    Compare details of the given companies. TICKERS is a comma-separated list of tickers.
 
     Examples:
 
@@ -162,6 +163,10 @@ def compare(tickers: str, export_path: Optional[str]) -> None:
             click.echo("No data found!")
             return
     if export_path:
+        if export_path.split(".")[-1] == "html":
+            tree = companies_df2tree(stock_infos_df, tickers)
+            export_to_html(tree, export_path)
+            return
         export_companies_data(
             stock_infos_df,
             export_path,

@@ -29,7 +29,16 @@ styles:
         color: magenta
       row:
         color: white
-      show_lines: false    
+      show_lines: false
+    metrics_historical:
+      alternate_row:
+        color: cyan
+      header:
+        bold: true
+        color: magenta
+      row:
+        color: white
+      show_lines: false
   terminal:
     command:
       color: "magenta"
@@ -74,3 +83,7 @@ commands:
           metrics: "pe_ratio_ttm,current_ratio,quick_ratio,price_to_book,revenue_growth,dividend_yield,roe"
         - name: "Key Ratios"
           metrics: pe_ratio_ttm,current_ratio,quick_ratio,price_to_book,revenue_growth,dividend_yield,roe
+  screen_gainers:
+      metrics: "company_name,price,change"
+  screen_losers:
+      metrics: "company_name,price,change"

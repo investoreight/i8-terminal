@@ -51,7 +51,7 @@ class I8AutoSuggest(AutoSuggest):
                         return Suggestion("-[Fiscal Period]")
                 elif matched_param.name == "export_path":
                     if len(ctx.incomplete) < 1:
-                        return Suggestion("[path]/[filename].[csv|xlsx|pdf]")
+                        return Suggestion("[path]/[filename].[csv|xlsx|pdf|html]")
                 elif matched_param.name == "path":
                     if len(ctx.incomplete) < 1:
                         return Suggestion("[path]/[filename].[xlsx]")
