@@ -1,22 +1,20 @@
-from typing import Any, List
+from typing import Any, List, Optional
 
-import pandas as pd
 import plotly.express as px
 from pandas import DataFrame
 from plotly.subplots import make_subplots
 
 from i8_terminal.common.formatting import color
-from i8_terminal.service_result import ServiceResult
-
 from i8_terminal.service_result.columns_context import ColumnsContext
+from i8_terminal.service_result.service_result import ServiceResult
 
 
 class EarningsListResult(ServiceResult):
     def __init__(self, data: DataFrame, columns_context: ColumnsContext):
         super().__init__(data, columns_context)
 
-    def __repr__(self):
-        return repr(self._data.head(2))
+    def __repr__(self) -> str:
+        return repr(self._df.head(2))
 
     def __create_plot_traces(self, df: DataFrame, column: str, beat_color: str) -> List[Any]:
         fig_traces = []
@@ -43,7 +41,7 @@ class EarningsListResult(ServiceResult):
         return fig
 
     def to_plot(self) -> Any:
-        df = self._data
+        df = self._df
         df["eps_beat_?"] = ["Yes" if x > 0 else "No" for x in df["eps_surprise"]]
         df["revenue_beat_?"] = ["Yes" if x > 0 else "No" for x in df["revenue_surprise"]]
         fig = make_subplots(rows=2, cols=2)
@@ -74,8 +72,8 @@ class EarningsListResult(ServiceResult):
         return fig
 
     def to_csv(self, path: str) -> None:
-        self._data.to_csv(path)
+        self._df.to_csv(path)
 
-    def to_xlsx(self, path: str, formatter=None, styler=None) -> None:
+    def to_xlsx(self, path: str, formatter: Optional[str] = None, styler: Optional[str] = None) -> None:
         df = self.to_df()
         df.to_excel(path)

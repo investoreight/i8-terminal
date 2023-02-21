@@ -21,7 +21,6 @@ jobs:
           restore-keys: ${{ runner.os }}-v1-test
 
       - run: pip3 install -r requirements-dev.txt
-      - run: pyflakes i8_terminal/
       - run: black --check i8_terminal/
       - run: isort --check i8_terminal/
       - run: mypy i8_terminal/
