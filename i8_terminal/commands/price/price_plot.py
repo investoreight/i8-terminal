@@ -182,7 +182,7 @@ def create_fig(
 
     dt_all = pd.date_range(start=df.index[-1], end=df.index[0])
     dt_obs = [d.strftime("%Y-%m-%d") for d in df.index]
-    dt_breaks = [d for d in dt_all.strftime("%Y-%m-%d").tolist() if not d in dt_obs]
+    dt_breaks = [d for d in dt_all.strftime("%Y-%m-%d").tolist() if d not in dt_obs]
 
     fig.update_xaxes(
         rangeslider_visible=False, spikemode="across", spikesnap="cursor", rangebreaks=[dict(values=dt_breaks)]
@@ -266,7 +266,7 @@ def plot(
 
     `i8 price plot --period 1M --indicators volume --ticker MSFT --chart_type candlestick`
     """
-    if not chart_type in [t[0] for t in get_chart_param_types()]:
+    if chart_type not in [t[0] for t in get_chart_param_types()]:
         click.echo(f"`{chart_type}` is not valid chart type.")
         return
     period = period.replace(" ", "").upper()

@@ -32,7 +32,7 @@ class I8AutoSuggest(AutoSuggest):
             if len(matched_params) > 0:
                 matched_param = matched_params[0]
                 if type(matched_param.type) is click.types.DateTime:
-                    return Suggestion("YYYY-MM-DD"[len(ctx.incomplete) :])
+                    return Suggestion("YYYY-MM-DD"[len(ctx.incomplete) :])  # noqa: E203
                 elif type(matched_param.type) is FinancialsIdentifierParamType:
                     parts_num = 3
                     parts = ctx.incomplete.split(",")

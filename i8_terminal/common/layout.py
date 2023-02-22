@@ -17,7 +17,13 @@ def format_df(df: DataFrame, cols_map: Dict[str, str], cols_formatters: Dict[str
 
 def format_metrics_df(df: DataFrame, target: str) -> DataFrame:
     df["value"] = df.apply(
-        lambda metric: get_formatter("number_int" if metric.data_format == "int" and metric.display_format == "number" else metric.display_format, target)(locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value)), axis=1  # type: ignore
+        lambda metric: get_formatter(
+            "number_int"
+            if metric.data_format == "int" and metric.display_format == "number"
+            else metric.display_format,
+            target,
+        )(locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value)),
+        axis=1,  # type: ignore
     )
     return df
 

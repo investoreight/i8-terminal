@@ -14,7 +14,8 @@ def get_login_authentication_request_id() -> str:
 
 
 def open_browser(request_id: str) -> None:
-    url = f"https://www.investoreight.com/account/authorize?reqId={request_id}&redirectUrl=http://localhost:{APP_SETTINGS['app']['port']}"
+    url = f"https://www.investoreight.com/account/authorize?reqId={request_id}\
+        &redirectUrl=http://localhost:{APP_SETTINGS['app']['port']}"
     webbrowser.open(url)
 
 

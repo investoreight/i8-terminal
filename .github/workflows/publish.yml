@@ -23,6 +23,7 @@ jobs:
       - run: pip3 install -r requirements-dev.txt
       - run: black --check i8_terminal/
       - run: isort --check i8_terminal/
+      - run: flake8 i8_terminal/
       - run: mypy i8_terminal/
 
   publish_pypi:
@@ -77,7 +78,7 @@ jobs:
           pip3 install i8-terminal
           python docs/generate_metrics.py
           mkdocs gh-deploy --force --clean --verbose
-  
+
   publish_msi_win:
     runs-on: windows-latest
     needs: [test]
