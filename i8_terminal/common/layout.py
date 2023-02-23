@@ -22,8 +22,10 @@ def format_metrics_df(df: DataFrame, target: str) -> DataFrame:
             if metric.data_format == "int" and metric.display_format == "number"
             else metric.display_format,
             target,
-        )(locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value)),
-        axis=1,  # type: ignore
+        )(
+            locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value)  # type: ignore # noqa: E501
+        ),
+        axis=1,
     )
     return df
 

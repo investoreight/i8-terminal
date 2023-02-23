@@ -63,9 +63,9 @@ class I8Completer(ClickCompleter):
                     filter_choices = False
                     parts = ctx.incomplete.split(",")
                     incomplete = parts[-1] if len(parts) > 0 else " "
-                    for (ticker, name) in matched_param.type.get_suggestions(
+                    for (ticker, name) in matched_param.type.get_suggestions(  # type: ignore
                         incomplete if incomplete else " ", True
-                    ):  # type: ignore
+                    ):
                         choices.append(Completion(text_type(ticker), -len(incomplete), display_meta=name))
                 elif type(matched_param.type) in [TickerParamType, UserWatchlistTickersParamType]:
                     filter_choices = False
@@ -74,17 +74,17 @@ class I8Completer(ClickCompleter):
                     else:
                         parts = ctx.incomplete.split(",")
                         incomplete = parts[-1] if len(parts) > 0 else " "
-                    for (ticker, name) in matched_param.type.get_suggestions(
+                    for (ticker, name) in matched_param.type.get_suggestions(  # type: ignore
                         incomplete if incomplete else " ", True
-                    ):  # type: ignore
+                    ):
                         choices.append(Completion(text_type(ticker.upper()), -len(incomplete), display_meta=name))
                 elif type(matched_param.type) in [MetricParamType, IndicatorParamType]:
                     filter_choices = False
                     parts = ctx.incomplete.split(",")
                     incomplete = parts[-1] if len(parts) > 0 else " "
-                    for (metric, name) in matched_param.type.get_suggestions(
+                    for (metric, name) in matched_param.type.get_suggestions(  # type: ignore
                         incomplete if incomplete else " ", True
-                    ):  # type: ignore
+                    ):
                         choices.append(Completion(text_type(metric.lower()), -len(incomplete), display_meta=name))
 
                 elif type(matched_param.type) is FinancialsIdentifierParamType:
