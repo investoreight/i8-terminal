@@ -31,6 +31,9 @@ def login_within_terminal() -> None:
             "i8_core_api_key": api_response.api_key,
         }
         save_user_settings(user_setting)
+        investor8_sdk.ApiClient().configuration.api_key["apiKey"] = api_response.api_key
+        investor8_sdk.ApiClient().configuration.api_key["Authorization"] = api_response.token
+        investor8_sdk.ApiClient().configuration.api_key_prefix["Authorization"] = "Bearer"
         click.echo("User logged in successfully!")
     except Exception as e:
         click.echo(e)
