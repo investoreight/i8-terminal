@@ -7,9 +7,9 @@ from i8_terminal.common.cli import log_terminal_usage
 
 @click.group()
 def cli() -> None:
-    """i8 Terminal - Modern Market Research with the Power of Terminal
+    """i8 Terminal - Modern Market Research powered by the Command-Line
 
-    Copyright © 2020-2022 Investoreight | https://www.investoreight.com/"""
+    Copyright © 2020-2022 Investoreight | https://investoreight.com/"""
     pass
 
 
