@@ -2,6 +2,8 @@ import codecs
 import os
 from typing import Any, Dict
 
+from rich.console import Console
+
 
 def read(rel_path: str) -> str:
     """
@@ -40,3 +42,15 @@ def find_dicts_diff(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, A
         if k not in dict1:
             result[k] = dict2[k]
     return result
+
+
+def status(text="Fetching data...", spinner="material"):
+    def decorate(func):
+        def wrapper(*args, **kwargs):
+            console = Console()
+            with console.status(text, spinner=spinner):
+                func(*args, **kwargs)
+
+        return wrapper
+
+    return decorate
