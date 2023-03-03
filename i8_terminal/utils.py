@@ -4,7 +4,7 @@ from typing import Any, Callable, Dict, TypeVar
 
 from rich.console import Console
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 def read(rel_path: str) -> str:
