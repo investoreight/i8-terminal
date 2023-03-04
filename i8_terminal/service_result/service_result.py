@@ -1,9 +1,10 @@
 from typing import Any, Callable, Dict, Optional, Union
 
 from pandas import DataFrame
+from rich.table import Table
 
 from i8_terminal.common.formatting import format_date, format_number_v2
-from i8_terminal.common.layout import format_df
+from i8_terminal.common.layout import df2Table, format_df
 from i8_terminal.i8_exception import I8Exception
 from i8_terminal.service_result.columns_context import ColumnsContext
 
@@ -34,8 +35,11 @@ class ServiceResult:
     def to_json(self) -> Any:
         pass
 
-    def to_console(self) -> None:
-        pass
+    def to_console(self) -> Table:
+        df = self._df.copy()
+        df = self._format_df(df, format="humanize")
+        df = self._style_df(df, styling="terminal")
+        return df2Table(df)
 
     def to_plot(self) -> Any:
         pass
