@@ -4,7 +4,7 @@ import sys
 from rich.console import Console
 
 from i8_terminal.common.cli import log_terminal_usage, pass_command
-from i8_terminal.config import USER_SETTINGS, is_user_logged_in
+from i8_terminal.config import USER_SETTINGS, init_api_configs, is_user_logged_in
 from i8_terminal.utils import get_version
 
 console = Console(force_terminal=True, color_system="truecolor")
@@ -152,11 +152,8 @@ def check_version() -> None:
 def main() -> None:
     check_version()
     init_commands()
-
     if is_user_logged_in():
-        investor8_sdk.ApiClient().configuration.api_key["apiKey"] = USER_SETTINGS.get("i8_core_api_key")
-        investor8_sdk.ApiClient().configuration.api_key["Authorization"] = USER_SETTINGS.get("i8_core_token")
-        investor8_sdk.ApiClient().configuration.api_key_prefix["Authorization"] = "Bearer"
+        init_api_configs()
 
     try:
         cli(obj={})
