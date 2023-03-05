@@ -161,7 +161,8 @@ def main() -> None:
     except ApiException as e:
         if "apiKey" in e.body.decode("utf-8"):
             console.print(
-                "You need to login before using i8 Terminal. Please login to i8 Terminal using [magenta]user login[/magenta] command."
+                "You need to login before using i8 Terminal. Please login to i8 Terminal \
+                    using [magenta]user login[/magenta] command."
             )
         else:
             console.print(f"⚠ Error: {e.body.decode('utf-8')}", style="yellow")
