@@ -43,8 +43,11 @@ class ServiceResult:
     def to_xlsx(self, path: str, formatter: Optional[str] = None, styler: Optional[str] = None) -> Any:
         pass
 
-    def to_csv(self, path: str) -> Any:
-        pass
+    def to_csv(self, path: str) -> None:
+        df = self._df.copy()
+        df = self._format_df(df, format="default")
+        df = self._style_df(df, styling="default")
+        df.to_csv(path, index=False)
 
     def _format_df(self, df: DataFrame, format: str = "default") -> DataFrame:
         ci_list = self._cols_context.get_col_infos()
