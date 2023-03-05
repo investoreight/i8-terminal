@@ -5,6 +5,7 @@ import sys
 import uuid
 from typing import Any, Dict
 
+import investor8_sdk
 import yaml
 from mergedeep import merge
 from rich.style import Style
@@ -126,6 +127,19 @@ def is_user_logged_in() -> bool:
     if not USER_SETTINGS.get("i8_core_api_key") or not USER_SETTINGS.get("i8_core_token"):
         return False
     return True
+
+
+def init_api_configs() -> None:
+    investor8_sdk.ApiClient().configuration.api_key["apiKey"] = USER_SETTINGS.get("i8_core_api_key")
+    investor8_sdk.ApiClient().configuration.api_key["Authorization"] = USER_SETTINGS.get("i8_core_token")
+    investor8_sdk.ApiClient().configuration.api_key_prefix["Authorization"] = "Bearer"
+
+
+def init_notebook() -> None:
+    if is_user_logged_in():
+        init_api_configs()
+    else:
+        print("You are not logged in. Please login to i8 Terminal using 'user login' command.")
 
 
 if "USER_SETTINGS" not in globals():
