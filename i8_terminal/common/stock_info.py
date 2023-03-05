@@ -62,9 +62,10 @@ def validate_tickers(ctx: click.Context, param: str, value: str) -> Optional[str
             [*set(value.replace(" ", "").upper().split(",")) - set(get_stocks_df()["ticker"])] if value else []
         )
         if value and invalid_tickers:
+            msg = "are not valid ticker names." if len(invalid_tickers) > 1 else "is not a valid ticker name."
             click.echo(
                 click.style(
-                    f"`{', '.join(invalid_tickers)}` {'are not valid ticker names.' if len(invalid_tickers) > 1 else 'is not a valid ticker name.'}",
+                    f"`{', '.join(invalid_tickers)}` {msg}",
                     fg="yellow",
                 )
             )

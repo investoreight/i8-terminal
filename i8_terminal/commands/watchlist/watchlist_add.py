@@ -50,9 +50,11 @@ def add(name: str, tickers: str) -> None:
     with console.status("Updating Watchlist...", spinner="material"):
         add_tickers_to_watchlist(name, tickers_list)
     console.print(
-        f"✅ Ticker{'s' if len(tickers_list) > 1 else ''} [cyan]{', '.join(tickers_list)}[/cyan] added to watchlist [cyan]{name}[/cyan] successfully!"
+        f"✅ Ticker{'s' if len(tickers_list) > 1 else ''} [cyan]{', '.join(tickers_list)}\
+            [/cyan] added to watchlist [cyan]{name}[/cyan] successfully!"
     )
     terminal_command_style = Style(**get_terminal_command_layout())
     console.print(
-        f'Try `[{terminal_command_style}]watchlist summary --name "{name}"[/{terminal_command_style}]` to see the watchlist.'
+        f'Try `[{terminal_command_style}]watchlist summary --name "{name}"[/{terminal_command_style}]`\
+             to see the watchlist.'
     )
