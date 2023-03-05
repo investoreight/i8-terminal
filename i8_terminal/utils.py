@@ -51,7 +51,7 @@ def status(text: str = "Fetching data...", spinner: str = "material") -> Callabl
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             console = Console()
             with console.status(text, spinner=spinner):
-                func(*args, **kwargs)
+                return func(*args, **kwargs)
 
         return wrapper
 
