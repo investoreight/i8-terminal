@@ -61,7 +61,8 @@ def init_commands() -> None:
             except ApiException as e:
                 if "apiKey" in e.body.decode("utf-8"):
                     console.print(
-                        "You need to login before using i8 Terminal. Please login to i8 Terminal using [magenta]user login[/magenta] command."
+                        "You need to login before using i8 Terminal. Please login to i8 Terminal using \
+                            [magenta]user login[/magenta] command."
                     )
                 else:
                     console.print(f"⚠ Error: {e.body.decode('utf-8')}", style="yellow")
@@ -135,14 +136,14 @@ def check_version() -> None:
     resp = None
     try:
         resp = investor8_sdk.SettingsApi().check_i8t_version(get_version())
-    except:
+    except Exception:
         pass
     if not resp or not resp.to_dict().get("version_supported"):
         status.stop()
         console.print(
             "[yellow]You are using an old version of i8 Terminal that is not supported anymore.[/yellow]",
-            "[yellow]Please update i8 Terminal with the following command to be able to use the application.[/yellow]\n",
-            "[magenta]i8update[/magenta]\n",
+            "[yellow]Please update i8 Terminal with the following command to be able to use the application.[/yellow]",
+            "\n[magenta]i8update[/magenta]\n",
             "If you are using Python pip, you can run the following command to update i8 Terminal:\n",
             "[magenta]pip install --upgrade i8-terminal[/magenta]",
         )
@@ -160,7 +161,8 @@ def main() -> None:
     except ApiException as e:
         if "apiKey" in e.body.decode("utf-8"):
             console.print(
-                "You need to login before using i8 Terminal. Please login to i8 Terminal using [magenta]user login[/magenta] command."
+                "You need to login before using i8 Terminal. Please login to i8 Terminal \
+                    using [magenta]user login[/magenta] command."
             )
         else:
             console.print(f"⚠ Error: {e.body.decode('utf-8')}", style="yellow")

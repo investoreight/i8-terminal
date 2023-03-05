@@ -28,9 +28,10 @@ def init_settings() -> None:
     if not os.path.exists(SETTINGS_FOLDER):
         try:
             os.mkdir(SETTINGS_FOLDER)
-        except:
+        except Exception:
             logging.error(
-                f"Cannot initialize app. Application needs write access to create app directory in the following path: '{OS_HOME_PATH}'"
+                f"Cannot initialize app. Application needs write access to create app directory in the following path: \
+                    '{OS_HOME_PATH}'"
             )
 
     if not os.path.exists(USER_SETTINGS_PATH):
@@ -38,7 +39,7 @@ def init_settings() -> None:
             user_setting = {"app_instance_id": uuid.uuid4().hex}
             with open(USER_SETTINGS_PATH, "w") as f:
                 yaml.dump(user_setting, f)
-        except:
+        except Exception:
             logging.error(
                 f"Cannot initalize user settings. Make sure you have write access to the path: '{USER_SETTINGS_PATH}'"
             )
@@ -52,7 +53,8 @@ def init_settings() -> None:
                 shutil.copyfile(f"{EXECUTABLE_APP_DIR}/config.yml", APP_SETTINGS_PATH)
         except Exception as e:
             logging.error(
-                f"Cannot initalize app settings. Make sure you have write access to the path: '{APP_SETTINGS_PATH}'\n {e}"
+                f"Cannot initalize app settings. Make sure you have write access to the path: \
+                    '{APP_SETTINGS_PATH}'\n {e}"
             )
 
 
@@ -114,9 +116,10 @@ def get_table_style(profile_name: str = "default") -> Dict[str, Any]:
             "row_styles": [Style(**styles["row"]), Style(**styles["alternate_row"])],
             "show_lines": styles.get("show_lines", False),
         }
-    except:
+    except Exception:
         raise I8Exception(
-            "Cannot parse table style settings from the configuration file! Check to see if the configuration file is formatted correctly!"
+            "Cannot parse table style settings from the configuration file! \
+                Check to see if the configuration file is formatted correctly!"
         )
 
 
