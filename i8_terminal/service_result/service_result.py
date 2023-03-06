@@ -46,7 +46,6 @@ class ServiceResult:
     def to_csv(self, path: str) -> None:
         df = self._df.copy()
         df = self._format_df(df, format="default")
-        df = self._style_df(df, styling="default")
         df.to_csv(path, index=False)
 
     def _format_df(self, df: DataFrame, format: str = "default") -> DataFrame:
