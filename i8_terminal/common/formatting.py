@@ -80,6 +80,7 @@ def format_number_v2(
     unit: Optional[str] = None,
     humanize: bool = False,
     in_millions: bool = False,
+    colorize: bool = False,
 ) -> Optional[Union[str, int]]:
     res: Optional[Union[str, int]] = None
     if m is None or np.isnan(m):
@@ -112,6 +113,10 @@ def format_number_v2(
 
     if unit in ["usd", "usdpershare"]:
         res = f"${res}"
+
+    if colorize:
+        color = "red" if m <= 0 else "green"
+        res = f"[{color}]{res}[/{color}]"
 
     return res
 
