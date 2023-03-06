@@ -63,21 +63,7 @@ def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dic
         table.add_column(
             c,
             justify=columns_justify.get(c, default_justify.get(c, "left")),
-            min_width=min(
-                max(
-                    df[c]
-                    .apply(
-                        lambda x: x.replace("[green]", "")
-                        .replace("[/green]", "")
-                        .replace("[red]", "")
-                        .replace("[/red]", "")
-                    )
-                    .str.len()
-                    .max(),
-                    len(df[c].name),
-                ),
-                MAX_COL_LENGTH,
-            ),
+            min_width=min(max(df[c].str.len().max(), len(df[c].name)), MAX_COL_LENGTH),
         )
     for _, r in df.iterrows():
         row = [r[c] if r[c] is not np.nan and r[c] is not None else "-" for c in df.columns]

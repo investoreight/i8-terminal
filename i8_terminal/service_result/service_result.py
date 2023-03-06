@@ -37,7 +37,7 @@ class ServiceResult:
 
     def to_console(self) -> Table:
         df = self._df.copy()
-        df = self._format_df(df, format="humanize", styling="terminal")
+        df = self._format_df(df, format="humanize")
         return df2Table(df)
 
     def to_plot(self) -> Any:
@@ -49,7 +49,7 @@ class ServiceResult:
     def to_csv(self, path: str) -> Any:
         pass
 
-    def _format_df(self, df: DataFrame, format: str = "default", styling: str = "default") -> DataFrame:
+    def _format_df(self, df: DataFrame, format: str = "default") -> DataFrame:
         ci_list = self._cols_context.get_col_infos()
         display_names: Dict[str, str] = {}
         formatters: Dict[str, Any] = {}
@@ -60,20 +60,17 @@ class ServiceResult:
             display_names[ci.name] = ci.display_name
             if ci.data_type in ["int", "unsigned_int", "float", "unsigned_float"] and self._df[ci.name].max() < 1e6:
                 if format == "raw":
-                    formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format, styling)
+                    formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)
                 else:
-                    formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format="default", styling=styling)
+                    formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format="default")
             else:
-                formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format, styling)
+                formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)
         return format_df(df, display_names, formatters)
 
     def _style_df(self, df: DataFrame, styling: str = "default") -> DataFrame:
         pass
 
-    def _get_formatter(
-        self, unit: str, data_type: str, format: str, styling: str
-    ) -> Callable[[Any], Optional[Union[str, int, Any]]]:
-        colorize = True if styling == "terminal" else False
+    def _get_formatter(self, unit: str, data_type: str, format: str) -> Callable[[Any], Optional[Union[str, int, Any]]]:
         if format == "raw":
             if unit == "datetime" and data_type == "datetime":
                 return lambda x: format_date(x)  # TODO: Implement a new format_date function with date format
@@ -91,15 +88,15 @@ class ServiceResult:
 
         if format == "default":
             if data_type in ["int", "unsigned_int"]:
-                return lambda x: format_number_v2(x, percision=0, unit=unit, colorize=colorize)
+                return lambda x: format_number_v2(x, percision=0, unit=unit)
             elif data_type in ["float", "unsigned_float"]:
-                return lambda x: format_number_v2(x, percision=2, unit=unit, colorize=colorize)
+                return lambda x: format_number_v2(x, percision=2, unit=unit)
         elif format == "humanize":
-            return lambda x: format_number_v2(x, percision=2, unit=unit, humanize=True, colorize=colorize)
+            return lambda x: format_number_v2(x, percision=2, unit=unit, humanize=True)
         elif format == "millionize":
             if data_type in ["int", "unsigned_int"]:
-                return lambda x: format_number_v2(x, percision=0, unit=unit, in_millions=True, colorize=colorize)
+                return lambda x: format_number_v2(x, percision=0, unit=unit, in_millions=True)
             elif data_type in ["float", "unsigned_float"]:
-                return lambda x: format_number_v2(x, percision=2, unit=unit, in_millions=True, colorize=colorize)
+                return lambda x: format_number_v2(x, percision=2, unit=unit, in_millions=True)
 
         return lambda x: x
