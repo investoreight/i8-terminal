@@ -17,6 +17,7 @@ __pycache__/
 *.so
 *.pyc
 *.pkl
+*.ipynb
 
 # Setuptools distribution folder.
 dist/

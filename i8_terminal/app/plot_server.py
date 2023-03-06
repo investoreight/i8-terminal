@@ -153,7 +153,8 @@ def serve_plot(fig: go.Figure, cmd_context: Dict[str, Any]) -> None:
         is_port_in_use = s.connect_ex(("localhost", APP_SETTINGS["app"]["port"])) == 0
     if is_port_in_use:
         console.print(
-            f"Port number {APP_SETTINGS['app']['port']} is already in use. Please make sure that only one instance of i8-terminal runs at a time!",
+            f"Port number {APP_SETTINGS['app']['port']} is already in use. Please make sure that only one instance of \
+                i8-terminal runs at a time!",
             style="yellow",
         )
         return

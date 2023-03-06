@@ -255,7 +255,7 @@ def available_fin_df2tree(df: pd.DataFrame, ticker: str) -> Tree:
                                 "NA"
                                 if (
                                     statement_code == "balance_sheet_statement"
-                                    and (period_type == "TTM" or period_type == "YTD")
+                                    and (period_type == "TTM" or period_type == "YTD")  # noqa: W503
                                 )
                                 else "❌"
                             )
@@ -268,7 +268,9 @@ def available_fin_df2tree(df: pd.DataFrame, ticker: str) -> Tree:
                             row_text.append(
                                 "Q1-Q4"
                                 if available_fiscal_periods == ["Q1", "Q2", "Q3", "Q4"]
-                                or (period_type == "TTM" and available_fiscal_periods == ["Q1", "Q2", "Q3"] and has_fy)
+                                or (  # noqa: W503
+                                    period_type == "TTM" and available_fiscal_periods == ["Q1", "Q2", "Q3"] and has_fy
+                                )
                                 else ",".join(available_fiscal_periods)
                             )
                 t.add_row(period_type_disp_name, *row_text)

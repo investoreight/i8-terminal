@@ -111,7 +111,8 @@ def create_fig(df: DataFrame, header_dict: Dict[str, List[str]], cmd_context: Di
     "--period_type",
     "-m",
     type=PeriodTypeParamType(),
-    help="Period by which you want to view the report. Possible values are `FY` for yearly, `Q` for quarterly, and `TTM` for TTM reports.",
+    help="Period by which you want to view the report. Possible values are `FY` for yearly, \
+        `Q` for quarterly, and `TTM` for TTM reports.",
 )
 @click.option("--plot", is_flag=True, default=False, help="Plot results on the browser.")
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
@@ -170,7 +171,7 @@ def compare(
                 "tickers": tickers_list,
                 "plot_type": PlotType.TABLE.value,
             }
-            df = df[df["is_significant"] != False]
+            df = df[df["is_significant"] is not False]
             df = df[["name", *fins["data"].columns[1:]]]
             df.rename(columns={"name": ""}, inplace=True)
             fig = create_fig(df, fins["header"], cmd_context)

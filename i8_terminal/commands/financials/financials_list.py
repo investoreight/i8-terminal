@@ -73,7 +73,8 @@ def get_standardized_financials(
     "--period_type",
     "-m",
     type=PeriodTypeParamType(),
-    help="Period by which you want to view the report. Possible values are `FY` for yearly, `Q` for quarterly, and `TTM` for TTM reports.",
+    help="Period by which you want to view the report. Possible values are `FY` for yearly, \
+        `Q` for quarterly, and `TTM` for TTM reports.",
 )
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
