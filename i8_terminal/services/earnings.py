@@ -4,8 +4,10 @@ from pandas import DataFrame
 from i8_terminal.service_result.column_info import ColumnInfo
 from i8_terminal.service_result.columns_context import ColumnsContext
 from i8_terminal.service_result.earning_list_result import EarningsListResult
+from i8_terminal.utils import status
 
 
+@status()
 def get_earnings_list(ticker: str, size: int) -> EarningsListResult:
     historical_earnings = investor8_sdk.EarningsApi().get_historical_earnings(ticker, size=size)
     historical_earnings = [d.to_dict() for d in historical_earnings]

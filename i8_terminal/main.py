@@ -4,7 +4,7 @@ import sys
 from rich.console import Console
 
 from i8_terminal.common.cli import log_terminal_usage, pass_command
-from i8_terminal.config import USER_SETTINGS, is_user_logged_in
+from i8_terminal.config import USER_SETTINGS, init_api_configs, is_user_logged_in
 from i8_terminal.utils import get_version
 
 console = Console(force_terminal=True, color_system="truecolor")
@@ -61,7 +61,8 @@ def init_commands() -> None:
             except ApiException as e:
                 if "apiKey" in e.body.decode("utf-8"):
                     console.print(
-                        "You need to login before using i8 Terminal. Please login to i8 Terminal using [magenta]user login[/magenta] command."
+                        "You need to login before using i8 Terminal. Please login to i8 Terminal using \
+                            [magenta]user login[/magenta] command."
                     )
                 else:
                     console.print(f"⚠ Error: {e.body.decode('utf-8')}", style="yellow")
@@ -135,14 +136,14 @@ def check_version() -> None:
     resp = None
     try:
         resp = investor8_sdk.SettingsApi().check_i8t_version(get_version())
-    except:
+    except Exception:
         pass
     if not resp or not resp.to_dict().get("version_supported"):
         status.stop()
         console.print(
             "[yellow]You are using an old version of i8 Terminal that is not supported anymore.[/yellow]",
-            "[yellow]Please update i8 Terminal with the following command to be able to use the application.[/yellow]\n",
-            "[magenta]i8update[/magenta]\n",
+            "[yellow]Please update i8 Terminal with the following command to be able to use the application.[/yellow]",
+            "\n[magenta]i8update[/magenta]\n",
             "If you are using Python pip, you can run the following command to update i8 Terminal:\n",
             "[magenta]pip install --upgrade i8-terminal[/magenta]",
         )
@@ -152,18 +153,16 @@ def check_version() -> None:
 def main() -> None:
     check_version()
     init_commands()
-
     if is_user_logged_in():
-        investor8_sdk.ApiClient().configuration.api_key["apiKey"] = USER_SETTINGS.get("i8_core_api_key")
-        investor8_sdk.ApiClient().configuration.api_key["Authorization"] = USER_SETTINGS.get("i8_core_token")
-        investor8_sdk.ApiClient().configuration.api_key_prefix["Authorization"] = "Bearer"
+        init_api_configs()
 
     try:
         cli(obj={})
     except ApiException as e:
         if "apiKey" in e.body.decode("utf-8"):
             console.print(
-                "You need to login before using i8 Terminal. Please login to i8 Terminal using [magenta]user login[/magenta] command."
+                "You need to login before using i8 Terminal. Please login to i8 Terminal \
+                    using [magenta]user login[/magenta] command."
             )
         else:
             console.print(f"⚠ Error: {e.body.decode('utf-8')}", style="yellow")
