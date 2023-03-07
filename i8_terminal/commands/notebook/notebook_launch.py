@@ -1,4 +1,4 @@
-import os
+import subprocess
 
 import click
 import nbformat as nbf
@@ -35,4 +35,4 @@ def launch(name: str) -> None:
         with open(fname, "w") as f:
             nbf.write(nb, f)
 
-        os.system(f"start /wait cmd /c  jupyter notebook {name}.ipynb")
+        subprocess.Popen(f"jupyter notebook {name}.ipynb", creationflags=subprocess.CREATE_NEW_CONSOLE)
