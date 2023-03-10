@@ -2,10 +2,9 @@ import subprocess
 
 import click
 import nbformat as nbf
-from rich.console import Console
-
 from i8_terminal.commands.notebook import notebook
 from i8_terminal.common.cli import pass_command
+from rich.console import Console
 
 
 @notebook.command()
@@ -35,4 +34,4 @@ def launch(name: str) -> None:
         with open(fname, "w") as f:
             nbf.write(nb, f)
 
-        subprocess.Popen(f"jupyter notebook {name}.ipynb", creationflags=subprocess.CREATE_NEW_CONSOLE)
+        subprocess.Popen(f"jupyter notebook {name}.ipynb", creationflags=subprocess.CREATE_NEW_CONSOLE) # type: ignore
