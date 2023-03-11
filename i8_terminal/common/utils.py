@@ -2,13 +2,15 @@ import enum
 import os
 from difflib import SequenceMatcher
 from io import StringIO
-from typing import Any, Dict, Optional
+from typing import Any, Callable, Dict, Optional, TypeVar
 
 import arrow
 import pandas as pd
 from rich.console import Console
 
 from i8_terminal.config import APP_SETTINGS
+
+T = TypeVar("T")
 
 
 class PlotType(enum.Enum):
@@ -126,3 +128,15 @@ def find_dicts_diff(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, A
         if k not in dict1:
             result[k] = dict2[k]
     return result
+
+
+def status(text: str = "Fetching data...", spinner: str = "material") -> Callable[..., Callable[..., T]]:
+    def decorate(func: Any) -> Any:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            console = Console()
+            with console.status(text, spinner=spinner):
+                return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorate

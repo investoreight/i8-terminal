@@ -2,7 +2,7 @@ import codecs
 import os
 from typing import Any
 
-"""This methods are used in `setup.py`, So keep in mind to use only built-in packages in here."""
+"""These methods are used in `setup.py`, so keep in mind to use only built-in packages in here."""
 
 
 def read(rel_path: str) -> str:
