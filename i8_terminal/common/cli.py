@@ -6,7 +6,7 @@ import click
 import investor8_sdk
 
 from i8_terminal.config import USER_SETTINGS
-from i8_terminal.utils import get_version
+from utils_setup import get_version
 
 
 def get_click_command_path(ctx: Any, parsed_options_dict: Optional[Dict[str, str]] = None) -> str:
