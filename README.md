@@ -1,4 +1,4 @@
-# i8 Terminal: Modern Market Research with the Power of Command-Line
+# i8 Terminal: Modern Market Research powered by the Command-Line
 
 [i8 terminal](https://www.i8terminal.io) is a modern python-based terminal application that gives you superior power and flexibility to understand and analyze the market. The interface is simple, efficient, and powerful: it's command-line!
 
