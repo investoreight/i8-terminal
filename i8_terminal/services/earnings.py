@@ -1,10 +1,10 @@
 import investor8_sdk
 from pandas import DataFrame
 
+from i8_terminal.common.utils import status
 from i8_terminal.service_result.column_info import ColumnInfo
 from i8_terminal.service_result.columns_context import ColumnsContext
 from i8_terminal.service_result.earning_list_result import EarningsListResult
-from i8_terminal.utils import status
 
 
 @status()

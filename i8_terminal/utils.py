@@ -1,10 +1,6 @@
 import codecs
 import os
-from typing import Any, Callable, Dict, TypeVar
-
-from rich.console import Console
-
-T = TypeVar("T")
+from typing import Any, Dict
 
 
 def read(rel_path: str) -> str:
@@ -44,15 +40,3 @@ def find_dicts_diff(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, A
         if k not in dict1:
             result[k] = dict2[k]
     return result
-
-
-def status(text: str = "Fetching data...", spinner: str = "material") -> Callable[..., Callable[..., T]]:
-    def decorate(func: Any) -> Any:
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
-            console = Console()
-            with console.status(text, spinner=spinner):
-                return func(*args, **kwargs)
-
-        return wrapper
-
-    return decorate
