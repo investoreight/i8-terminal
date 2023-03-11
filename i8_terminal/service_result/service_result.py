@@ -35,9 +35,9 @@ class ServiceResult:
     def to_json(self) -> Any:
         pass
 
-    def to_console(self) -> Table:
+    def to_console(self, format: str = "humanize") -> Table:
         df = self._df.copy()
-        df = self._format_df(df, format="humanize")
+        df = self._format_df(df, format)
         return df2Table(df)
 
     def to_plot(self) -> Any:
