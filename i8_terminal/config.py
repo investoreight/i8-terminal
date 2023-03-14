@@ -7,11 +7,12 @@ from typing import Any, Dict
 
 import investor8_sdk
 import yaml
-from common.utils import find_dicts_diff
 from mergedeep import merge
 from rich.style import Style
 
 from i8_terminal.i8_exception import I8Exception
+
+from .utils import find_dicts_diff
 
 PACKAGE_PATH = os.path.dirname(__file__)
 EXECUTABLE_APP_DIR = os.path.join(os.path.dirname(sys.executable))

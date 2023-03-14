@@ -112,24 +112,6 @@ def export_to_html(data: Any, export_path: str) -> None:
     console.print(f"Data is saved on: {export_path}")
 
 
-def find_dicts_diff(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, Any]:
-    result = {}
-    for k in dict1:
-        if k in dict2:
-            if type(dict1[k]) is dict:
-                res = find_dicts_diff(dict1[k], dict2[k])
-                if res:
-                    result[k] = res
-            if dict1[k] != dict2[k]:
-                result[k] = dict1[k]
-        else:
-            result[k] = dict1[k]
-    for k in dict2:
-        if k not in dict1:
-            result[k] = dict2[k]
-    return result
-
-
 def status(text: str = "Fetching data...", spinner: str = "material") -> Callable[..., Callable[..., T]]:
     def decorate(func: Any) -> Any:
         def wrapper(*args: Any, **kwargs: Any) -> Any:
