@@ -69,7 +69,7 @@ styles:
         num_format: "#,##0.00"
 metric_view:
   watchlist_summary:
-    metrics: "company_name,stock_exchange,price.r,change,52_week_low,52_week_high,marketcap"
+    metrics: "company_name,stock_exchange,price,change,52_week_low,52_week_high,marketcap"
   watchlist_financials:
     metrics: "total_revenue,net_income,basic_eps,net_cash_from_operating_activities,total_assets,total_liabilities"
 commands:

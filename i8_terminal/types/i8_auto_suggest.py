@@ -64,8 +64,8 @@ class I8AutoSuggest(AutoSuggest):
                         parts_num = 1
 
                     if len(incomplete) < 1:
-                        return Suggestion("Metric.[Period]")
+                        return Suggestion("Metric.[Optional Period]")
                     elif parts_num == 2:
-                        return Suggestion(".[Period]")
+                        return Suggestion(".[Optional Period]")
 
         return None
