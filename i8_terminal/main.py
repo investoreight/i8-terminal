@@ -5,7 +5,7 @@ from rich.console import Console
 
 from i8_terminal.common.cli import log_terminal_usage, pass_command
 from i8_terminal.config import USER_SETTINGS, init_api_configs, is_user_logged_in
-from utils_setup import get_version
+from i8_terminal.utils_setup import get_version
 
 console = Console(force_terminal=True, color_system="truecolor")
 if set(["i8"]) == set(sys.argv[1:]):
