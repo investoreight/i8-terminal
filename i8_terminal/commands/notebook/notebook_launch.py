@@ -35,4 +35,4 @@ def launch(name: str) -> None:
         with open(fname, "w") as f:
             nbf.write(nb, f)
 
-        os.system(f"start /wait cmd /c  jupyter notebook {name}.ipynb")
+        os.system(f"jupyter notebook {name}.ipynb")
