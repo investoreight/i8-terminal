@@ -71,9 +71,6 @@ class EarningsListResult(ServiceResult):
         fig.update_layout(width=1000, height=600, showlegend=False)
         return fig
 
-    def to_csv(self, path: str) -> None:
-        self._df.to_csv(path)
-
     def to_xlsx(self, path: str, formatter: Optional[str] = None, styler: Optional[str] = None) -> None:
         df = self.to_df()
         df.to_excel(path)
