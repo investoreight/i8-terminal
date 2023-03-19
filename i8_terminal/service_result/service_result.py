@@ -1,11 +1,14 @@
-from typing import Any, Callable, Dict, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
+import matplotlib.pyplot as plt
 from pandas import DataFrame
+from rich.console import Console
 
 from i8_terminal.common.formatting import format_date, format_number_v2
-from i8_terminal.common.layout import format_df
+from i8_terminal.common.layout import df2Table, format_df
 from i8_terminal.i8_exception import I8Exception
 from i8_terminal.service_result.columns_context import ColumnsContext
+from i8_terminal.utils import concat_and
 
 
 class ServiceResult:
@@ -34,11 +37,32 @@ class ServiceResult:
     def to_json(self) -> Any:
         pass
 
-    def to_console(self) -> None:
-        pass
+    def to_console(self, format: str = "default", style: str = "default", width: int = 800) -> None:
+        table = df2Table(self.to_df(format=format, style=style))
+        console = Console(force_jupyter=True, width=width)
+        console.print(table)
 
-    def to_plot(self) -> Any:
-        pass
+    def to_plot(self, x: str, y: List[str], kind="bar") -> Any:
+        return self._to_plot(x, y, kind)
+
+    def _to_plot(self, x: str, y: List[str], kind="bar") -> Any:
+        df = self._df[[x] + y]
+
+        df_grouped = df.groupby(x)[y].mean()
+        ax = df_grouped.plot(kind=kind, figsize=(10, 6))
+
+        cid = self._cols_context.get_col_info_dict()
+        y_display_names = [cid[ci_name].display_name for ci_name in y]
+        title = f"{concat_and(y_display_names)} by {cid[x].display_name}"
+
+        ax.set_title(title)
+        ax.set_xlabel(cid[x].display_name)
+        ax.legend(y_display_names)
+
+        plt.xticks(rotation=45, ha="right")
+        plt.show()
+
+        return plt
 
     def to_xlsx(self, path: str, formatter: Optional[str] = None, styler: Optional[str] = None) -> Any:
         pass

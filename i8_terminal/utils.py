@@ -1,6 +1,6 @@
 import codecs
 import os
-from typing import Any, Callable, Dict, TypeVar
+from typing import Any, Callable, Dict, List, TypeVar
 
 from rich.console import Console
 
@@ -44,6 +44,10 @@ def find_dicts_diff(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, A
         if k not in dict1:
             result[k] = dict2[k]
     return result
+
+
+def concat_and(items: List[str]) -> str:
+    return " and ".join(", ".join(items).rsplit(", ", 1))
 
 
 def status(text: str = "Fetching data...", spinner: str = "material") -> Callable[..., Callable[..., T]]:

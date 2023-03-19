@@ -9,6 +9,7 @@ class ColumnsContext:
     def __init__(self, col_infos: List[ColumnInfo]):
         self._col_infos = col_infos
         self._enrich_col_infos()
+        self._col_info_dict = {ci.name: ci for ci in self._col_infos}
 
     def _enrich_col_infos(self) -> None:
         all_metrics_dict = self.get_metrics_dict()
@@ -32,3 +33,11 @@ class ColumnsContext:
 
     def get_col_infos(self) -> List[ColumnInfo]:
         return self._col_infos
+
+    def get_col_info_dict(self) -> Dict[str, ColumnInfo]:
+        return self._col_info_dict
+
+    def get_col_info(self, name) -> ColumnInfo:
+        if name not in self._col_info_dict:
+            raise I8Exception(f"Column `{name}` is not found!")
+        return self._col_info_dict[name]

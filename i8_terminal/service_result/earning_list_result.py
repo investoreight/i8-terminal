@@ -40,36 +40,12 @@ class EarningsListResult(ServiceResult):
             fig.append_trace(trace, row=row, col=col)
         return fig
 
-    def to_plot(self) -> Any:
-        df = self._df
-        df["eps_beat_?"] = ["Yes" if x > 0 else "No" for x in df["eps_surprise"]]
-        df["revenue_beat_?"] = ["Yes" if x > 0 else "No" for x in df["revenue_surprise"]]
-        fig = make_subplots(rows=2, cols=2)
-        fig_eps_traces = self.__create_plot_traces(df, "eps_actual", "eps_beat_?")
-        fig_revenue_traces = self.__create_plot_traces(df, "revenue_actual", "revenue_beat_?")
-        fig_eps_surprise_traces = self.__create_plot_traces(df, "eps_surprise", "eps_beat_?")
-        fig_revenue_surprise_traces = self.__create_plot_traces(df, "revenue_surprise", "revenue_beat_?")
-
-        fig = self.__add_traces_to_fig(fig_revenue_traces, fig, row=1, col=1)
-        fig = self.__add_traces_to_fig(fig_eps_traces, fig, row=1, col=2)
-        fig = self.__add_traces_to_fig(fig_revenue_surprise_traces, fig, row=2, col=1)
-        fig = self.__add_traces_to_fig(fig_eps_surprise_traces, fig, row=2, col=2)
-
-        fig.update_yaxes(title_text="Revenue $", row=1, col=1)
-        fig.update_yaxes(title_text="EPS $", row=1, col=2)
-        fig.update_yaxes(title_text="Revenue Surprise (%)", row=2, col=1)
-        fig.update_yaxes(title_text="EPS Surprise (%)", row=2, col=2)
-
-        fig.update_xaxes(
-            categoryorder="array", categoryarray=df["period"], showticklabels=True, row=1, col=1, tickmode="linear"
-        )
-        fig.update_xaxes(categoryorder="array", categoryarray=df["period"], showticklabels=True, row=1, col=2)
-        fig.update_xaxes(categoryorder="array", categoryarray=df["period"], row=2, col=1)
-        fig.update_xaxes(categoryorder="array", categoryarray=df["period"], row=2, col=2)
-
-        fig.update_layout(title="Revenue and Earning History", font=dict(color=color.i8_dark.value))
-        fig.update_layout(width=1000, height=600, showlegend=False)
-        return fig
+    def to_plot(self, x: str = None, y: List[str] = None, kind="bar") -> Any:
+        if x is None:
+            x = "period"
+        if y is None:
+            y = ["eps_consensus", "eps_actual"]
+        return self._to_plot(x, y, kind)
 
     def to_csv(self, path: str) -> None:
         self._df.to_csv(path)
