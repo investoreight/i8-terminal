@@ -18,7 +18,7 @@ def get_version() -> Any:
     """
     Read version from a file.
     """
-    for line in read("i8_terminal/version.txt").splitlines():
+    for line in read("version.txt").splitlines():
         if line.startswith("__version__"):
             delim = '"' if '"' in line else "'"
             return line.split(delim)[1]
