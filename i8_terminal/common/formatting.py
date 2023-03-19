@@ -21,6 +21,15 @@ def make_svg_responsive(svg_str: str) -> str:
 
     return svg_str
 
+def colorize_style(row, raw_col: str, formatted_col: str):
+    if row[raw_col] == 0:
+        return row[formatted_col]
+    if row[raw_col] > 0:
+        color = "green" 
+    else:
+        color = "red"  
+    return f"[{color}]{row[formatted_col]}[/{color}]"
+
 
 def format_number(
     m: int,

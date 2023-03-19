@@ -1,10 +1,13 @@
-from typing import Any, Callable, Dict, Optional, Union
+from typing import Any, Callable, Dict, Optional, Union, Tuple
 
 from pandas import DataFrame
+
 from rich.table import Table
 
-from i8_terminal.common.formatting import format_date, format_number_v2
+from i8_terminal.common.formatting import format_date, format_number_v2, colorize_style
 from i8_terminal.common.layout import df2Table, format_df
+
+import pandas as pd
 from i8_terminal.i8_exception import I8Exception
 from i8_terminal.service_result.columns_context import ColumnsContext
 
@@ -26,11 +29,28 @@ class ServiceResult:
                 `terminal`: terminal styling (e.g. positive change is green),
                 `plotly`: plotly styling
         """
-
         df = self._df.copy()
-        df = self._format_df(df, format)
-        df = self._style_df(df, style)
-        return df
+        ci_list = self._cols_context.get_col_infos()
+        raw_col_names = {}
+        for ci in ci_list:
+            raw_col_names[ci.name] = ci.name+"_raw"
+
+        display_names, formatters = self._format_df(df, format)
+        
+
+        df_raw = self._df.copy()
+        df_raw = df_raw.rename(columns=raw_col_names)
+
+        df = pd.concat([df, df_raw], axis=1)
+        stylers = self._style_df(df, style)
+    
+        for ci in ci_list:
+            if ci.name in formatters.keys():
+                df[ci.name] = df[ci.name].apply(formatters[ci.name])
+            if ci.name in stylers.keys():
+                df[ci.name] = df.apply(stylers[ci.name], axis=1)
+        
+        return df[display_names.keys()].rename(columns=display_names)
 
     def to_json(self) -> Any:
         pass
@@ -51,7 +71,7 @@ class ServiceResult:
         df = self._format_df(df, format)
         df.to_csv(path, index=False)
 
-    def _format_df(self, df: DataFrame, format: str = "default") -> DataFrame:
+    def _format_df(self, df: DataFrame, format: str = "default") -> Tuple[Dict[str, str], Dict[str, Any]]:
         ci_list = self._cols_context.get_col_infos()
         display_names: Dict[str, str] = {}
         formatters: Dict[str, Any] = {}
@@ -67,10 +87,19 @@ class ServiceResult:
                     formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format="default")
             else:
                 formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)
-        return format_df(df, display_names, formatters)
+        return (display_names, formatters)
 
-    def _style_df(self, df: DataFrame, styling: str = "default") -> DataFrame:
-        pass
+    def _style_df(self, df: DataFrame, style: Union[str, Any]="default") -> DataFrame:
+        ci_list = self._cols_context.get_col_infos()
+        stylers: Dict[str, Any] = {}
+        for ci in ci_list:
+            if style == "default":
+                stylers[ci.name] = lambda x: x
+            if style == "colorize":
+                if ci.colorable:
+                    stylers[ci.name] = lambda x: colorize_style(x, self._get_raw_name(ci.name), ci.name)
+        return stylers
+
 
     def _get_formatter(self, unit: str, data_type: str, format: str) -> Callable[[Any], Optional[Union[str, int, Any]]]:
         if format == "raw":
@@ -102,3 +131,7 @@ class ServiceResult:
                 return lambda x: format_number_v2(x, percision=2, unit=unit, in_millions=True)
 
         return lambda x: x
+
+    
+    def _get_raw_name(self, name):
+        return name+"_raw"

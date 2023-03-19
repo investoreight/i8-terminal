@@ -22,12 +22,15 @@ class ColumnsContext:
                 ci.enrich(all_metrics_dict[ci.name])
 
     def get_metrics_dict(self) -> Dict[str, ColumnInfo]:
+        colorables = ["revenue_actual", "revenue_consensus", "revenue_growth", "eps_actual", "eps_consensus"]
         metrics_df = get_all_metrics_df()
         metrics_dict: Dict[str, ColumnInfo] = {}
         for _, r in metrics_df.iterrows():
             metrics_dict[r["metric_name"]] = ColumnInfo(
-                r["metric_name"], "metric", r["display_name"], r["data_format"], r["unit"]
+                r["metric_name"], "metric", r["display_name"], r["data_format"], r["unit"], False
             )
+            if r["metric_name"] in colorables:
+                metrics_dict[r["metric_name"]].colorable = True
         return metrics_dict
 
     def get_col_infos(self) -> List[ColumnInfo]:

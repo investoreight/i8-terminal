@@ -11,6 +11,7 @@ class ColumnInfo:
     display_name: Optional[str]
     data_type: Optional[str]
     unit: Optional[str]
+    colorable: bool
 
     def __init__(
         self,
@@ -19,12 +20,14 @@ class ColumnInfo:
         display_name: Optional[str] = None,
         data_type: Optional[str] = None,
         unit: Optional[str] = None,
+        colorable: bool = False
     ):
         self.name = name
         self.col_type = col_type
         self.display_name = display_name
         self.data_type = data_type
         self.unit = unit
+        self.colorable = colorable
 
     def enrich(self, other: ColumnInfo) -> None:
         if not self.display_name:
@@ -33,3 +36,5 @@ class ColumnInfo:
             self.data_type = other.data_type
         if not self.unit:
             self.unit = other.unit
+        if not self.colorable:
+            self.colorable = other.colorable
