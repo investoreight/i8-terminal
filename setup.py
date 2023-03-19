@@ -2,7 +2,7 @@ from typing import List
 
 from setuptools import find_packages, setup
 
-from i8_terminal.utils import get_version
+from i8_terminal.utils_setup import get_version
 
 PACKAGE_NAME = "i8_terminal"
 
