@@ -22,8 +22,7 @@ def prepare_watchlists_df(watchlists: List[WatchlistDto]) -> DataFrame:
         wls.append(
             {
                 "name": wl.name,
-                "tickers": f"{', '.join(str(ticker) for ticker in wl.tickers[:5])} \
-                    {f'and {len(wl.tickers)-5} more' if len(wl.tickers) > 5 else ''}",
+                "tickers": f"{', '.join(str(ticker) for ticker in wl.tickers[:5])} {f'and {len(wl.tickers)-5} more' if len(wl.tickers) > 5 else ''}",  # noqa: E501
             }
         )
     watchlists_df = DataFrame(wls)
