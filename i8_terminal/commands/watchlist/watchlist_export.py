@@ -33,7 +33,7 @@ def export_watchlist_data(
     )
     summary_df = prepare_current_metrics_formatted_df(
         get_current_metrics_df(
-            ",".join(tickers), "company_name,stock_exchange,price.r,change,52_week_low,52_week_high,marketcap"
+            ",".join(tickers), "company_name,stock_exchange,price,change,52_week_low,52_week_high,marketcap"
         ),
         "store",
     )
