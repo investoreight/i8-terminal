@@ -275,10 +275,8 @@ def historical(
     Examples:
 
     `i8 metrics historical --metrics net_income --tickers AMD,INTC,QCOM --output plot --plot_type bar --period_type Q`
-    `i8 metrics historical --metrics total_revenue,total_assets --tickers AMD,INTC,QCOM --output terminal \
-        --period_type FY --pivot`
-
-    """
+    `i8 metrics historical --metrics total_revenue,total_assets --tickers AMD,INTC,QCOM --output terminal --period_type FY --pivot`
+    """  # noqa: E501
     metrics_list = metrics.replace(" ", "").split(",")
     if output not in ["terminal", "plot"]:
         click.echo(click.style(f"`{output}` is not valid output type.", fg="yellow"))
