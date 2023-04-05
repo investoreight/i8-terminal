@@ -154,3 +154,8 @@ def prepare_current_metrics_formatted_df(df: DataFrame, target: str, include_per
 def get_all_metrics_types_dict() -> Dict[str, str]:
     df = get_all_metrics_df()[["metric_name", "type"]]
     return dict([(i, j) for i, j in zip(df.metric_name, df.type)])
+
+
+def get_all_metrics_default_period_types_dict() -> Dict[str, str]:
+    df = get_all_metrics_df()[["metric_name", "period_type_default"]]
+    return dict([(i, j) for i, j in zip(df.metric_name, df.period_type_default)])
