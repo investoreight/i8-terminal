@@ -11,7 +11,6 @@ from mergedeep import merge
 from rich.style import Style
 
 from i8_terminal.i8_exception import I8Exception
-from i8_terminal.utils import find_dicts_diff
 
 PACKAGE_PATH = os.path.dirname(__file__)
 EXECUTABLE_APP_DIR = os.path.join(os.path.dirname(sys.executable))
@@ -95,6 +94,24 @@ def restore_user_settings() -> None:
     restored_user_setting = {"app_instance_id": current_user_settings.get("app_instance_id")}
     with open(USER_SETTINGS_PATH, "w") as f:
         yaml.dump(restored_user_setting, f)
+
+
+def find_dicts_diff(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, Any]:
+    result = {}
+    for k in dict1:
+        if k in dict2:
+            if type(dict1[k]) is dict:
+                res = find_dicts_diff(dict1[k], dict2[k])
+                if res:
+                    result[k] = res
+            if dict1[k] != dict2[k]:
+                result[k] = dict1[k]
+        else:
+            result[k] = dict1[k]
+    for k in dict2:
+        if k not in dict1:
+            result[k] = dict2[k]
+    return result
 
 
 def update_settings() -> None:

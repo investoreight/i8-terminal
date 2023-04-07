@@ -46,9 +46,6 @@ class EarningsListResult(ServiceResult):
             y = ["eps_consensus", "eps_actual"]
         return self._to_plot(x, y, kind)
 
-    def to_csv(self, path: str) -> None:
-        self._df.to_csv(path)
-
     def to_xlsx(self, path: str, formatter: Optional[str] = None, styler: Optional[str] = None) -> None:
         df = self.to_df()
         df.to_excel(path)

@@ -23,7 +23,7 @@ def format_metrics_df(df: DataFrame, target: str) -> DataFrame:
             else metric.display_format,
             target,
         )(
-            locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value)  # type: ignore # noqa: E501
+            locate("int" if metric.data_format == "unsigned_int" else metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" or metric.data_format == "unsigned_int" else metric.value)  # type: ignore # noqa: E501
         ),
         axis=1,
     )
@@ -31,6 +31,7 @@ def format_metrics_df(df: DataFrame, target: str) -> DataFrame:
 
 
 def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dict[str, Any] = {}) -> Table:
+    MIN_COL_LENGTH = 13
     style = get_table_style(style_profile)
     table = Table(**style)
     default_justify = {
@@ -54,9 +55,16 @@ def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dic
         "Revenue Beat Rate": "right",
         "EPS Surprise": "right",
         "Revenue Surprise": "right",
+        "EPS Consensus": "right",
+        "Revenue Consensus": "right",
+        "Eps Surprise": "right",
     }
     for c in df.columns:
-        table.add_column(c, justify=columns_justify.get(c, default_justify.get(c, "left")))
+        table.add_column(
+            c,
+            justify=columns_justify.get(c, default_justify.get(c, "left")),
+            min_width=min(max(df[c].str.len().max(), len(df[c].name)), MIN_COL_LENGTH),
+        )
     for _, r in df.iterrows():
         row = [r[c] if r[c] is not np.nan and r[c] is not None else "-" for c in df.columns]
         table.add_row(*row)

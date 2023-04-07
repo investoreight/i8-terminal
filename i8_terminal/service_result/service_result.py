@@ -4,12 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
-from rich.console import Console
 from rich.table import Table
 
 from i8_terminal.common.formatting import format_date, format_number_v2
 from i8_terminal.common.layout import format_df
-from i8_terminal.config import get_table_style
 from i8_terminal.i8_exception import I8Exception
 from i8_terminal.service_result.column_info import ColumnInfo
 from i8_terminal.service_result.columns_context import ColumnsContext
@@ -95,8 +93,10 @@ class ServiceResult:
     def to_xlsx(self, path: str, formatter: Optional[str] = None, styler: Optional[str] = None) -> Any:
         pass
 
-    def to_csv(self, path: str) -> Any:
-        pass
+    def to_csv(self, path: str, format: str = "raw") -> None:
+        df = self._df.copy()
+        df = self._format_df(df, format)
+        df.to_csv(path, index=False)
 
     def _format_df(self, df: DataFrame, format: str = "default") -> DataFrame:
         ci_list = self._cols_context.get_col_infos()
