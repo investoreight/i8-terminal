@@ -1,25 +1,18 @@
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from rich.console import Console
+from rich.table import Table
 
 from i8_terminal.common.formatting import format_date, format_number_v2
-from i8_terminal.common.layout import df2Table, format_df
+from i8_terminal.common.layout import format_df
+from i8_terminal.config import get_table_style
 from i8_terminal.i8_exception import I8Exception
 from i8_terminal.service_result.columns_context import ColumnsContext
 from i8_terminal.utils import concat_and
-
-
-def colorize_style(row, raw_col: str, formatted_col: str):
-    if row[raw_col] == 0:
-        return row[formatted_col]
-    if row[raw_col] > 0:
-        color = "green"
-    else:
-        color = "red"
-    return f"[{color}]{row[formatted_col]}[/{color}]"
 
 
 class ServiceResult:
@@ -27,44 +20,15 @@ class ServiceResult:
         self._df = df
         self._cols_context = cols_context
 
-    def to_df(self, format: str = "default", style: str = "default") -> DataFrame:
+    def to_df(self, format: str = "default") -> DataFrame:
         """
         Args:
             formating: possible options are
                 `raw`: no formating,
-                `formatted`: number (e.g. 123456.7890 => 123,456.79) and display formatting (net_income => Net Income)
+                `default`: number (e.g. 123456.7890 => 123,456.79) and display formatting (net_income => Net Income)
                 `humanize`: numbers are formatted to human-friendly formats (e.g. 1200000 => $1.20 M)
-            styling: possible options are
-                `default`: no styling,
-                `terminal`: terminal styling (e.g. positive change is green),
-                `plotly`: plotly styling
         """
-
-        df = self._wide_df(format)
-
-        stylers = self._style_df(df, style)
-
-        ci_list = self._cols_context.get_col_infos()
-        display_names = []
-
-        for ci in ci_list:
-            display_names.append(ci.display_name)
-            if ci.name in stylers.keys():
-                df[ci.display_name] = df.apply(stylers[ci.name], axis=1)
-
-        return df[display_names]
-
-    def _style_df(self, df: DataFrame, style: Any) -> DataFrame:
-        ci_list = self._cols_context.get_col_infos()
-        stylers: Dict[str, Any] = {}
-        for ci in ci_list:
-            if style == "default":
-                stylers[ci.name] = lambda x: x[ci.display_name]
-            if style == "colorize":
-                # TODO: remove hardcode
-                if ci.colorable and ci.name == "eps_surprise":
-                    stylers[ci.name] = lambda x: colorize_style(x, ci.name, ci.display_name)
-        return stylers
+        return self._format_df(self._df.copy(), format)
 
     def _wide_df(self, format):
         df_formatted = self._format_df(self._df.copy(), format)
@@ -75,10 +39,35 @@ class ServiceResult:
     def to_json(self) -> Any:
         pass
 
-    def to_console(self, format: str = "default", style: str = "default", width: int = 800) -> None:
-        table = df2Table(self.to_df(format=format, style=style))
+    def to_console(self, format: str = "default", style_profile: str = "default", width: int = 800) -> None:
+        table = self._to_rich_table(format, style_profile)
         console = Console(force_jupyter=True, width=width)
         console.print(table)
+
+    def _to_rich_table(self, format: str, style_profile: str) -> Table:
+        style = get_table_style(style_profile)
+        table = Table(**style)
+        df = self._wide_df(format)
+        ci_list = self._cols_context.get_col_infos()
+        non_num_dts = ["str", "string", "datetime"]
+
+        for ci in ci_list:
+            table.add_column(ci.display_name, justify="left" if ci.data_type in non_num_dts else "right")
+
+        def _process_value(raw, formatted, ci):
+            if raw is np.nan or raw is None:
+                return "-"
+            value = raw if format == "raw" else formatted
+            if ci.colorable and ci.data_type not in non_num_dts and raw != 0:
+                color = "green" if raw > 0 else "red"
+                return f"[{color}]{value}[/{color}]"
+            return str(value)
+
+        for _, r in df.iterrows():
+            row = [_process_value(r[ci.name], r[ci.display_name], ci) for ci in ci_list]
+            table.add_row(*row)
+
+        return table
 
     def to_plot(self, x: str, y: List[str], kind="bar") -> Any:
         return self._to_plot(x, y, kind)
