@@ -2,7 +2,7 @@ import enum
 import os
 from difflib import SequenceMatcher
 from io import StringIO
-from typing import Any, Callable, Dict, Optional, TypeVar
+from typing import Any, Callable, Dict, List, Optional, TypeVar
 
 import arrow
 import pandas as pd
@@ -122,3 +122,7 @@ def status(text: str = "Fetching data...", spinner: str = "material") -> Callabl
         return wrapper
 
     return decorate
+
+
+def concat_and(items: List[str]) -> str:
+    return " and ".join(", ".join(items).rsplit(", ", 1))
