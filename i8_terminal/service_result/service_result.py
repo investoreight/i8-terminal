@@ -11,6 +11,7 @@ from i8_terminal.common.formatting import format_date, format_number_v2
 from i8_terminal.common.layout import format_df
 from i8_terminal.config import get_table_style
 from i8_terminal.i8_exception import I8Exception
+from i8_terminal.service_result.column_info import ColumnInfo
 from i8_terminal.service_result.columns_context import ColumnsContext
 from i8_terminal.utils import concat_and
 
@@ -30,7 +31,7 @@ class ServiceResult:
         """
         return self._format_df(self._df.copy(), format)
 
-    def _wide_df(self, format):
+    def _wide_df(self, format: str) -> DataFrame:
         df_formatted = self._format_df(self._df.copy(), format)
         df_raw = self._df.copy()
 
@@ -54,7 +55,7 @@ class ServiceResult:
         for ci in ci_list:
             table.add_column(ci.display_name, justify="left" if ci.data_type in non_num_dts else "right")
 
-        def _process_value(raw, formatted, ci):
+        def _process_value(raw: Union[int, float], formatted: str, ci: ColumnInfo) -> str:
             if raw is np.nan or raw is None:
                 return "-"
             value = raw if format == "raw" else formatted
@@ -69,10 +70,10 @@ class ServiceResult:
 
         return table
 
-    def to_plot(self, x: str, y: List[str], kind="bar") -> Any:
+    def to_plot(self, x: str, y: List[str], kind: str = "bar") -> Any:
         return self._to_plot(x, y, kind)
 
-    def _to_plot(self, x: str, y: List[str], kind="bar") -> Any:
+    def _to_plot(self, x: str, y: List[str], kind: str = "bar") -> Any:
         df = self._df[[x] + y]
 
         df_grouped = df.groupby(x)[y].mean()

@@ -2,7 +2,6 @@ from typing import Any, List, Optional
 
 import plotly.express as px
 from pandas import DataFrame
-from plotly.subplots import make_subplots
 
 from i8_terminal.common.formatting import color
 from i8_terminal.service_result.columns_context import ColumnsContext
@@ -40,7 +39,7 @@ class EarningsListResult(ServiceResult):
             fig.append_trace(trace, row=row, col=col)
         return fig
 
-    def to_plot(self, x: str = None, y: List[str] = None, kind="bar") -> Any:
+    def to_plot(self, x: str = None, y: List[str] = None, kind: str = "bar") -> Any:
         if x is None:
             x = "period"
         if y is None:

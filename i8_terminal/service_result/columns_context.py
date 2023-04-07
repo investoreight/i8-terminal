@@ -37,7 +37,7 @@ class ColumnsContext:
     def get_col_info_dict(self) -> Dict[str, ColumnInfo]:
         return self._col_info_dict
 
-    def get_col_info(self, name) -> ColumnInfo:
+    def get_col_info(self, name: str) -> ColumnInfo:
         if name not in self._col_info_dict:
             raise I8Exception(f"Column `{name}` is not found!")
         return self._col_info_dict[name]
