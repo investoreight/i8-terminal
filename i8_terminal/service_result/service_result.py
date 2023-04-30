@@ -1,3 +1,4 @@
+from io import StringIO
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import matplotlib.pyplot as plt
@@ -9,11 +10,11 @@ from rich.table import Table
 
 from i8_terminal.common.formatting import format_date, format_number_v2
 from i8_terminal.common.layout import format_df
+from i8_terminal.common.utils import concat_and
 from i8_terminal.config import get_table_style
 from i8_terminal.i8_exception import I8Exception
 from i8_terminal.service_result.column_info import ColumnInfo
 from i8_terminal.service_result.columns_context import ColumnsContext
-from i8_terminal.utils import concat_and
 
 
 class ServiceResult:
@@ -72,6 +73,12 @@ class ServiceResult:
 
     def to_plot(self, x: str, y: List[str], kind: str = "bar") -> Any:
         return self._to_plot(x, y, kind)
+
+    def to_html(self, format: str = "default") -> str:
+        table = self._to_rich_table(format, "default")
+        console = Console(record=True, file=StringIO(), width=800)
+        console.print(table)
+        return console.export_html(inline_styles=True, code_format="<pre>{code}</pre>")
 
     def _to_plot(self, x: str, y: List[str], kind: str = "bar") -> Any:
         df = self._df[[x] + y]
