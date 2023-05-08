@@ -34,35 +34,36 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 
 
 def get_historical_metrics_df(
-    tickers: List[str], metrics: List[str], period_type: Optional[str], from_date: Optional[str], to_date: Optional[str]
+    tickers: List[str],
+    metrics: List[str],
+    period_type: Optional[str],
+    from_date: Optional[datetime],
+    to_date: Optional[datetime],
 ) -> DataFrame:
     if period_type:
         metrics = [f"{metric}.{period_type}" for metric in metrics]
     if from_date:
-        if not to_date:
-            to_date = arrow.now().datetime.strftime("%Y-%m-%d")
         historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
             symbols=",".join(tickers),
             metrics=",".join(metrics),
-            from_date=from_date,
-            to_date=to_date,
+            from_date=from_date.strftime("%Y-%m-%d"),
+            to_date=arrow.now().datetime.strftime("%Y-%m-%d") if not to_date else to_date.strftime("%Y-%m-%d"),
         )
-    else:
-        if to_date:
-            historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
-                symbols=",".join(tickers),
-                metrics=",".join(metrics),
-                from_period_offset=-10,
-                to_period_offset=0,
-                to_date=to_date,
-            )
-        else:
-            historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
-                symbols=",".join(tickers),
-                metrics=",".join(metrics),
-                from_period_offset=-10,
-                to_period_offset=0,
-            )
+    if to_date and not from_date:
+        historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
+            symbols=",".join(tickers),
+            metrics=",".join(metrics),
+            from_period_offset=-10,
+            to_period_offset=0,
+            to_date=to_date.strftime("%Y-%m-%d"),
+        )
+    if not from_date and not to_date:
+        historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
+            symbols=",".join(tickers),
+            metrics=",".join(metrics),
+            from_period_offset=-10,
+            to_period_offset=0,
+        )
     df = pd.DataFrame.from_records(
         [
             (ticker, metric, period_value.period, period_value.period_date_time, period_value.value)
@@ -76,7 +77,12 @@ def get_historical_metrics_df(
     df = pd.merge(df, metadata_df, on="metric_name")
     df[["data_format", "display_format"]] = df[["data_format", "display_format"]].replace("string", "str")
     df.rename(columns={"display_name": "Metric", "Value": "value"}, inplace=True)
-    df["value"] = df.apply(lambda metric: locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value), axis=1)  # type: ignore # noqa: E501
+    data_format_mapper = {"unsigned_int": "int"}
+    df["data_format"] = df["data_format"].replace(data_format_mapper)
+    df["value"] = df.apply(
+        lambda metric: locate(metric.data_format)(float(metric.value) if metric.data_format == "int" else metric.value),  # type: ignore # noqa: E501
+        axis=1,
+    )
     return df
 
 
@@ -325,9 +331,7 @@ def historical(
 
     console = Console()
     with console.status("Fetching data...", spinner="material") as status:
-        df = get_historical_metrics_df(
-            tickers_list, metrics_list, period_type, cast(str, from_date), cast(str, to_date)
-        )
+        df = get_historical_metrics_df(tickers_list, metrics_list, period_type, from_date, to_date)
         df = df.sort_values(["PeriodDateTime"], ascending=False).groupby(["Ticker", "Metric", "Period"]).head(1)
         if len(df["default_period_type"].unique()) > 1:
             console.print(
