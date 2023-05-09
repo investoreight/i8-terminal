@@ -8,26 +8,10 @@ from typing import Optional
 class ColumnInfo:
     name: str
     col_type: str
-    display_name: Optional[str]
-    data_type: Optional[str]
-    unit: Optional[str]
-    colorable: Optional[bool]
-
-    def __init__(
-        self,
-        name: str,
-        col_type: str,
-        display_name: Optional[str] = None,
-        data_type: Optional[str] = None,
-        unit: Optional[str] = None,
-        colorable: Optional[bool] = None,
-    ):
-        self.name = name
-        self.col_type = col_type
-        self.display_name = display_name
-        self.data_type = data_type
-        self.unit = unit
-        self.colorable = colorable
+    display_name: Optional[str] = None
+    data_type: Optional[str] = None
+    unit: Optional[str]  = None
+    colorable: Optional[bool] = None
 
     def enrich(self, other: ColumnInfo) -> None:
         if not self.display_name:

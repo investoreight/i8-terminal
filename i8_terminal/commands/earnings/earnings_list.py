@@ -42,7 +42,7 @@ def list(ticker: str, export_path: Optional[str]) -> None:
             )
     else:
         df = earnings_list.to_df()
-        earnings_list.to_console()
+
         table = df2Table(df)
         console = Console()
         console.print(table)
