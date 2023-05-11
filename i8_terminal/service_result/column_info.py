@@ -10,7 +10,7 @@ class ColumnInfo:
     col_type: str
     display_name: Optional[str] = None
     data_type: Optional[str] = None
-    unit: Optional[str]  = None
+    unit: Optional[str] = None
     colorable: Optional[bool] = None
 
     def enrich(self, other: ColumnInfo) -> None:

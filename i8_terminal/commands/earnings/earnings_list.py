@@ -42,7 +42,5 @@ def list(ticker: str, export_path: Optional[str]) -> None:
             )
     else:
         df = earnings_list.to_df()
-
-        table = df2Table(df)
         console = Console()
-        console.print(table)
+        console.print(earnings_list._to_rich_table("default", "default"))
