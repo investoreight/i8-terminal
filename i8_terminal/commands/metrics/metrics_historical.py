@@ -1,6 +1,5 @@
 from datetime import datetime
-from pydoc import locate
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional
 
 import arrow
 import click
