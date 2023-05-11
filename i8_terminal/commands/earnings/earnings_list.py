@@ -43,4 +43,4 @@ def list(ticker: str, export_path: Optional[str]) -> None:
     else:
         df = earnings_list.to_df()
         console = Console()
-        console.print(earnings_list._to_rich_table("default", "default"))
+        console.print(earnings_list._to_rich_table("humanize", "default"))
