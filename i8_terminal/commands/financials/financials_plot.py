@@ -157,7 +157,8 @@ def create_fig(
     "-m",
     type=PeriodTypeParamType(),
     default="FY",
-    help="Period by which you want to view the report. Possible values are `FY` for yearly, `Q` for quarterly, and `TTM` for TTM reports.",
+    help="Period by which you want to view the report. Possible values are `FY` for yearly, \
+        `Q` for quarterly, and `TTM` for TTM reports.",
 )
 @click.option("--metrics", "-m", type=MetricParamType(), default="basic_eps", help="Comma-separated list of metrics.")
 @click.option("--from_date", "-f", type=DateTime(), help="Histotical financials from date.")
@@ -184,19 +185,21 @@ def plot(
 
     Examples:
 
-    `i8 financials plot --period_type Q --metrics net_ppe --from_date 2020-05-01 --to_date 2022-05-01 --tickers AMD,INTC,QCOM --chart_type line`
+    `i8 financials plot --period_type Q --metrics net_ppe --from_date 2020-05-01 --to_date 2022-05-01 \
+        --tickers AMD,INTC,QCOM --chart_type line`
     """
     metrics_list = metrics.replace(" ", "").split(",")
     matched_metrics = [find_similar_fin_metric(metric.replace("_", "")) for metric in metrics_list]
     if not matched_metrics:
         click.echo(
-            f"`{metrics}` is not valid metrics name. See the list of valid financial metrics with the following command:\n`i8 metrics`"
+            f"`{metrics}` is not valid metrics name. See the list of valid financial metrics with the \
+                following command:\n`i8 metrics`"
         )
         return
     if len(matched_metrics) > 2:
         click.echo("You can enter up to 2 metrics.")
         return
-    if not chart_type in [t[0] for t in get_chart_param_types()]:
+    if chart_type not in [t[0] for t in get_chart_param_types()]:
         click.echo(f"`{chart_type}` is not valid chart type.")
         return
     command_path_parsed_options_dict = {"--metrics": ",".join(matched_metrics)}  # type: ignore

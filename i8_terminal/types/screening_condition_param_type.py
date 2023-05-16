@@ -20,9 +20,9 @@ class ScreeningConditionParamType(AutoCompleteChoice):
         if param_type == "metric":
             return self._metric_auto_comp.get_suggestions(keyword)
         elif param_type == "period":
-            return self._period_auto_comp.get_suggestions(keyword, metric=metric)
+            return self._period_auto_comp.get_suggestions(keyword, metric=metric)  # type: ignore
         else:
-            return self._condition_auto_comp.get_suggestions(keyword, metric=metric)
+            return self._condition_auto_comp.get_suggestions(keyword, metric=metric)  # type: ignore
 
     def __repr__(self) -> str:
         return "SCREENINGCONDITION"

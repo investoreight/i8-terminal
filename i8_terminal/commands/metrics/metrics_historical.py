@@ -22,6 +22,7 @@ from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.layout import df2Table, format_metrics_df
+from i8_terminal.common.metrics import get_all_metrics_type_and_data_types_df
 from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import PlotType, reverse_period
 from i8_terminal.config import get_table_style
@@ -75,17 +76,12 @@ def get_historical_metrics_df(
     df = pd.merge(df, metadata_df, on="metric_name")
     df[["data_format", "display_format"]] = df[["data_format", "display_format"]].replace("string", "str")
     df.rename(columns={"display_name": "Metric", "Value": "value"}, inplace=True)
-    df["value"] = df.apply(
-        lambda metric: locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value), axis=1  # type: ignore
-    )
+    df["value"] = df.apply(lambda metric: locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value), axis=1)  # type: ignore # noqa: E501
     return df
 
 
 def create_fig(
-    df: DataFrame,
-    cmd_context: Dict[str, Any],
-    tickers: List[str],
-    chart_type: str,
+    df: DataFrame, cmd_context: Dict[str, Any], tickers: List[str], chart_type: str, metrics_type_df: DataFrame
 ) -> go.Figure:
     vertical_spacing = 0.02
     layout = dict(
@@ -145,8 +141,11 @@ def create_fig(
             fig["layout"][f"xaxis{metric_idx+1}"]["dtick"] = round(len(metric_df["Period"]) / 10)
 
     fig.update_traces(hovertemplate="%{y} %{x}")
-    df["Reversed Period"] = df.apply(lambda row: reverse_period(row.Period), axis=1)
-    sorted_periods = [reverse_period(reversed_period) for reversed_period in sorted(set(df["Reversed Period"]))]
+    sorted_periods = df.sort_values("PeriodDateTime")["Period"].unique()
+    if "fin_metric" in set(metrics_type_df["type"]):
+        # Reverse the financials periods. e.g: `FY 2020` will converted to `2020 FY``
+        sorted_periods = list(map(reverse_period, sorted_periods))
+
     fig.update_xaxes(
         rangeslider_visible=False,
         spikemode="across",
@@ -241,7 +240,7 @@ def historical_metrics_df2tree(df: DataFrame) -> Tree:
     "-o",
     type=OutputParamType(),
     default="terminal",
-    help="Output can be terminal or plot type.",
+    help="Output can be terminal or plot.",
 )
 @click.option(
     "--plot_type",
@@ -255,7 +254,8 @@ def historical_metrics_df2tree(df: DataFrame) -> Tree:
     "--period_type",
     "-t",
     type=PeriodTypeParamType(),
-    help="Period by which you want to view the report. Possible values are `D` for daily, `FY` for yearly, `Q` for quarterly, `TTM` for TTM reports, `YTD` for YTD reports.",
+    help="Period by which you want to view the report. Possible values are `D` for daily, \
+        `FY` for yearly, `Q` for quarterly, `TTM` for TTM reports, `YTD` for YTD reports.",
 )
 @click.option("--from_date", "-f", type=DateTime(), help="Histotical metrics from date.")
 @click.option("--to_date", "-t", type=DateTime(), help="Histotical metrics to date.")
@@ -277,11 +277,12 @@ def historical(
     Examples:
 
     `i8 metrics historical --metrics net_income --tickers AMD,INTC,QCOM --output plot --plot_type bar --period_type Q`
-    `i8 metrics historical --metrics total_revenue,total_assets --tickers AMD,INTC,QCOM --output terminal --period_type FY --pivot`
+    `i8 metrics historical --metrics total_revenue,total_assets --tickers AMD,INTC,QCOM --output terminal \
+        --period_type FY --pivot`
 
     """
     metrics_list = metrics.replace(" ", "").split(",")
-    if not output in ["terminal", "plot"]:
+    if output not in ["terminal", "plot"]:
         click.echo(click.style(f"`{output}` is not valid output type.", fg="yellow"))
         return
     if output == "plot" and len(metrics_list) > 2:
@@ -304,7 +305,7 @@ def historical(
     if len(tickers_list) > 5:
         click.echo(click.style("You can enter up to 5 tickers.", fg="yellow"))
         return
-    if not plot_type in ["bar", "line"]:
+    if plot_type not in ["bar", "line"]:
         click.echo(click.style(f"`{plot_type}` is not valid chart type.", fg="yellow"))
         return
     cmd_context = {
@@ -312,6 +313,15 @@ def historical(
         "tickers": tickers_list,
         "plot_type": PlotType.CHART.value,
     }
+
+    metrics_type_df: DataFrame = get_all_metrics_type_and_data_types_df()
+    metrics_type_df = metrics_type_df[metrics_type_df["metric_name"].isin(metrics_list)]
+
+    if output == "plot" and "string" in metrics_type_df["data_format"].unique():
+        click.echo(
+            click.style("Metrics with type `string` cannot be plotted! Select `terminal` output instead.", fg="yellow")
+        )
+        return
 
     console = Console()
     with console.status("Fetching data...", spinner="material") as status:
@@ -321,14 +331,17 @@ def historical(
         df = df.sort_values(["PeriodDateTime"], ascending=False).groupby(["Ticker", "Metric", "Period"]).head(1)
         if len(df["default_period_type"].unique()) > 1:
             console.print(
-                "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type. Check `metrics describe` command to find more about metrics.",
+                (
+                    "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have "
+                    "the same period type. Check `metrics describe` command to find more about metrics."
+                ),
                 style="yellow",
             )
             return
         if output == "plot":
             cmd_context["plot_title"] = f"Historical {' and '.join(list(set(df['Metric'])))}"
             status.update("Generating plot...")
-            fig = create_fig(df, cmd_context, tickers_list, plot_type)
+            fig = create_fig(df, cmd_context, tickers_list, plot_type, metrics_type_df)
 
     if output == "plot":
         serve_plot(fig, cmd_context)

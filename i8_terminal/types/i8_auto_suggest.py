@@ -10,7 +10,6 @@ from prompt_toolkit.document import Document
 from i8_terminal.types.command_parser import CommandParser
 from i8_terminal.types.fin_identifier_param_type import FinancialsIdentifierParamType
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
-from i8_terminal.types.screening_condition_param_type import ScreeningConditionParamType
 
 
 class I8AutoSuggest(AutoSuggest):
@@ -33,7 +32,7 @@ class I8AutoSuggest(AutoSuggest):
             if len(matched_params) > 0:
                 matched_param = matched_params[0]
                 if type(matched_param.type) is click.types.DateTime:
-                    return Suggestion("YYYY-MM-DD"[len(ctx.incomplete) :])
+                    return Suggestion("YYYY-MM-DD"[len(ctx.incomplete) :])  # noqa: E203
                 elif type(matched_param.type) is FinancialsIdentifierParamType:
                     parts_num = 3
                     parts = ctx.incomplete.split(",")
@@ -65,25 +64,8 @@ class I8AutoSuggest(AutoSuggest):
                         parts_num = 1
 
                     if len(incomplete) < 1:
-                        return Suggestion("Metric.[Period]")
+                        return Suggestion("Metric.[Optional Period]")
                     elif parts_num == 2:
-                        return Suggestion(".[Period]")
-                elif type(matched_param.type) is ScreeningConditionParamType:
-                    parts_num = 3
-                    parts = ctx.incomplete.split(",")
-                    incomplete = parts[-1] if len(parts) > 0 else " "
-                    period_sub_parts = incomplete.split(".")
-                    condition_sub_parts = incomplete.split(":")
-                    if len(condition_sub_parts) > 1:
-                        parts_num = 2
-                    elif len(period_sub_parts) > 1:
-                        parts_num = 1
-
-                    if len(incomplete) < 1:
-                        return Suggestion("Metric.[Period]:[Condition]")
-                    elif parts_num == 1:
-                        return Suggestion("[Period]:[Condition]")
-                    elif parts_num == 2:
-                        return Suggestion("[Condition]")
+                        return Suggestion(".[Optional Period]")
 
         return None

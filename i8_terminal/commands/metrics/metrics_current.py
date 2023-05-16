@@ -39,38 +39,23 @@ def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
     """
     Lists the given metrics for a given list of companies. TICKERS is a comma-separated list of tickers.
     METRICS can be in the below format:
-    {metric}.{period}
+    {metric}.{optional period}
 
     Available periods:
-        price, performance and technical metrics:
-            1da = 1 day ago,
-            2da = 2 days ago
-
-        financial metrics:
-            mrq = most recent quarter,
-            mry = most recent financial year,
-            ttm = trailing 12 months,
-            ytd = year to date,
-            1qa = 1 quarter ago,
-            2qa = 2 quarters ago,
-            1ya = 1 year ago,
-            2ya = 2 years ago
-
-        earnings metrics:
-            uq = upcoming quarter
-            mrq = most recent quarter,
-            1qa = 1 quarter ago,
-            2qa = 2 quarters ago
-
-        You can also use specific period (e.g FY_2020).
+        q = most recent quarter,
+        fy = most recent fiscal year,
+        ttm = trailing 12 months,
+        ytd = year to date,
+        p = default period type
 
     Examples:
 
-    `i8 metrics current --metrics total_revenue.mrq,net_income.2ya,close.1da,total_revenue.FY_2019 --tickers AMD,INTC,QCOM`
+    `i8 metrics current --metrics total_revenue.q,net_income.fy,close.d,total_revenue \
+        --tickers AMD,INTC,QCOM`
     """
     console = Console()
     with console.status("Fetching data...", spinner="material"):
-        df = get_current_metrics_df(tickers, metrics)
+        df = get_current_metrics_df(tickers, metrics.replace(".p", ""))
     if df is None:
         console.print("No data found for metrics with selected tickers", style="yellow")
         return

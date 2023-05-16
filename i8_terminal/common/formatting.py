@@ -1,9 +1,17 @@
 import re
 from datetime import date
+from enum import Enum
 from typing import Any, Optional, Union
 
 import arrow
 import numpy as np
+
+
+class color(Enum):
+    i8_dark = "#015560"
+    i8_light = "#00b08f"
+    i8_red = "#ef553b"
+    i8_green = "#00cc96"
 
 
 def make_svg_responsive(svg_str: str) -> str:
@@ -62,6 +70,48 @@ def format_number(
     if colorize:
         color = "red" if m <= 0 else "green"
         res = f"[{color}]{res}[/{color}]"
+
+    return res
+
+
+def format_number_v2(
+    m: int,
+    percision: int = 2,
+    unit: Optional[str] = None,
+    humanize: bool = False,
+    in_millions: bool = False,
+) -> Optional[Union[str, int]]:
+    res: Optional[Union[str, int]] = None
+    if m is None or np.isnan(m):
+        return "-"
+
+    if in_millions:
+        number = abs(m)
+        if m < 0:
+            res = f"({number // 1e6:,.1f})"
+        else:
+            res = f"{number // 1e6:,.1f}"
+
+    elif humanize:
+        number = abs(m)
+        if number < 1e3:
+            res = f"{m:,.{percision}f}"
+        if number >= 1e3 and number < 1e6:
+            res = f"{m / 1e3:,.{percision}f} K"
+        if number >= 1e6 and number < 1e9:
+            res = f"{m / 1e6:,.{percision}f} M"
+        if number >= 1e9 and number < 1e12:
+            res = f"{m / 1e9:,.{percision}f} B"
+        if number >= 1e12:
+            res = f"{m / 1e12:,.{percision}f} T"
+    else:
+        res = f"{m:,.{percision}f}"
+
+    if unit == "percentage":
+        res = f"{res}%" if m <= 0 else f"+{res}%"
+
+    if unit in ["usd", "usdpershare"]:
+        res = f"${res}"
 
     return res
 

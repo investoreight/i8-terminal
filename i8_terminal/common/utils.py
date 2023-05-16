@@ -2,13 +2,15 @@ import enum
 import os
 from difflib import SequenceMatcher
 from io import StringIO
-from typing import Any, Dict, Optional
+from typing import Any, Callable, Dict, List, Optional, TypeVar
 
 import arrow
 import pandas as pd
 from rich.console import Console
 
 from i8_terminal.config import APP_SETTINGS
+
+T = TypeVar("T")
 
 
 class PlotType(enum.Enum):
@@ -108,3 +110,19 @@ def export_to_html(data: Any, export_path: str) -> None:
         file.write(exported_html)
     console = Console()
     console.print(f"Data is saved on: {export_path}")
+
+
+def status(text: str = "Fetching data...", spinner: str = "material") -> Callable[..., Callable[..., T]]:
+    def decorate(func: Any) -> Any:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            console = Console()
+            with console.status(text, spinner=spinner):
+                return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorate
+
+
+def concat_and(items: List[str]) -> str:
+    return " and ".join(", ".join(items).rsplit(", ", 1))

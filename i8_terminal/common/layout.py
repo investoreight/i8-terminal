@@ -17,12 +17,21 @@ def format_df(df: DataFrame, cols_map: Dict[str, str], cols_formatters: Dict[str
 
 def format_metrics_df(df: DataFrame, target: str) -> DataFrame:
     df["value"] = df.apply(
-        lambda metric: get_formatter("number_int" if metric.data_format == "int" and metric.display_format == "number" else metric.display_format, target)(locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value)), axis=1  # type: ignore
+        lambda metric: get_formatter(
+            "number_int"
+            if metric.data_format == "int" and metric.display_format == "number"
+            else metric.display_format,
+            target,
+        )(
+            locate("int" if metric.data_format == "unsigned_int" else metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" or metric.data_format == "unsigned_int" else metric.value)  # type: ignore # noqa: E501
+        ),
+        axis=1,
     )
     return df
 
 
 def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dict[str, Any] = {}) -> Table:
+    MIN_COL_LENGTH = 13
     style = get_table_style(style_profile)
     table = Table(**style)
     default_justify = {
@@ -46,10 +55,17 @@ def df2Table(df: DataFrame, style_profile: str = "default", columns_justify: Dic
         "Revenue Beat Rate": "right",
         "EPS Surprise": "right",
         "Revenue Surprise": "right",
+        "EPS Consensus": "right",
+        "Revenue Consensus": "right",
+        "Eps Surprise": "right",
     }
     for c in df.columns:
-        table.add_column(c, justify=columns_justify.get(c, default_justify.get(c, "left")))
+        table.add_column(
+            c,
+            justify=columns_justify.get(c, default_justify.get(c, "left")),
+            min_width=min(max(df[c].str.len().max(), len(df[c].name)), MIN_COL_LENGTH),
+        )
     for _, r in df.iterrows():
-        row = [r[c] if r[c] is not np.nan else "-" for c in df.columns]
+        row = [r[c] if r[c] is not np.nan and r[c] is not None else "-" for c in df.columns]
         table.add_row(*row)
     return table

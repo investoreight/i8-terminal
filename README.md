@@ -1,4 +1,4 @@
-# i8 Terminal: Modern Market Research with the Power of Command-Line
+# i8 Terminal: Modern Market Research powered by the Command-Line
 
 [i8 terminal](https://www.i8terminal.io) is a modern python-based terminal application that gives you superior power and flexibility to understand and analyze the market. The interface is simple, efficient, and powerful: it's command-line!
 
@@ -58,6 +58,7 @@ The preferred workflow for contributing to i8 Terminal is to clone the
 
 See [here](https://github.com/investoreight/i8-terminal/blob/main/CONTRIBUTING.md) for guidelines for contributors.
 
+i8 Terminal is built on top of the [Investoreight Core API](https://github.com/investoreight/investor8-sdk).
 
 ## How to Run i8 Terminal
 You can verify whether i8 Terminal is installed successfully by running i8 script:

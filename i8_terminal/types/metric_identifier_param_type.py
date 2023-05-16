@@ -18,7 +18,7 @@ class MetricIdentifierParamType(AutoCompleteChoice):
         if param_type == "metric":
             return self._metric_auto_comp.get_suggestions(keyword)
         else:
-            return self._period_auto_comp.get_suggestions(keyword, metric=metric)
+            return self._period_auto_comp.get_suggestions(keyword, metric=metric)  # type: ignore
 
     def __repr__(self) -> str:
         return "METRICIDENTIFIER"

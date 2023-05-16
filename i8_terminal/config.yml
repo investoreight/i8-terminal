@@ -69,7 +69,7 @@ styles:
         num_format: "#,##0.00"
 metric_view:
   watchlist_summary:
-    metrics: "company_name,stock_exchange,price.r,change,52_week_low,52_week_high,marketcap"
+    metrics: "company_name,stock_exchange,price,change,52_week_low,52_week_high,marketcap"
   watchlist_financials:
     metrics: "total_revenue,net_income,basic_eps,net_cash_from_operating_activities,total_assets,total_liabilities"
 commands:
@@ -78,11 +78,11 @@ commands:
         - name: "Summary"
           metrics: "company_name,sector,industry_group,price,change,marketcap,pe_ratio_ttm"
         - name: "Financials"
-          metrics: "return_1w,return_1m,return_3m,return_6m,return_ytd,return_1y,return_2y,return_5y"
+          metrics: "operating_revenue,total_revenue,total_gross_profit,other_income,basic_eps,diluted_eps,adj_basic_eps"
         - name: "Performance"
-          metrics: "pe_ratio_ttm,current_ratio,quick_ratio,price_to_book,revenue_growth,dividend_yield,roe"
+          metrics: "return_1w,return_1m,return_3m,return_6m,return_ytd,return_1y,return_2y,return_5y"
         - name: "Key Ratios"
-          metrics: pe_ratio_ttm,current_ratio,quick_ratio,price_to_book,revenue_growth,dividend_yield,roe
+          metrics: "pe_ratio_ttm,current_ratio,quick_ratio,price_to_book,revenue_growth,dividend_yield,roe"
   screen_gainers:
       metrics: "company_name,price,change"
   screen_losers:

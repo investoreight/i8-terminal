@@ -14,7 +14,7 @@ def get_login_authentication_request_id() -> str:
 
 
 def open_browser(request_id: str) -> None:
-    url = f"https://www.investoreight.com/account/authorize?reqId={request_id}&redirectUrl=http://localhost:{APP_SETTINGS['app']['port']}"
+    url = f"https://www.investoreight.com/account/authorize?reqId={request_id}&redirectUrl=http://localhost:{APP_SETTINGS['app']['port']}"  # noqa: E501
     webbrowser.open(url)
 
 
@@ -31,6 +31,9 @@ def login_within_terminal() -> None:
             "i8_core_api_key": api_response.api_key,
         }
         save_user_settings(user_setting)
+        investor8_sdk.ApiClient().configuration.api_key["apiKey"] = api_response.api_key
+        investor8_sdk.ApiClient().configuration.api_key["Authorization"] = api_response.token
+        investor8_sdk.ApiClient().configuration.api_key_prefix["Authorization"] = "Bearer"
         click.echo("User logged in successfully!")
     except Exception as e:
         click.echo(e)
