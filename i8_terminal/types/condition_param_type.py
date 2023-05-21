@@ -1,11 +1,11 @@
 from typing import Dict, List, Tuple
 
-from i8_terminal.common.metrics import get_all_metrics_df
+from i8_terminal.common.metrics import get_all_metrics_screening_conditions_df
 from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
 
 
 def get_metrics_conditions_dict() -> Dict[str, str]:
-    df = get_all_metrics_df()[["metric_name", "screening_conditions"]]
+    df = get_all_metrics_screening_conditions_df()[["metric_name", "screening_conditions"]]
     return dict([(i, j) for i, j in zip(df.metric_name, df.screening_conditions)])
 
 
