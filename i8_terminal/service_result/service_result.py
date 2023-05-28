@@ -9,11 +9,11 @@ from rich.table import Table
 
 from i8_terminal.common.formatting import format_date, format_number_v2
 from i8_terminal.common.layout import format_df
+from i8_terminal.common.utils import concat_and
 from i8_terminal.config import get_table_style
 from i8_terminal.i8_exception import I8Exception
 from i8_terminal.service_result.column_info import ColumnInfo
 from i8_terminal.service_result.columns_context import ColumnsContext
-from i8_terminal.utils import concat_and
 
 
 class ServiceResult:

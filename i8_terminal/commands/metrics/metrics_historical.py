@@ -1,6 +1,5 @@
 from datetime import datetime
-from pydoc import locate
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional
 
 import arrow
 import click
@@ -34,35 +33,36 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 
 
 def get_historical_metrics_df(
-    tickers: List[str], metrics: List[str], period_type: Optional[str], from_date: Optional[str], to_date: Optional[str]
+    tickers: List[str],
+    metrics: List[str],
+    period_type: Optional[str],
+    from_date: Optional[datetime],
+    to_date: Optional[datetime],
 ) -> DataFrame:
     if period_type:
         metrics = [f"{metric}.{period_type}" for metric in metrics]
     if from_date:
-        if not to_date:
-            to_date = arrow.now().datetime.strftime("%Y-%m-%d")
         historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
             symbols=",".join(tickers),
             metrics=",".join(metrics),
-            from_date=from_date,
-            to_date=to_date,
+            from_date=from_date.strftime("%Y-%m-%d"),
+            to_date=to_date.strftime("%Y-%m-%d") if to_date else arrow.now().datetime.strftime("%Y-%m-%d"),
         )
-    else:
-        if to_date:
-            historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
-                symbols=",".join(tickers),
-                metrics=",".join(metrics),
-                from_period_offset=-10,
-                to_period_offset=0,
-                to_date=to_date,
-            )
-        else:
-            historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
-                symbols=",".join(tickers),
-                metrics=",".join(metrics),
-                from_period_offset=-10,
-                to_period_offset=0,
-            )
+    elif to_date and not from_date:
+        historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
+            symbols=",".join(tickers),
+            metrics=",".join(metrics),
+            from_period_offset=-10,
+            to_period_offset=0,
+            to_date=to_date.strftime("%Y-%m-%d"),
+        )
+    elif not to_date and not from_date:
+        historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
+            symbols=",".join(tickers),
+            metrics=",".join(metrics),
+            from_period_offset=-10,
+            to_period_offset=0,
+        )
     df = pd.DataFrame.from_records(
         [
             (ticker, metric, period_value.period, period_value.period_date_time, period_value.value)
@@ -76,8 +76,18 @@ def get_historical_metrics_df(
     df = pd.merge(df, metadata_df, on="metric_name")
     df[["data_format", "display_format"]] = df[["data_format", "display_format"]].replace("string", "str")
     df.rename(columns={"display_name": "Metric", "Value": "value"}, inplace=True)
-    df["value"] = df.apply(lambda metric: locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value), axis=1)  # type: ignore # noqa: E501
+    df["value"] = df.apply(lambda metric: data_format_mapper(metric), axis=1)
     return df
+
+
+def data_format_mapper(metric: pd.Series) -> Any:
+    if metric["data_format"] in ["int", "unsigned_int"]:
+        return int(float(metric["value"]))
+    elif metric["data_format"] == "float":
+        return float(metric["value"])
+    else:
+        # Includes "datetime", "string" and "str"
+        return str(metric["value"])
 
 
 def create_fig(
@@ -141,7 +151,12 @@ def create_fig(
             fig["layout"][f"xaxis{metric_idx+1}"]["dtick"] = round(len(metric_df["Period"]) / 10)
 
     fig.update_traces(hovertemplate="%{y} %{x}")
+
     sorted_periods = df.sort_values("PeriodDateTime")["Period"].unique()
+    sorted_periods_filtered = (
+        sorted_periods[:: int(len(sorted_periods) / 10)] if len(sorted_periods) > 10 else sorted_periods
+    )  # Get only 10,
+
     if "fin_metric" in set(metrics_type_df["type"]):
         # Reverse the financials periods. e.g: `FY 2020` will converted to `2020 FY``
         sorted_periods = list(map(reverse_period, sorted_periods))
@@ -152,6 +167,8 @@ def create_fig(
         spikesnap="cursor",
         categoryorder="array",
         categoryarray=sorted_periods,
+        xaxis_tickvals=sorted_periods_filtered,
+        xaxis_ticktext=sorted_periods_filtered,
     )
 
     fig.update_layout(
@@ -325,9 +342,7 @@ def historical(
 
     console = Console()
     with console.status("Fetching data...", spinner="material") as status:
-        df = get_historical_metrics_df(
-            tickers_list, metrics_list, period_type, cast(str, from_date), cast(str, to_date)
-        )
+        df = get_historical_metrics_df(tickers_list, metrics_list, period_type, from_date, to_date)
         df = df.sort_values(["PeriodDateTime"], ascending=False).groupby(["Ticker", "Metric", "Period"]).head(1)
         if len(df["default_period_type"].unique()) > 1:
             console.print(
