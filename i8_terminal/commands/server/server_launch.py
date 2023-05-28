@@ -19,6 +19,7 @@ def launch(port: Optional[int]) -> None:
     """
     app = Flask(__name__)
     ctx = click.get_current_context()
+    ctx.obj["is_server_call"] = True
 
     @app.route("/", defaults={"command_path": ""})
     @app.route("/<path:command_path>", methods=["GET"])
@@ -39,6 +40,7 @@ def launch(port: Optional[int]) -> None:
         }
 
         res = ctx.invoke(command, *args, **kwargs)
+
         return str(res)
 
     app.run(port=port or 8085)
