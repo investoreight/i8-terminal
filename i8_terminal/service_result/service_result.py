@@ -8,7 +8,6 @@ from rich.console import Console
 from rich.table import Table
 
 from i8_terminal.app.layout import get_plot_default_layout
-from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.common.formatting import format_date, format_number_v2
 from i8_terminal.common.layout import format_df
 from i8_terminal.common.utils import concat_and
