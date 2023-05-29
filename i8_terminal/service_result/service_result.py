@@ -75,14 +75,13 @@ class ServiceResult:
     def to_plot(self, x: str, y: List[str], kind: str = "bar") -> Any:
         return self._to_plot(x, y, kind)
 
-    def _to_plot(self, cmd_context: Dict[str, Any], x: str, y: List[str], kind: str = "bar") -> None:
+    def _to_plot(self, x: str, y: List[str], kind: str = "bar") -> Any:
         df = self._df[[x] + y]
         df_grouped = df.groupby(x)[y].mean().reset_index()
 
         cid = self._cols_context.get_col_info_dict()
         y_display_names = [cid[ci_name].display_name for ci_name in y]
         title = f"{concat_and(y_display_names)} by {cid[x].display_name}"
-        cmd_context["plot_title"] = title
 
         fig = None
         if kind == "bar":
@@ -106,8 +105,9 @@ class ServiceResult:
             xaxis_title=None,
             margin=dict(b=15, l=70, r=20),
         )
+        fig.show()
 
-        serve_plot(fig, cmd_context)
+        return fig
 
     def to_xlsx(self, path: str, formatter: Optional[str] = None, styler: Optional[str] = None) -> Any:
         pass
