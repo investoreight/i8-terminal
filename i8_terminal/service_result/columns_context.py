@@ -27,7 +27,7 @@ class ColumnsContext:
         metrics_dict: Dict[str, ColumnInfo] = {}
         for _, r in metrics_df.iterrows():
             metrics_dict[r["metric_name"]] = ColumnInfo(
-                r["metric_name"], "metric", r["display_name"], r["data_format"], r["unit"], r["colorable"]
+                r["metric_name"], "metric", r["display_name"], r["data_format"], r["unit"]  # , r["colorable"]
             )
         return metrics_dict
 
