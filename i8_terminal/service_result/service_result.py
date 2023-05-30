@@ -1,12 +1,13 @@
 from typing import Any, Callable, Dict, List, Optional, Union
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import plotly.express as px
 from pandas import DataFrame
 from rich.console import Console
 from rich.table import Table
 
+from i8_terminal.app.layout import get_plot_default_layout
 from i8_terminal.common.formatting import format_date, format_number_v2
 from i8_terminal.common.layout import format_df
 from i8_terminal.common.utils import concat_and
@@ -75,22 +76,37 @@ class ServiceResult:
 
     def _to_plot(self, x: str, y: List[str], kind: str = "bar") -> Any:
         df = self._df[[x] + y]
-
-        df_grouped = df.groupby(x)[y].mean()
-        ax = df_grouped.plot(kind=kind, figsize=(10, 6))
+        df_grouped = df.groupby(x)[y].mean().reset_index()
 
         cid = self._cols_context.get_col_info_dict()
         y_display_names = [cid[ci_name].display_name for ci_name in y]
         title = f"{concat_and(y_display_names)} by {cid[x].display_name}"
 
-        ax.set_title(title)
-        ax.set_xlabel(cid[x].display_name)
-        ax.legend(y_display_names)
+        fig = None
+        if kind == "bar":
+            fig = px.bar(
+                df_grouped,
+                hover_data=[],
+                x=x,
+                y=y,
+                barmode="group",
+                title=title,
+                labels={"value": "Metric Value", x: "Period"},
+            )
+        if not fig:
+            return
 
-        plt.xticks(rotation=45, ha="right")
-        plt.show()
+        fig.update_traces(width=0.3, hovertemplate="%{y}%{_xother}")
+        fig.update_layout(
+            **get_plot_default_layout(),
+            bargap=0.4,
+            legend_title_text=None,
+            xaxis_title=None,
+            margin=dict(b=15, l=70, r=20),
+        )
+        fig.show()
 
-        return plt
+        return fig
 
     def to_xlsx(self, path: str, formatter: Optional[str] = None, styler: Optional[str] = None) -> Any:
         pass
