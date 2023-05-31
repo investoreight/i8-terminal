@@ -31,10 +31,10 @@ def prepare_screen_df(
         if len(metric_parts) == 1:
             metric_default_period_type = get_metric_info(metric_parts[0])["default_period_type"]
             period_type = (
-                ".mrq" if metric_default_period_type == "Q" else ".mry" if metric_default_period_type == "FY" else ""
+                ".q" if metric_default_period_type == "Q" else ".fy" if metric_default_period_type == "FY" else ""
             )
-            metric = f"{metric}{period_type}"
-            conditions[index] = f"{metric}:{condition_parts[1]}"
+            metric_new = f"{metric}{period_type}"
+            conditions[index] = conditions[index].replace(metric, metric_new)
     tickers_list = investor8_sdk.ScreenerApi().search(
         conditions=",".join(conditions), order_by=sort_by, order_direction=sort_order
     )
