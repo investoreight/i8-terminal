@@ -124,5 +124,5 @@ def status(text: str = "Fetching data...", spinner: str = "material") -> Callabl
     return decorate
 
 
-def concat_and(items: List[str]) -> str:  # type: ignore
+def concat_and(items: List[str]) -> str:
     return " and ".join(", ".join(items).rsplit(", ", 1))

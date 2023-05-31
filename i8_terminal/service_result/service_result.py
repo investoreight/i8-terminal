@@ -80,7 +80,7 @@ class ServiceResult:
 
         cid = self._cols_context.get_col_info_dict()
         y_display_names = [cid[ci_name].display_name for ci_name in y]
-        title = f"{concat_and(y_display_names)} by {cid[x].display_name}"
+        title = f"{concat_and(y_display_names)} by {cid[x].display_name}"  # type: ignore
 
         fig = None
         if kind == "bar":
