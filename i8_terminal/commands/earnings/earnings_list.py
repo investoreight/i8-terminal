@@ -16,6 +16,7 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 
 
 def get_hist_earnings_df(ticker: str, size: int) -> DataFrame:
+    investor8_sdk.MetricsApi().get_list_metrics_metadata()
     historical_earnings = investor8_sdk.EarningsApi().get_historical_earnings(ticker, size=size)
     historical_earnings = [d.to_dict() for d in historical_earnings]
     df = DataFrame(historical_earnings)

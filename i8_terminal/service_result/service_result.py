@@ -48,7 +48,8 @@ class ServiceResult:
             if ci.name in formatters.keys():
                 df[ci.name] = df[ci.name].apply(formatters[ci.name])
             if ci.name in stylers.keys():
-                df[ci.name] = df.apply(stylers[ci.name], axis=1)
+                # df[ci.name] = df.apply(stylers[ci.name], axis=1)
+                df[ci.name] = df.apply(lambda x: x[ci.name], axis=1)
         
         return df[display_names.keys()].rename(columns=display_names)
 
@@ -56,8 +57,7 @@ class ServiceResult:
         pass
 
     def to_console(self, format: str = "humanize") -> Table:
-        df = self._df.copy()
-        df = self._format_df(df, format)
+        df = self.to_df(format=format)
         return df2Table(df)
 
     def to_plot(self) -> Any:
@@ -94,7 +94,7 @@ class ServiceResult:
         stylers: Dict[str, Any] = {}
         for ci in ci_list:
             if style == "default":
-                stylers[ci.name] = lambda x: x
+                stylers[ci.name] = lambda x: x[ci.name]
             if style == "colorize":
                 if ci.colorable:
                     stylers[ci.name] = lambda x: colorize_style(x, self._get_raw_name(ci.name), ci.name)
