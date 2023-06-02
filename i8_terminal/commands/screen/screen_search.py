@@ -24,6 +24,7 @@ from i8_terminal.types.sort_order_param_type import SortOrderParamType
 def prepare_screen_df(
     conditions: List[str], metrics: str, sort_by: Optional[str], sort_order: Optional[str]
 ) -> Tuple[List[str], Optional[pd.DataFrame]]:
+    max_count = 20
     for index, condition in enumerate(conditions):
         condition_parts = condition.split(":")
         metric = condition_parts[0]
@@ -38,7 +39,7 @@ def prepare_screen_df(
     tickers_list = investor8_sdk.ScreenerApi().search(
         conditions=",".join(conditions), order_by=sort_by, order_direction=sort_order
     )
-    screen_df = get_current_metrics_df(",".join(tickers_list), metrics)
+    screen_df = get_current_metrics_df(",".join(tickers_list[:max_count]), metrics)
     return tickers_list, screen_df
 
 
