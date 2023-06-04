@@ -39,7 +39,7 @@ class ServiceResult:
         return pd.concat([df_formatted, df_raw], axis=1)
 
     def to_json(self) -> Any:
-        pass
+        return self.to_df().to_dict(orient="records")
 
     def to_console(self, format: str = "default", style_profile: str = "default", width: int = 800) -> None:
         table = self._to_rich_table(format, style_profile)

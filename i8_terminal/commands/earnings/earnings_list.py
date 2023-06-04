@@ -5,7 +5,7 @@ from rich.console import Console
 
 import i8_terminal.api.earnings as earnings_api
 from i8_terminal.commands.earnings import earnings
-from i8_terminal.common.cli import pass_command
+from i8_terminal.common.cli import is_server_call, pass_command
 from i8_terminal.common.layout import df2Table
 from i8_terminal.common.stock_info import validate_ticker
 from i8_terminal.common.utils import export_data, export_to_html
@@ -41,6 +41,9 @@ def list(ticker: str, export_path: Optional[str]) -> None:
                 column_format=APP_SETTINGS["styles"]["xlsx"]["financials"]["column"],
             )
     else:
-        df = earnings_list.to_df()
-        console = Console()
-        console.print(earnings_list._to_rich_table("humanize", "default"))
+        if is_server_call():
+            return earnings_list.to_json()
+        else:
+            df = earnings_list.to_df()
+            console = Console()
+            console.print(earnings_list._to_rich_table("humanize", "default"))
