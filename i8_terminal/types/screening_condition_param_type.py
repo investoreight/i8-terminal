@@ -5,6 +5,9 @@ from i8_terminal.types.condition_param_type import ConditionParamType
 from i8_terminal.types.metric_param_type import MetricParamType
 from i8_terminal.types.period_param_type import PeriodParamType
 from i8_terminal.types.screening_operator_param_type import ScreeningOperatorParamType
+from i8_terminal.types.screening_value_field_param_type import (
+    ScreeningValueFieldParamType,
+)
 
 
 class ScreeningConditionParamType(AutoCompleteChoice):
@@ -13,6 +16,7 @@ class ScreeningConditionParamType(AutoCompleteChoice):
     def __init__(self) -> None:
         self._metric_auto_comp = MetricParamType()
         self._period_auto_comp = PeriodParamType()
+        self._value_field_auto_comp = ScreeningValueFieldParamType()
         self._operator_auto_comp = ScreeningOperatorParamType()
         self._condition_auto_comp = ConditionParamType()
 
@@ -23,6 +27,8 @@ class ScreeningConditionParamType(AutoCompleteChoice):
             return self._metric_auto_comp.get_suggestions(keyword)
         elif param_type == "period":
             return self._period_auto_comp.get_suggestions(keyword, metric=metric)  # type: ignore
+        elif param_type == "value_field":
+            return self._value_field_auto_comp.get_suggestions(keyword, metric=metric)  # type: ignore
         elif param_type == "operator":
             return self._operator_auto_comp.get_suggestions(keyword, metric=metric)  # type: ignore
         else:
