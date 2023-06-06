@@ -10,8 +10,8 @@ PERIOD_TYPES: Dict[str, str] = {
     "q": "mrq",
     "ttm": "ttm",
     "ytd": "ytd",
-    "d": "",
-    "r": "",
+    "d": "d",
+    "r": "r",
     "mry": "mry",
     "mrq": "mrq",
 }
