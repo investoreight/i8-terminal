@@ -5,19 +5,19 @@ from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
 
 def get_value_fields() -> List[Tuple[str, str]]:
     return [
-        ("value_numeric", ""),
-        ("value", ""),
-        ("overall_rank", ""),
-        ("spx_rank", ""),
-        ("dow_rank", ""),
-        ("sector_rank", ""),
-        ("industry_rank", ""),
-        ("overall_percentile", ""),
-        ("spx_percentile", ""),
-        ("nasdaq_percentile", ""),
-        ("dow_percentile", ""),
-        ("sector_percentile", ""),
-        ("industry_percentile", ""),
+        ("value_numeric", "Absolute Value Numeric"),
+        ("value", "Absolute Value"),
+        ("overall_rank", "Overall Rank"),
+        ("spx_rank", "Spx Rank"),
+        ("dow_rank", "Dow Rank"),
+        ("sector_rank", "Sector Rank"),
+        ("industry_rank", "Industry Rank"),
+        ("overall_percentile", "Overall Percentile"),
+        ("spx_percentile", "Spx Percentile"),
+        ("nasdaq_percentile", "Nasdaq Percentile"),
+        ("dow_percentile", "Dow Percentile"),
+        ("sector_percentile", "Sector Percentile"),
+        ("industry_percentile", "Industry Percentile"),
     ]
 
 
