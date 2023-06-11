@@ -32,7 +32,7 @@ def prepare_screen_df(
         if len(metric_parts) == 1:
             metric_default_period_type = get_metric_info(metric_parts[0])["default_period_type"]
             period_type = (
-                ".q" if metric_default_period_type == "Q" else ".fy" if metric_default_period_type == "FY" else ""
+                ".q" if metric_default_period_type == "Q" else ".fy" if metric_default_period_type == "FY" else ".d"
             )
             metric_new = f"{metric}{period_type}"
             conditions[index] = conditions[index].replace(metric, metric_new)
