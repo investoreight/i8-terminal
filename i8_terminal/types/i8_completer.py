@@ -154,6 +154,9 @@ class I8Completer(ClickCompleter):
                     elif len(condition_sub_parts) > 1:
                         param_type = "operator"
                         incomplete = condition_sub_parts[-1] if len(condition_sub_parts) > 0 else " "
+                    elif len(period_sub_parts) > 2:
+                        param_type = "value_field"
+                        incomplete = period_sub_parts[-1] if len(period_sub_parts) > 1 else " "
                     elif len(period_sub_parts) > 1:
                         param_type = "period"
                         incomplete = period_sub_parts[-1] if len(period_sub_parts) > 0 else " "

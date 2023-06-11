@@ -39,15 +39,11 @@ class ConditionParamType(AutoCompleteChoice):
         metric_screening_bounds_dict = json.loads(
             self.metrics_conditions.get(metric, "").replace("'", '"')  # type: ignore
         )
+        period = period if period else self.metrics_default_period_types.get(metric, "mrq")  # type: ignore
         self.set_choices(
             [
                 (str(c), format_number_v2(c, percision=0, humanize=True))  # type: ignore
-                for c in metric_screening_bounds_dict.get(
-                    PERIOD_TYPES.get(period, "mrq")
-                    if period
-                    else self.metrics_default_period_types.get(metric, "mrq"),  # type: ignore
-                    "",
-                )
+                for c in metric_screening_bounds_dict.get(PERIOD_TYPES.get(period, "mrq"), "")  # type: ignore
             ]
         )
 
