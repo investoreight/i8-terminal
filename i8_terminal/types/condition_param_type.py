@@ -53,7 +53,10 @@ class ConditionParamType(AutoCompleteChoice):
         else:
             self.set_choices(
                 [
-                    (str(c), format_number_v2(c, percision=1 if c < 1000 else 0, humanize=False if c < 1000 else True))  # type: ignore
+                    (
+                        str(c),
+                        format_number_v2(c, percision=1 if c < 1000 else 0, humanize=False if c < 1000 else True),
+                    )  # type: ignore
                     for c in metric_screening_bounds_dict.get(
                         PERIOD_TYPES.get(period, "mrq")
                         if period
