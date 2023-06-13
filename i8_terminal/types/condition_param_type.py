@@ -31,7 +31,7 @@ class ConditionParamType(AutoCompleteChoice):
     name = "condition"
 
     def get_suggestions(
-        self, keyword: str, pre_populate: bool = True, metric: str = None, period: str = None
+        self, keyword: str, pre_populate: bool = True, metric: str = None, period: str = None, value_field: str = None
     ) -> List[Tuple[str, str]]:
         if not self.is_loaded:
             self.metrics_conditions = get_metrics_conditions_dict()
@@ -39,13 +39,32 @@ class ConditionParamType(AutoCompleteChoice):
         metric_screening_bounds_dict = json.loads(
             self.metrics_conditions.get(metric, "").replace("'", '"')  # type: ignore
         )
-        period = period if period else self.metrics_default_period_types.get(metric, "mrq")  # type: ignore
-        self.set_choices(
-            [
-                (str(c), format_number_v2(c, percision=0, humanize=True))  # type: ignore
-                for c in metric_screening_bounds_dict.get(PERIOD_TYPES.get(period, "mrq"), "")  # type: ignore
-            ]
-        )
+        if value_field in ["overall_rank", "spx_rank", "dow_rank", "sector_rank", "industry_rank"]:
+            self.set_choices([("5", ""), ("10", ""), ("20", ""), ("50", ""), ("100", ""), ("500", ""), ("1000", "")])
+        elif value_field in [
+            "overall_percentile",
+            "nasdaq_percentile",
+            "spx_percentile",
+            "sector_percentile",
+            "industry_percentile",
+            "dow_percentile",
+        ]:
+            self.set_choices([("1", ""), ("3", ""), ("5", ""), ("10", ""), ("20", ""), ("50", "")])
+        else:
+            self.set_choices(
+                [
+                    (
+                        str(c),
+                        format_number_v2(c, percision=1 if c < 1000 else 0, humanize=False if c < 1000 else True),
+                    )  # type: ignore
+                    for c in metric_screening_bounds_dict.get(
+                        PERIOD_TYPES.get(period, "mrq")
+                        if period
+                        else self.metrics_default_period_types.get(metric, "mrq"),  # type: ignore
+                        "",
+                    )
+                ]
+            )
 
         if pre_populate and keyword.strip() == "":
             return self._choices[: self.size]

@@ -146,10 +146,13 @@ class I8Completer(ClickCompleter):
                     condition_sub_parts = incomplete.split(":")
                     period_sub_parts = condition_sub_parts[0].split(".")
                     period = None
+                    value_field = None
                     if len(condition_sub_parts) > 2:
                         param_type = "condition"
                         if len(period_sub_parts) > 1:
                             period = period_sub_parts[1]
+                        if len(period_sub_parts) > 2:
+                            value_field = period_sub_parts[2]
                         incomplete = condition_sub_parts[-1] if len(condition_sub_parts) > 1 else " "
                     elif len(condition_sub_parts) > 1:
                         param_type = "operator"
@@ -164,7 +167,7 @@ class I8Completer(ClickCompleter):
                         param_type = "metric"
 
                     for (idf, name) in matched_param.type.get_suggestions(
-                        incomplete if incomplete else " ", False, param_type, period_sub_parts[0], period
+                        incomplete if incomplete else " ", False, param_type, period_sub_parts[0], period, value_field
                     ):
                         choices.append(Completion(text_type(idf), -len(incomplete), display_meta=name))
         else:
