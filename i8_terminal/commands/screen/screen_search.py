@@ -36,6 +36,8 @@ def prepare_screen_df(
             )
             metric_new = f"{metric}{period_type}"
             conditions[index] = conditions[index].replace(metric, metric_new)
+    if not sort_by:
+        sort_by = metrics.split(",")[0]
     tickers_list = investor8_sdk.ScreenerApi().search(
         conditions=",".join(conditions), order_by=sort_by, order_direction=sort_order
     )
@@ -78,7 +80,6 @@ def sort_by_tickers(df: pd.DataFrame, sorted_tickers: List[str]) -> pd.DataFrame
     "-sb",
     type=MetricIdentifierParamType(),
     help="Metric to sort the output by.",
-    default="marketcap",
 )
 @click.option(
     "--sort_order", "sort_order", "-so", type=SortOrderParamType(), help="Order to sort the output by.", default="desc"
