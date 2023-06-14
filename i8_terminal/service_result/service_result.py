@@ -33,9 +33,12 @@ class ServiceResult:
         """
         return self._format_df(self._df.copy(), format)
 
-    def _wide_df(self, format: str) -> DataFrame:
+    def _wide_df(self, format: str = "humanize", raw_col_names="default") -> DataFrame:
         df_formatted = self._format_df(self._df.copy(), format)
-        df_raw = self._df.copy()
+        if raw_col_names == "default":
+            df_raw = self._df.copy()
+        elif raw_col_names == "suffix":
+            df_raw = self._format_df(self._df.copy(), format="suffix")
 
         return pd.concat([df_formatted, df_raw], axis=1)
 
@@ -72,8 +75,8 @@ class ServiceResult:
 
         return table
 
-    def to_plot(self, x: str, y: List[str], kind: str = "bar") -> Any:
-        return self._to_plot(x, y, kind)
+    def to_plot(self, x: str, y: List[str], kind: str = "bar", show=True) -> Any:
+        return self._to_plot(x, y, kind, show)
 
     def to_html(self, format: str = "default") -> str:
         table = self._to_rich_table(format, "default")
@@ -81,7 +84,7 @@ class ServiceResult:
         console.print(table)
         return console.export_html(inline_styles=True, code_format="<pre>{code}</pre>")
 
-    def _to_plot(self, x: str, y: List[str], kind: str = "bar") -> Any:
+    def _to_plot(self, x: str, y: List[str], kind: str = "bar", show=True) -> Any:
         df = self._df[[x] + y]
         df_grouped = df.groupby(x)[y].mean().reset_index()
 
@@ -111,7 +114,8 @@ class ServiceResult:
             xaxis_title=None,
             margin=dict(b=15, l=70, r=20),
         )
-        fig.show()
+        if show:
+            fig.show()
 
         return fig
 
@@ -131,7 +135,11 @@ class ServiceResult:
             if ci.display_name is None or ci.data_type is None or ci.unit is None:
                 raise I8Exception(f"Missing required metadata fields on colum: `{ci.name}`")
 
-            display_names[ci.name] = ci.display_name
+            if format == "suffix":
+                display_names[ci.name] = ci.display_name + "_raw"
+            else:
+                display_names[ci.name] = ci.display_name
+
             if ci.data_type in ["int", "unsigned_int", "float", "unsigned_float"] and self._df[ci.name].max() < 1e6:
                 if format == "raw":
                     formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)

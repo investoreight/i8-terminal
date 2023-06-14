@@ -11,6 +11,19 @@ from i8_terminal.commands.server import server
 from i8_terminal.common.cli import pass_command
 
 
+def create_resp(result):
+    res = {}
+    res["text"] = "Here is a sample text response for the query."
+    df = result._wide_df("humanize", "suffix")
+    res["table"] = df.to_dict(orient="records")
+
+    fig = result.to_plot(show=False)
+    if fig:
+        res["plot"] = fig.to_json()
+
+    return res
+
+
 @server.command()
 @click.option("--port", "-p", help="HTTP port to server i8 Terminal. Default 8095")
 def launch(port: Optional[int]) -> None:
@@ -41,6 +54,6 @@ def launch(port: Optional[int]) -> None:
 
         res = ctx.invoke(command, *args, **kwargs)
 
-        return str(res)
+        return create_resp(res)
 
     app.run(port=port or 8085)

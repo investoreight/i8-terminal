@@ -39,12 +39,12 @@ class EarningsListResult(ServiceResult):
             fig.append_trace(trace, row=row, col=col)
         return fig
 
-    def to_plot(self, x: str = None, y: List[str] = None, kind: str = "bar") -> Any:
+    def to_plot(self, x: str = None, y: List[str] = None, kind: str = "bar", show=True) -> Any:
         if x is None:
             x = "period"
         if y is None:
             y = ["eps_consensus", "eps_actual"]
-        return self._to_plot(x, y, kind)
+        return self._to_plot(x, y, kind, show)
 
     def to_xlsx(self, path: str, formatter: Optional[str] = None, styler: Optional[str] = None) -> None:
         df = self.to_df()

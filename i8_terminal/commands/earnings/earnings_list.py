@@ -42,7 +42,7 @@ def list(ticker: str, export_path: Optional[str]) -> None:
             )
     else:
         if is_server_call():
-            return earnings_list.to_json()
+            return earnings_list
         else:
             df = earnings_list.to_df()
             console = Console()
