@@ -156,6 +156,10 @@ def get_all_metrics_types_dict() -> Dict[str, str]:
     return dict([(i, j) for i, j in zip(df.metric_name, df.type)])
 
 
+def get_all_metrics_type_and_data_types_df() -> DataFrame:
+    return get_all_metrics_df()[["metric_name", "data_format", "type"]]
+
+
 def get_all_metrics_default_period_types_dict() -> Dict[str, str]:
     df = get_all_metrics_df()[["metric_name", "period_type_default"]]
     return dict([(i, j) for i, j in zip(df.metric_name, df.period_type_default)])

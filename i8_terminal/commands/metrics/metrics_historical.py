@@ -1,6 +1,5 @@
 from datetime import datetime
-from pydoc import locate
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional
 
 import arrow
 import click
@@ -22,6 +21,7 @@ from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.layout import df2Table, format_metrics_df
+from i8_terminal.common.metrics import get_all_metrics_type_and_data_types_df
 from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import PlotType, reverse_period
 from i8_terminal.config import get_table_style
@@ -33,35 +33,36 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 
 
 def get_historical_metrics_df(
-    tickers: List[str], metrics: List[str], period_type: Optional[str], from_date: Optional[str], to_date: Optional[str]
+    tickers: List[str],
+    metrics: List[str],
+    period_type: Optional[str],
+    from_date: Optional[datetime],
+    to_date: Optional[datetime],
 ) -> DataFrame:
     if period_type:
         metrics = [f"{metric}.{period_type}" for metric in metrics]
     if from_date:
-        if not to_date:
-            to_date = arrow.now().datetime.strftime("%Y-%m-%d")
         historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
             symbols=",".join(tickers),
             metrics=",".join(metrics),
-            from_date=from_date,
-            to_date=to_date,
+            from_date=from_date.strftime("%Y-%m-%d"),
+            to_date=to_date.strftime("%Y-%m-%d") if to_date else arrow.now().datetime.strftime("%Y-%m-%d"),
         )
-    else:
-        if to_date:
-            historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
-                symbols=",".join(tickers),
-                metrics=",".join(metrics),
-                from_period_offset=-10,
-                to_period_offset=0,
-                to_date=to_date,
-            )
-        else:
-            historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
-                symbols=",".join(tickers),
-                metrics=",".join(metrics),
-                from_period_offset=-10,
-                to_period_offset=0,
-            )
+    elif to_date and not from_date:
+        historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
+            symbols=",".join(tickers),
+            metrics=",".join(metrics),
+            from_period_offset=-10,
+            to_period_offset=0,
+            to_date=to_date.strftime("%Y-%m-%d"),
+        )
+    elif not to_date and not from_date:
+        historical_metrics = investor8_sdk.MetricsApi().get_historical_metrics(
+            symbols=",".join(tickers),
+            metrics=",".join(metrics),
+            from_period_offset=-10,
+            to_period_offset=0,
+        )
     df = pd.DataFrame.from_records(
         [
             (ticker, metric, period_value.period, period_value.period_date_time, period_value.value)
@@ -75,15 +76,22 @@ def get_historical_metrics_df(
     df = pd.merge(df, metadata_df, on="metric_name")
     df[["data_format", "display_format"]] = df[["data_format", "display_format"]].replace("string", "str")
     df.rename(columns={"display_name": "Metric", "Value": "value"}, inplace=True)
-    df["value"] = df.apply(lambda metric: locate(metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" else metric.value), axis=1)  # type: ignore # noqa: E501
+    df["value"] = df.apply(lambda metric: data_format_mapper(metric), axis=1)
     return df
 
 
+def data_format_mapper(metric: pd.Series) -> Any:
+    if metric["data_format"] in ["int", "unsigned_int"]:
+        return int(float(metric["value"]))
+    elif metric["data_format"] == "float":
+        return float(metric["value"])
+    else:
+        # Includes "datetime", "string" and "str"
+        return str(metric["value"])
+
+
 def create_fig(
-    df: DataFrame,
-    cmd_context: Dict[str, Any],
-    tickers: List[str],
-    chart_type: str,
+    df: DataFrame, cmd_context: Dict[str, Any], tickers: List[str], chart_type: str, metrics_type_df: DataFrame
 ) -> go.Figure:
     vertical_spacing = 0.02
     layout = dict(
@@ -143,14 +151,24 @@ def create_fig(
             fig["layout"][f"xaxis{metric_idx+1}"]["dtick"] = round(len(metric_df["Period"]) / 10)
 
     fig.update_traces(hovertemplate="%{y} %{x}")
-    df["Reversed Period"] = df.apply(lambda row: reverse_period(row.Period), axis=1)
-    sorted_periods = [reverse_period(reversed_period) for reversed_period in sorted(set(df["Reversed Period"]))]
+
+    sorted_periods = df.sort_values("PeriodDateTime")["Period"].unique()
+    sorted_periods_filtered = (
+        sorted_periods[:: int(len(sorted_periods) / 10)] if len(sorted_periods) > 10 else sorted_periods
+    )  # Get only 10,
+
+    if "fin_metric" in set(metrics_type_df["type"]):
+        # Reverse the financials periods. e.g: `FY 2020` will converted to `2020 FY``
+        sorted_periods = list(map(reverse_period, sorted_periods))
+
     fig.update_xaxes(
         rangeslider_visible=False,
         spikemode="across",
         spikesnap="cursor",
         categoryorder="array",
         categoryarray=sorted_periods,
+        xaxis_tickvals=sorted_periods_filtered,
+        xaxis_ticktext=sorted_periods_filtered,
     )
 
     fig.update_layout(
@@ -239,7 +257,7 @@ def historical_metrics_df2tree(df: DataFrame) -> Tree:
     "-o",
     type=OutputParamType(),
     default="terminal",
-    help="Output can be terminal or plot type.",
+    help="Output can be terminal or plot.",
 )
 @click.option(
     "--plot_type",
@@ -310,11 +328,18 @@ def historical(
         "plot_type": PlotType.CHART.value,
     }
 
+    metrics_type_df: DataFrame = get_all_metrics_type_and_data_types_df()
+    metrics_type_df = metrics_type_df[metrics_type_df["metric_name"].isin(metrics_list)]
+
+    if output == "plot" and "string" in metrics_type_df["data_format"].unique():
+        click.echo(
+            click.style("Metrics with type `string` cannot be plotted! Select `terminal` output instead.", fg="yellow")
+        )
+        return
+
     console = Console()
     with console.status("Fetching data...", spinner="material") as status:
-        df = get_historical_metrics_df(
-            tickers_list, metrics_list, period_type, cast(str, from_date), cast(str, to_date)
-        )
+        df = get_historical_metrics_df(tickers_list, metrics_list, period_type, from_date, to_date)
         df = df.sort_values(["PeriodDateTime"], ascending=False).groupby(["Ticker", "Metric", "Period"]).head(1)
         if len(df["default_period_type"].unique()) > 1:
             console.print(
@@ -325,7 +350,7 @@ def historical(
         if output == "plot":
             cmd_context["plot_title"] = f"Historical {' and '.join(list(set(df['Metric'])))}"
             status.update("Generating plot...")
-            fig = create_fig(df, cmd_context, tickers_list, plot_type)
+            fig = create_fig(df, cmd_context, tickers_list, plot_type, metrics_type_df)
 
     if output == "plot":
         serve_plot(fig, cmd_context)
