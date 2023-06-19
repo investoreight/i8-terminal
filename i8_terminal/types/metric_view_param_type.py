@@ -1,11 +1,15 @@
 from typing import List, Tuple
 
-from i8_terminal.config import APP_SETTINGS
+import investor8_sdk
+import pandas as pd
+
 from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
 
 
 def get_metric_view_names() -> List[Tuple[str, str]]:
-    return [(view_name, "") for view_name in APP_SETTINGS["metric_view"]]
+    results = investor8_sdk.MetricsApi().get_list_metric_views()
+    df = pd.DataFrame([d.to_dict() for d in results])[["view_name", "display_name"]]
+    return list(df.to_records(index=False))
 
 
 class MetricViewParamType(AutoCompleteChoice):

@@ -11,6 +11,7 @@ from i8_terminal.common.layout import df2Table
 from i8_terminal.common.metrics import (
     get_current_metrics_df,
     get_metric_info,
+    get_view_metrics,
     prepare_current_metrics_formatted_df,
 )
 from i8_terminal.common.utils import export_data, export_to_html
@@ -104,7 +105,7 @@ def search(
         )
         return
     if view_name:
-        metrics = APP_SETTINGS["metric_view"][view_name]["metrics"]
+        metrics = ",".join(get_view_metrics(view_name))
     with console.status("Fetching data...", spinner="material"):
         sorted_tickers, df = prepare_screen_df(list(condition), metrics, sort_by, sort_order)  # type: ignore
     if df is None:
