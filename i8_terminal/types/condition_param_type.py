@@ -27,6 +27,16 @@ def get_metrics_default_period_types_dict() -> Dict[str, str]:
     return dict([(i, j) for i, j in zip(df.metric_name, df.period_type_default)])
 
 
+def get_metrics_data_format_dict() -> Dict[str, str]:
+    df = get_all_metrics_df()[["metric_name", "data_format"]]
+    return dict([(i, j) for i, j in zip(df.metric_name, df.data_format)])
+
+
+def get_metrics_screening_categories_dict() -> Dict[str, str]:
+    df = get_all_metrics_df()[["metric_name", "screening_categories"]]
+    return dict([(i, j) for i, j in zip(df.metric_name, df.screening_categories)])
+
+
 class ConditionParamType(AutoCompleteChoice):
     name = "condition"
 
@@ -36,6 +46,8 @@ class ConditionParamType(AutoCompleteChoice):
         if not self.is_loaded:
             self.metrics_conditions = get_metrics_conditions_dict()
             self.metrics_default_period_types = get_metrics_default_period_types_dict()
+            self.metrics_data_format = get_metrics_data_format_dict()
+            self.metrics_screening_categories = get_metrics_screening_categories_dict()
         metric_screening_bounds_dict = json.loads(
             self.metrics_conditions.get(metric, "").replace("'", '"')  # type: ignore
         )
@@ -51,20 +63,34 @@ class ConditionParamType(AutoCompleteChoice):
         ]:
             self.set_choices([("1", ""), ("3", ""), ("5", ""), ("10", ""), ("20", ""), ("50", "")])
         else:
-            self.set_choices(
-                [
-                    (
-                        str(c),
-                        format_number_v2(c, percision=1 if c < 1000 else 0, humanize=False if c < 1000 else True),
-                    )  # type: ignore
-                    for c in metric_screening_bounds_dict.get(
-                        PERIOD_TYPES.get(period, "mrq")
-                        if period
-                        else self.metrics_default_period_types.get(metric, "mrq"),  # type: ignore
-                        "",
-                    )
-                ]
-            )
+            if self.metrics_data_format.get(metric, "") == "categorical":  # type: ignore
+                metric_screening_categories = json.loads(
+                    self.metrics_screening_categories.get(metric, "").replace("'", '"')  # type: ignore
+                )
+                self.set_choices(
+                    [
+                        (
+                            c.get("category_name", ""),
+                            c.get("category_display_name", ""),
+                        )
+                        for c in metric_screening_categories
+                    ]
+                )
+            else:
+                self.set_choices(
+                    [
+                        (
+                            str(c),
+                            format_number_v2(c, percision=1 if c < 1000 else 0, humanize=False if c < 1000 else True),
+                        )  # type: ignore
+                        for c in metric_screening_bounds_dict.get(
+                            PERIOD_TYPES.get(period, "mrq")
+                            if period
+                            else self.metrics_default_period_types.get(metric, "mrq"),  # type: ignore
+                            "",
+                        )
+                    ]
+                )
 
         if pre_populate and keyword.strip() == "":
             return self._choices[: self.size]
