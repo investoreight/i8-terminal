@@ -163,3 +163,12 @@ def get_all_metrics_type_and_data_types_df() -> DataFrame:
 def get_all_metrics_default_period_types_dict() -> Dict[str, str]:
     df = get_all_metrics_df()[["metric_name", "period_type_default"]]
     return dict([(i, j) for i, j in zip(df.metric_name, df.period_type_default)])
+
+
+def get_view_metrics(viewName: str) -> List[str]:
+    metric_view = investor8_sdk.MetricsApi().get_metric_view_by_name(viewName)
+    metric_names = []
+    for mg in metric_view.metric_groups:
+        for m in mg.metrics:
+            metric_names.append(m.name)
+    return metric_names
