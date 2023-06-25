@@ -1,6 +1,8 @@
 import json
 from typing import Dict, List, Tuple
 
+import numpy as np
+
 from i8_terminal.common.formatting import format_number_v2
 from i8_terminal.common.metrics import get_all_metrics_df
 from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
@@ -77,6 +79,7 @@ class ConditionParamType(AutoCompleteChoice):
                     ]
                 )
             else:
+                default_p_type = self.metrics_default_period_types.get(metric, "Q")  # type: ignore
                 self.set_choices(
                     [
                         (
@@ -87,7 +90,7 @@ class ConditionParamType(AutoCompleteChoice):
                             PERIOD_TYPES.get(period, "mrq")
                             if period
                             else PERIOD_TYPES.get(
-                                self.metrics_default_period_types.get(metric, "Q").lower()  # type: ignore
+                                default_p_type.lower() if default_p_type is not np.nan else "Q"  # type: ignore
                             ),
                             "",
                         )
