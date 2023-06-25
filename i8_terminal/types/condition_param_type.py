@@ -86,7 +86,9 @@ class ConditionParamType(AutoCompleteChoice):
                         for c in metric_screening_bounds_dict.get(
                             PERIOD_TYPES.get(period, "mrq")
                             if period
-                            else self.metrics_default_period_types.get(metric, "mrq"),  # type: ignore
+                            else PERIOD_TYPES.get(
+                                self.metrics_default_period_types.get(metric, "Q").lower()  # type: ignore
+                            ),
                             "",
                         )
                     ]
