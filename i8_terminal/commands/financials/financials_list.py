@@ -60,7 +60,7 @@ def get_standardized_financials(
     "-i",
     type=FinancialsIdentifierParamType(),
     required=True,
-    help="Comma-separated list of identifiers.",
+    help="Financial identifier (e.g. MSFT-2023-Q2)",
 )
 @click.option(
     "--statement",

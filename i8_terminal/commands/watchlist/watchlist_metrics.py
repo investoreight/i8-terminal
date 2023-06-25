@@ -10,6 +10,7 @@ from i8_terminal.common.cli import pass_command
 from i8_terminal.common.layout import df2Table
 from i8_terminal.common.metrics import (
     get_current_metrics_df,
+    get_view_metrics,
     prepare_current_metrics_formatted_df,
 )
 from i8_terminal.common.utils import export_data, export_to_html
@@ -61,7 +62,7 @@ def metrics(name: str, metrics: str, export_path: Optional[str], view_name: Opti
         console.print("The 'metrics' or 'view_name' options are mutually exclusive", style="yellow")
         return
     if view_name:
-        metrics = APP_SETTINGS["metric_view"][view_name]["metrics"]
+        metrics = ",".join(get_view_metrics(view_name))
     with console.status("Fetching data...", spinner="material"):
         df = prepare_watchlist_stocks_df(name, metrics)
     if df is None:
