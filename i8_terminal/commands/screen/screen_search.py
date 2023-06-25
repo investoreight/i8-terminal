@@ -21,6 +21,13 @@ from i8_terminal.types.metric_view_param_type import MetricViewParamType
 from i8_terminal.types.screening_condition_param_type import ScreeningConditionParamType
 from i8_terminal.types.sort_order_param_type import SortOrderParamType
 
+RELATIVE_PERIOD_TYPES: Dict[str, str] = {
+    "D": ".d",
+    "R": ".r",
+    "FY": ".fy",
+    "Q": ".q",
+}
+
 
 def prepare_screen_df(
     conditions: List[str], metrics: str, sort_by: Optional[str], sort_order: Optional[str]
@@ -32,9 +39,7 @@ def prepare_screen_df(
         metric_parts = metric.split(".")
         if len(metric_parts) == 1:
             metric_default_period_type = get_metric_info(metric_parts[0])["default_period_type"]
-            period_type = (
-                ".q" if metric_default_period_type == "Q" else ".fy" if metric_default_period_type == "FY" else ".d"
-            )
+            period_type = RELATIVE_PERIOD_TYPES.get(metric_default_period_type, "")
             metric_new = f"{metric}{period_type}"
             conditions[index] = conditions[index].replace(metric, metric_new)
     if not sort_by:
