@@ -50,9 +50,8 @@ def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
 
     Examples:
 
-    `i8 metrics current --metrics total_revenue.q,net_income.fy,close.d,total_revenue \
-        --tickers AMD,INTC,QCOM`
-    """
+    `i8 metrics current --metrics total_revenue.q,net_income.fy,close.d,total_revenue --tickers AMD,INTC,QCOM`
+    """  # noqa: E501
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         df = get_current_metrics_df(tickers, metrics.replace(".p", ""))

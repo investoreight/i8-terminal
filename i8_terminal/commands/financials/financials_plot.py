@@ -157,8 +157,7 @@ def create_fig(
     "-m",
     type=PeriodTypeParamType(),
     default="FY",
-    help="Period by which you want to view the report. Possible values are `FY` for yearly, \
-        `Q` for quarterly, and `TTM` for TTM reports.",
+    help="Period by which you want to view the report. Possible values are `FY` for yearly, `Q` for quarterly, and `TTM` for TTM reports.",  # noqa: E501
 )
 @click.option("--metrics", "-m", type=MetricParamType(), default="basic_eps", help="Comma-separated list of metrics.")
 @click.option("--from_date", "-f", type=DateTime(), help="Histotical financials from date.")
@@ -185,15 +184,13 @@ def plot(
 
     Examples:
 
-    `i8 financials plot --period_type Q --metrics net_ppe --from_date 2020-05-01 --to_date 2022-05-01 \
-        --tickers AMD,INTC,QCOM --chart_type line`
-    """
+    `i8 financials plot --period_type Q --metrics net_ppe --from_date 2020-05-01 --to_date 2022-05-01 --tickers AMD,INTC,QCOM --chart_type line`
+    """  # noqa: E501
     metrics_list = metrics.replace(" ", "").split(",")
     matched_metrics = [find_similar_fin_metric(metric.replace("_", "")) for metric in metrics_list]
     if not matched_metrics:
         click.echo(
-            f"`{metrics}` is not valid metrics name. See the list of valid financial metrics with the \
-                following command:\n`i8 metrics`"
+            f"`{metrics}` is not valid metrics name. See the list of valid financial metrics with the following command:\n`i8 metrics`"  # noqa: E501
         )
         return
     if len(matched_metrics) > 2:

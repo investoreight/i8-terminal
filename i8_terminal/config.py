@@ -29,8 +29,7 @@ def init_settings() -> None:
             os.mkdir(SETTINGS_FOLDER)
         except Exception:
             logging.error(
-                f"Cannot initialize app. Application needs write access to create app directory in the following path: \
-                    '{OS_HOME_PATH}'"
+                f"Cannot initialize app. Application needs write access to create app directory in the following path: '{OS_HOME_PATH}'"  # noqa: E501
             )
 
     if not os.path.exists(USER_SETTINGS_PATH):
@@ -52,8 +51,7 @@ def init_settings() -> None:
                 shutil.copyfile(f"{EXECUTABLE_APP_DIR}/config.yml", APP_SETTINGS_PATH)
         except Exception as e:
             logging.error(
-                f"Cannot initalize app settings. Make sure you have write access to the path: \
-                    '{APP_SETTINGS_PATH}'\n {e}"
+                f"Cannot initalize app settings. Make sure you have write access to the path: '{APP_SETTINGS_PATH}'\n {e}"  # noqa: E501
             )
 
 
@@ -135,8 +133,7 @@ def get_table_style(profile_name: str = "default") -> Dict[str, Any]:
         }
     except Exception:
         raise I8Exception(
-            "Cannot parse table style settings from the configuration file! \
-                Check to see if the configuration file is formatted correctly!"
+            "Cannot parse table style settings from the configuration file! Check to see if the configuration file is formatted correctly!"  # noqa: E501
         )
 
 
