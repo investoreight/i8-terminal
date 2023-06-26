@@ -123,7 +123,7 @@ class I8Completer(ClickCompleter):
                     for (metric_view, desc) in matched_param.type.get_suggestions(
                         incomplete if incomplete else " ", True
                     ):  # type: ignore
-                        choices.append(Completion(text_type(metric_view), -len(incomplete)))
+                        choices.append(Completion(text_type(metric_view), -len(incomplete), display_meta=desc))
                 elif type(matched_param.type) is MetricIdentifierParamType:
                     param_type = "metric"
                     filter_choices = False

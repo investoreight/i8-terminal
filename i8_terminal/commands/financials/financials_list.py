@@ -60,7 +60,7 @@ def get_standardized_financials(
     "-i",
     type=FinancialsIdentifierParamType(),
     required=True,
-    help="Comma-separated list of identifiers.",
+    help="Financial identifier (e.g. MSFT-2023-Q2)",
 )
 @click.option(
     "--statement",
@@ -73,8 +73,7 @@ def get_standardized_financials(
     "--period_type",
     "-m",
     type=PeriodTypeParamType(),
-    help="Period by which you want to view the report. Possible values are `FY` for yearly, \
-        `Q` for quarterly, and `TTM` for TTM reports.",
+    help="Period by which you want to view the report. Possible values are `FY` for yearly, `Q` for quarterly, and `TTM` for TTM reports.",  # noqa: E501
 )
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command

@@ -271,8 +271,7 @@ def historical_metrics_df2tree(df: DataFrame) -> Tree:
     "--period_type",
     "-t",
     type=PeriodTypeParamType(),
-    help="Period by which you want to view the report. Possible values are `D` for daily, \
-        `FY` for yearly, `Q` for quarterly, `TTM` for TTM reports, `YTD` for YTD reports.",
+    help="Period by which you want to view the report. Possible values are `D` for daily, `FY` for yearly, `Q` for quarterly, `TTM` for TTM reports, `YTD` for YTD reports.",  # noqa: E501
 )
 @click.option("--from_date", "-f", type=DateTime(), help="Histotical metrics from date.")
 @click.option("--to_date", "-t", type=DateTime(), help="Histotical metrics to date.")
@@ -294,10 +293,8 @@ def historical(
     Examples:
 
     `i8 metrics historical --metrics net_income --tickers AMD,INTC,QCOM --output plot --plot_type bar --period_type Q`
-    `i8 metrics historical --metrics total_revenue,total_assets --tickers AMD,INTC,QCOM --output terminal \
-        --period_type FY --pivot`
-
-    """
+    `i8 metrics historical --metrics total_revenue,total_assets --tickers AMD,INTC,QCOM --output terminal --period_type FY --pivot`
+    """  # noqa: E501
     metrics_list = metrics.replace(" ", "").split(",")
     if output not in ["terminal", "plot"]:
         click.echo(click.style(f"`{output}` is not valid output type.", fg="yellow"))
@@ -346,10 +343,7 @@ def historical(
         df = df.sort_values(["PeriodDateTime"], ascending=False).groupby(["Ticker", "Metric", "Period"]).head(1)
         if len(df["default_period_type"].unique()) > 1:
             console.print(
-                (
-                    "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have "
-                    "the same period type. Check `metrics describe` command to find more about metrics."
-                ),
+                "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type. Check `metrics describe` command to find more about metrics.",  # noqa: E501
                 style="yellow",
             )
             return

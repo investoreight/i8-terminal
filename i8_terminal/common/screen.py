@@ -7,6 +7,7 @@ from rich.table import Table
 from i8_terminal.common.layout import df2Table
 from i8_terminal.common.metrics import (
     get_current_metrics_df,
+    get_view_metrics,
     prepare_current_metrics_formatted_df,
 )
 from i8_terminal.common.utils import export_data, export_to_html
@@ -20,7 +21,7 @@ def get_top_stocks_df(category: str, index: str, view_name: Optional[str]) -> Op
         return None
     companies = [company.ticker for company in companies_data]
     if view_name:
-        metrics = metrics + "," + APP_SETTINGS["metric_view"][view_name]["metrics"]
+        metrics = metrics + "," + ",".join(get_view_metrics(view_name))
     return get_current_metrics_df(",".join(companies), metrics)
 
 
