@@ -3,14 +3,14 @@ from typing import List, Optional, Tuple
 
 import click
 import investor8_sdk
+import numpy as np
 import pandas as pd
 
 from i8_terminal.common.utils import is_cached_file_expired
 from i8_terminal.config import SETTINGS_FOLDER
-import numpy as np
 
 
-def sort_stocks(df: pd.DataFrame, include_peers: bool) -> pd.DataFrame:
+def sort_stocks(df: pd.DataFrame, include_peers: bool = False) -> pd.DataFrame:
     df["default_rank"] = 11
     default_rank = (
         {
@@ -80,9 +80,7 @@ def validate_ticker(ctx: click.Context, param: str, value: str) -> Optional[str]
 def validate_tickers(ctx: click.Context, param: str, value: str) -> Optional[str]:
     tickers = {d[0] for d in get_stocks(True)}
     if not ctx.resilient_parsing:
-        invalid_tickers = (
-            [*set(value.replace(" ", "").upper().split(",")) - tickers] if value else []
-        )
+        invalid_tickers = [*set(value.replace(" ", "").upper().split(",")) - tickers] if value else []
         if value and invalid_tickers:
             msg = "are not valid ticker names." if len(invalid_tickers) > 1 else "is not a valid ticker name."
             click.echo(

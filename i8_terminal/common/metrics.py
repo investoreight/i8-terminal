@@ -1,4 +1,5 @@
 import os
+from ast import literal_eval
 from typing import Dict, List, Optional
 
 import arrow
@@ -9,11 +10,9 @@ from investor8_sdk import MetricsApi
 from pandas import DataFrame, read_csv
 
 from i8_terminal.common.layout import format_metrics_df
+from i8_terminal.common.stock_info import get_stocks, get_stocks_df
 from i8_terminal.common.utils import is_cached_file_expired, reverse_period, similarity
 from i8_terminal.config import APP_SETTINGS, SETTINGS_FOLDER
-
-from i8_terminal.common.stock_info import get_stocks_df, get_stocks
-from ast import literal_eval
 
 
 def get_indicators_list(indicator: Optional[str] = None) -> List[str]:
@@ -121,7 +120,7 @@ def get_period_start_date(period: str) -> str:
 
 
 def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFrame]:
-    stocks_peers = get_stocks_df()[["ticker", "peers"]].set_index('ticker').to_dict()["peers"]
+    stocks_peers = get_stocks_df()[["ticker", "peers"]].set_index("ticker").to_dict()["peers"]
     tickers_list = []
     for tk in tickers.split(","):
         if "PEERS" in tk and stocks_peers.get(tk.split(".")[0]):
