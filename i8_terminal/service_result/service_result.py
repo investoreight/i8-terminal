@@ -54,7 +54,9 @@ class ServiceResult:
         non_num_dts = ["str", "string", "datetime"]
 
         for ci in ci_list:
-            table.add_column(ci.display_name, justify="left" if ci.data_type in non_num_dts else "right")
+            table.add_column(
+                ci.display_name, justify="left" if ci.data_type in non_num_dts else "right"
+            )  # type: ignore
 
         def _process_value(raw: Union[int, float], formatted: str, ci: ColumnInfo) -> str:
             if raw is np.nan or raw is None:
