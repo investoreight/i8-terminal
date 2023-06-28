@@ -23,7 +23,7 @@ def format_metrics_df(df: DataFrame, target: str) -> DataFrame:
             else metric.display_format,
             target,
         )(
-            locate("int" if metric.data_format == "unsigned_int" else "str" if metric.data_format == "categorical" else metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" or metric.data_format == "unsigned_int" else metric.value)  # type: ignore # noqa: E501
+            locate("int" if metric.data_format == "unsigned_int" else "str" if metric.data_format in ["categorical", "datetime", "bool"] else metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" or metric.data_format == "unsigned_int" else metric.value)  # type: ignore # noqa: E501
         ),
         axis=1,
     )
