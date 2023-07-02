@@ -1,11 +1,10 @@
-from pydoc import locate
 from typing import Any, Dict
 
 import numpy as np
 from pandas import DataFrame
 from rich.table import Table
 
-from i8_terminal.common.formatting import get_formatter
+from i8_terminal.common.formatting import data_format_mapper, get_formatter
 from i8_terminal.config import get_table_style
 
 
@@ -22,9 +21,7 @@ def format_metrics_df(df: DataFrame, target: str) -> DataFrame:
             if metric.data_format == "int" and metric.display_format == "number"
             else metric.display_format,
             target,
-        )(
-            locate("int" if metric.data_format == "unsigned_int" else "str" if metric.data_format in ["categorical", "datetime", "bool"] else metric.data_format)(locate("float")(metric.value) if metric.data_format == "int" or metric.data_format == "unsigned_int" else metric.value)  # type: ignore # noqa: E501
-        ),
+        )(data_format_mapper(metric)),
         axis=1,
     )
     return df

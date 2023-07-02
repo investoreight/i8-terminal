@@ -5,6 +5,7 @@ from typing import Any, Optional, Union
 
 import arrow
 import numpy as np
+import pandas as pd
 
 
 class color(Enum):
@@ -185,3 +186,13 @@ def styling_markdown_text(text: str) -> str:
     text = text.replace("#", "")  # Ignore headings
     text = re.sub("```\n([^`]*)\n```", "[magenta]\\1[/magenta]", text)
     return re.sub("`([^`]*)`", "[magenta]\\1[/magenta]", text)
+
+
+def data_format_mapper(metric: pd.Series) -> Any:
+    if metric["data_format"] in ["int", "unsigned_int"]:
+        return int(float(metric["value"]))
+    elif metric["data_format"] == "float":
+        return float(metric["value"])
+    else:
+        # Includes "datetime", "categorical", "boolean", "string" and "str"
+        return str(metric["value"])
