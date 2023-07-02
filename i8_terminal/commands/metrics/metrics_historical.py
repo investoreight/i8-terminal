@@ -20,6 +20,7 @@ from i8_terminal.app.layout import get_plot_default_layout
 from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import get_click_command_path, pass_command
+from i8_terminal.common.formatting import data_format_mapper
 from i8_terminal.common.layout import df2Table, format_metrics_df
 from i8_terminal.common.metrics import get_all_metrics_type_and_data_types_df
 from i8_terminal.common.stock_info import validate_tickers
@@ -78,16 +79,6 @@ def get_historical_metrics_df(
     df.rename(columns={"display_name": "Metric", "Value": "value"}, inplace=True)
     df["value"] = df.apply(lambda metric: data_format_mapper(metric), axis=1)
     return df
-
-
-def data_format_mapper(metric: pd.Series) -> Any:
-    if metric["data_format"] in ["int", "unsigned_int"]:
-        return int(float(metric["value"]))
-    elif metric["data_format"] == "float":
-        return float(metric["value"])
-    else:
-        # Includes "datetime", "string" and "str"
-        return str(metric["value"])
 
 
 def create_fig(
