@@ -72,13 +72,14 @@ class I8Completer(ClickCompleter):
                         choices.append(Completion(text_type(ticker), -len(incomplete), display_meta=name))
                 elif type(matched_param.type) in [TickerParamType, UserWatchlistTickersParamType]:
                     filter_choices = False
+                    include_peers = matched_param.name != "ticker"
                     if matched_param.name == "ticker":
                         incomplete = ctx.incomplete
                     else:
                         parts = ctx.incomplete.split(",")
                         incomplete = parts[-1] if len(parts) > 0 else " "
                     for (ticker, name) in matched_param.type.get_suggestions(  # type: ignore
-                        incomplete if incomplete else " ", True
+                        incomplete if incomplete else " ", True, include_peers
                     ):
                         choices.append(Completion(text_type(ticker.upper()), -len(incomplete), display_meta=name))
                 elif type(matched_param.type) in [MetricParamType, IndicatorParamType]:

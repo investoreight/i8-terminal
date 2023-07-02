@@ -10,7 +10,7 @@ from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
 def get_user_watchlist_tickers() -> List[Tuple[str, str]]:
     results = investor8_sdk.UserApi().get_watchlists_by_user(user_id=USER_SETTINGS.get("user_id"))
     tickers = set(ticker for wl in results.watchlists for ticker in wl.tickers)
-    stocks = get_stocks()
+    stocks = get_stocks(True)
     return [(tk, name) for (tk, name) in stocks if tk in tickers]
 
 
