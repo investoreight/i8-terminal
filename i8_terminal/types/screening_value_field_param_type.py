@@ -10,6 +10,7 @@ def get_value_fields() -> List[Tuple[str, str]]:
         ("overall_rank", "Overall Rank"),
         ("spx_rank", "Spx Rank"),
         ("dow_rank", "Dow Rank"),
+        ("nasdaq_rank", "Nasdaq Rank"),
         ("sector_rank", "Sector Rank"),
         ("industry_rank", "Industry Rank"),
         ("overall_percentile", "Overall Percentile"),
