@@ -88,7 +88,7 @@ class ConditionParamType(AutoCompleteChoice):
                         )  # type: ignore
                         for c in metric_screening_bounds_dict.get(
                             PERIOD_TYPES.get(period, "mrq")
-                            if period
+                            if period and period != "p"
                             else PERIOD_TYPES.get(
                                 default_p_type.lower() if default_p_type is not np.nan else "Q"  # type: ignore
                             ),
