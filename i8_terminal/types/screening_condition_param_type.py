@@ -21,7 +21,13 @@ class ScreeningConditionParamType(AutoCompleteChoice):
         self._condition_auto_comp = ConditionParamType()
 
     def get_suggestions(
-        self, keyword: str, pre_populate: bool = True, param_type: str = None, metric: str = None, period: str = None
+        self,
+        keyword: str,
+        pre_populate: bool = True,
+        param_type: str = None,
+        metric: str = None,
+        period: str = None,
+        value_field: str = None,
     ) -> List[Tuple[str, str]]:
         if param_type == "metric":
             return self._metric_auto_comp.get_suggestions(keyword)
@@ -32,7 +38,9 @@ class ScreeningConditionParamType(AutoCompleteChoice):
         elif param_type == "operator":
             return self._operator_auto_comp.get_suggestions(keyword, metric=metric)  # type: ignore
         else:
-            return self._condition_auto_comp.get_suggestions(keyword, metric=metric, period=period)  # type: ignore
+            return self._condition_auto_comp.get_suggestions(
+                keyword, metric=metric, period=period, value_field=value_field
+            )  # type: ignore
 
     def __repr__(self) -> str:
         return "SCREENINGCONDITION"

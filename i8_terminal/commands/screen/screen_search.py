@@ -11,6 +11,7 @@ from i8_terminal.common.layout import df2Table
 from i8_terminal.common.metrics import (
     get_current_metrics_df,
     get_metric_info,
+    get_view_metrics,
     prepare_current_metrics_formatted_df,
 )
 from i8_terminal.common.utils import export_data, export_to_html
@@ -19,6 +20,13 @@ from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParam
 from i8_terminal.types.metric_view_param_type import MetricViewParamType
 from i8_terminal.types.screening_condition_param_type import ScreeningConditionParamType
 from i8_terminal.types.sort_order_param_type import SortOrderParamType
+
+RELATIVE_PERIOD_TYPES: Dict[str, str] = {
+    "D": ".d",
+    "R": ".r",
+    "FY": ".fy",
+    "Q": ".q",
+}
 
 
 def prepare_screen_df(
@@ -31,11 +39,11 @@ def prepare_screen_df(
         metric_parts = metric.split(".")
         if len(metric_parts) == 1:
             metric_default_period_type = get_metric_info(metric_parts[0])["default_period_type"]
-            period_type = (
-                ".q" if metric_default_period_type == "Q" else ".fy" if metric_default_period_type == "FY" else ".d"
-            )
+            period_type = RELATIVE_PERIOD_TYPES.get(metric_default_period_type, "")
             metric_new = f"{metric}{period_type}"
             conditions[index] = conditions[index].replace(metric, metric_new)
+    if not sort_by:
+        sort_by = metrics.split(",")[0]
     tickers_list = investor8_sdk.ScreenerApi().search(
         conditions=",".join(conditions), order_by=sort_by, order_direction=sort_order
     )
@@ -78,7 +86,6 @@ def sort_by_tickers(df: pd.DataFrame, sorted_tickers: List[str]) -> pd.DataFrame
     "-sb",
     type=MetricIdentifierParamType(),
     help="Metric to sort the output by.",
-    default="marketcap",
 )
 @click.option(
     "--sort_order", "sort_order", "-so", type=SortOrderParamType(), help="Order to sort the output by.", default="desc"
@@ -103,7 +110,7 @@ def search(
         )
         return
     if view_name:
-        metrics = APP_SETTINGS["metric_view"][view_name]["metrics"]
+        metrics = ",".join(get_view_metrics(view_name))
     with console.status("Fetching data...", spinner="material"):
         sorted_tickers, df = prepare_screen_df(list(condition), metrics, sort_by, sort_order)  # type: ignore
     if df is None:

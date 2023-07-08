@@ -20,6 +20,7 @@ from i8_terminal.app.layout import get_plot_default_layout
 from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import get_click_command_path, pass_command
+from i8_terminal.common.formatting import data_format_mapper
 from i8_terminal.common.layout import df2Table, format_metrics_df
 from i8_terminal.common.metrics import get_all_metrics_type_and_data_types_df
 from i8_terminal.common.stock_info import validate_tickers
@@ -78,16 +79,6 @@ def get_historical_metrics_df(
     df.rename(columns={"display_name": "Metric", "Value": "value"}, inplace=True)
     df["value"] = df.apply(lambda metric: data_format_mapper(metric), axis=1)
     return df
-
-
-def data_format_mapper(metric: pd.Series) -> Any:
-    if metric["data_format"] in ["int", "unsigned_int"]:
-        return int(float(metric["value"]))
-    elif metric["data_format"] == "float":
-        return float(metric["value"])
-    else:
-        # Includes "datetime", "string" and "str"
-        return str(metric["value"])
 
 
 def create_fig(
@@ -271,8 +262,7 @@ def historical_metrics_df2tree(df: DataFrame) -> Tree:
     "--period_type",
     "-t",
     type=PeriodTypeParamType(),
-    help="Period by which you want to view the report. Possible values are `D` for daily, \
-        `FY` for yearly, `Q` for quarterly, `TTM` for TTM reports, `YTD` for YTD reports.",
+    help="Period by which you want to view the report. Possible values are `D` for daily, `FY` for yearly, `Q` for quarterly, `TTM` for TTM reports, `YTD` for YTD reports.",  # noqa: E501
 )
 @click.option("--from_date", "-f", type=DateTime(), help="Histotical metrics from date.")
 @click.option("--to_date", "-t", type=DateTime(), help="Histotical metrics to date.")
@@ -294,10 +284,8 @@ def historical(
     Examples:
 
     `i8 metrics historical --metrics net_income --tickers AMD,INTC,QCOM --output plot --plot_type bar --period_type Q`
-    `i8 metrics historical --metrics total_revenue,total_assets --tickers AMD,INTC,QCOM --output terminal \
-        --period_type FY --pivot`
-
-    """
+    `i8 metrics historical --metrics total_revenue,total_assets --tickers AMD,INTC,QCOM --output terminal --period_type FY --pivot`
+    """  # noqa: E501
     metrics_list = metrics.replace(" ", "").split(",")
     if output not in ["terminal", "plot"]:
         click.echo(click.style(f"`{output}` is not valid output type.", fg="yellow"))
@@ -346,10 +334,7 @@ def historical(
         df = df.sort_values(["PeriodDateTime"], ascending=False).groupby(["Ticker", "Metric", "Period"]).head(1)
         if len(df["default_period_type"].unique()) > 1:
             console.print(
-                (
-                    "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have "
-                    "the same period type. Check `metrics describe` command to find more about metrics."
-                ),
+                "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type. Check `metrics describe` command to find more about metrics.",  # noqa: E501
                 style="yellow",
             )
             return

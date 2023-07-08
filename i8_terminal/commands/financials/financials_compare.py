@@ -111,8 +111,7 @@ def create_fig(df: DataFrame, header_dict: Dict[str, List[str]], cmd_context: Di
     "--period_type",
     "-m",
     type=PeriodTypeParamType(),
-    help="Period by which you want to view the report. Possible values are `FY` for yearly, \
-        `Q` for quarterly, and `TTM` for TTM reports.",
+    help="Period by which you want to view the report. Possible values are `FY` for yearly, `Q` for quarterly, and `TTM` for TTM reports.",  # noqa: E501
 )
 @click.option("--plot", is_flag=True, default=False, help="Plot results on the browser.")
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")

@@ -72,13 +72,14 @@ class I8Completer(ClickCompleter):
                         choices.append(Completion(text_type(ticker), -len(incomplete), display_meta=name))
                 elif type(matched_param.type) in [TickerParamType, UserWatchlistTickersParamType]:
                     filter_choices = False
+                    include_peers = matched_param.name != "ticker"
                     if matched_param.name == "ticker":
                         incomplete = ctx.incomplete
                     else:
                         parts = ctx.incomplete.split(",")
                         incomplete = parts[-1] if len(parts) > 0 else " "
                     for (ticker, name) in matched_param.type.get_suggestions(  # type: ignore
-                        incomplete if incomplete else " ", True
+                        incomplete if incomplete else " ", True, include_peers
                     ):
                         choices.append(Completion(text_type(ticker.upper()), -len(incomplete), display_meta=name))
                 elif type(matched_param.type) in [MetricParamType, IndicatorParamType]:
@@ -122,7 +123,7 @@ class I8Completer(ClickCompleter):
                     for (metric_view, desc) in matched_param.type.get_suggestions(
                         incomplete if incomplete else " ", True
                     ):  # type: ignore
-                        choices.append(Completion(text_type(metric_view), -len(incomplete)))
+                        choices.append(Completion(text_type(metric_view), -len(incomplete), display_meta=desc))
                 elif type(matched_param.type) is MetricIdentifierParamType:
                     param_type = "metric"
                     filter_choices = False
@@ -146,10 +147,13 @@ class I8Completer(ClickCompleter):
                     condition_sub_parts = incomplete.split(":")
                     period_sub_parts = condition_sub_parts[0].split(".")
                     period = None
+                    value_field = None
                     if len(condition_sub_parts) > 2:
                         param_type = "condition"
                         if len(period_sub_parts) > 1:
                             period = period_sub_parts[1]
+                        if len(period_sub_parts) > 2:
+                            value_field = period_sub_parts[2]
                         incomplete = condition_sub_parts[-1] if len(condition_sub_parts) > 1 else " "
                     elif len(condition_sub_parts) > 1:
                         param_type = "operator"
@@ -164,7 +168,7 @@ class I8Completer(ClickCompleter):
                         param_type = "metric"
 
                     for (idf, name) in matched_param.type.get_suggestions(
-                        incomplete if incomplete else " ", False, param_type, period_sub_parts[0], period
+                        incomplete if incomplete else " ", False, param_type, period_sub_parts[0], period, value_field
                     ):
                         choices.append(Completion(text_type(idf), -len(incomplete), display_meta=name))
         else:

@@ -1,4 +1,5 @@
 import os
+from ast import literal_eval
 from typing import Dict, List, Optional
 
 import arrow
@@ -9,6 +10,7 @@ from investor8_sdk import MetricsApi
 from pandas import DataFrame, read_csv
 
 from i8_terminal.common.layout import format_metrics_df
+from i8_terminal.common.stock_info import get_stocks_df
 from i8_terminal.common.utils import is_cached_file_expired, reverse_period, similarity
 from i8_terminal.config import APP_SETTINGS, SETTINGS_FOLDER
 
@@ -118,8 +120,17 @@ def get_period_start_date(period: str) -> str:
 
 
 def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFrame]:
+    stocks_peers = get_stocks_df()[["ticker", "peers"]].set_index("ticker").to_dict()["peers"]
+    tickers_list = []
+    for tk in tickers.split(","):
+        if "PEERS" in tk and stocks_peers.get(tk.split(".")[0]):
+            ticker_name = tk.split(".")[0]
+            tickers_list.append(ticker_name)
+            tickers_list.extend(literal_eval(stocks_peers.get(ticker_name)))
+        else:
+            tickers_list.append(tk)
     metrics = investor8_sdk.MetricsApi().get_current_metrics(
-        symbols=tickers,
+        symbols=",".join(tickers_list),
         metrics=metricsList,
     )
     if metrics.data is None:
@@ -163,3 +174,12 @@ def get_all_metrics_type_and_data_types_df() -> DataFrame:
 def get_all_metrics_default_period_types_dict() -> Dict[str, str]:
     df = get_all_metrics_df()[["metric_name", "period_type_default"]]
     return dict([(i, j) for i, j in zip(df.metric_name, df.period_type_default)])
+
+
+def get_view_metrics(viewName: str) -> List[str]:
+    metric_view = investor8_sdk.MetricsApi().get_metric_view_by_name(viewName)
+    metric_names = []
+    for mg in metric_view.metric_groups:
+        for m in mg.metrics:
+            metric_names.append(m.name)
+    return metric_names
