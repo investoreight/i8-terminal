@@ -123,7 +123,7 @@ def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFr
     stocks_peers = get_stocks_df()[["ticker", "peers"]].set_index("ticker").to_dict()["peers"]
     tickers_list = []
     for tk in tickers.split(","):
-        if "PEERS" in tk and stocks_peers.get(tk.split(".")[0]):
+        if "peers" in tk and stocks_peers.get(tk.split(".")[0]):
             ticker_name = tk.split(".")[0]
             tickers_list.append(ticker_name)
             tickers_list.extend(literal_eval(stocks_peers.get(ticker_name)))
