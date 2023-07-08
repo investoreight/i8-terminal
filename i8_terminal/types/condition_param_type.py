@@ -53,12 +53,10 @@ class ConditionParamType(AutoCompleteChoice):
         metric_screening_bounds_dict = json.loads(
             self.metrics_conditions.get(metric, "").replace("'", '"')  # type: ignore
         )
-        if value_field in ["overall_rank", "spx_rank", "dow_rank", "sector_rank", "industry_rank"]:
+        if value_field in ["rank", "dow_rank", "sector_rank", "industry_rank"]:
             self.set_choices([("5", ""), ("10", ""), ("20", ""), ("50", ""), ("100", ""), ("500", ""), ("1000", "")])
         elif value_field in [
-            "overall_percentile",
-            "nasdaq_percentile",
-            "spx_percentile",
+            "percentile",
             "sector_percentile",
             "industry_percentile",
             "dow_percentile",
