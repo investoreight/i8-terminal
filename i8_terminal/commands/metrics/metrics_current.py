@@ -55,7 +55,7 @@ def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
     console = Console()
     with console.status("Fetching data...", spinner="material"):
         df = get_current_metrics_df(tickers, metrics.replace(".p", ""))
-    if df is None:
+    if df is None or df.empty:
         console.print("No data found for metrics with selected tickers", style="yellow")
         return
     for m in [*set(metric.split(".")[0] for metric in set(metrics.split(","))) - set(df["metric_name"])]:

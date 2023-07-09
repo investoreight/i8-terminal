@@ -140,6 +140,8 @@ def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFr
     metrics_metadata_df = pd.DataFrame([m.to_dict() for m in metrics.metadata])
     df = pd.merge(metrics_data_df, metrics_metadata_df, on="metric_name")
     df[["data_format", "display_format"]] = df[["data_format", "display_format"]].replace("string", "str")
+    df["value"].replace("None", np.nan, inplace=True)
+    df.dropna(subset=["value"], axis=0, inplace=True)
     return df
 
 
