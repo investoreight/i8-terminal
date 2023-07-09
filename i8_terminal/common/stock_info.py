@@ -12,8 +12,8 @@ from i8_terminal.config import SETTINGS_FOLDER
 
 def sort_stocks(df: pd.DataFrame, include_peers: bool = False) -> pd.DataFrame:
     df["default_rank"] = 11
-    default_rank = (
-        {
+    if not include_peers:
+        default_rank = {
             "A": 1,
             "AAL": 2,
             "AAP": 3,
@@ -25,8 +25,8 @@ def sort_stocks(df: pd.DataFrame, include_peers: bool = False) -> pd.DataFrame:
             "ACN": 9,
             "ADBE": 10,
         }
-        if not include_peers
-        else {
+    else:
+        default_rank = {
             "A": 1,
             "A.peers": 2,
             "AAL": 3,
@@ -38,7 +38,6 @@ def sort_stocks(df: pd.DataFrame, include_peers: bool = False) -> pd.DataFrame:
             "AABV": 9,
             "AABV.peers": 10,
         }
-    )
     df["default_rank"] = df["ticker"].apply(lambda x: default_rank.get(x, 11))
     df = df.sort_values("default_rank").reset_index(drop=True)
     return df[["ticker", "name", "peers"]]
@@ -61,7 +60,8 @@ def get_stocks(include_peers: bool) -> List[Tuple[str, str]]:
     df = get_stocks_df().replace("", np.nan)
     if include_peers:
         df_peers = df[~df["peers"].isna()].copy()
-        df_peers.loc[:, "ticker"] = df_peers["ticker"].apply(lambda x: x + ".PEERS")
+        df_peers.loc[:, "ticker"] = df_peers["ticker"].apply(lambda x: x + ".peers")
+        df_peers.loc[:, "name"] = df_peers["name"].apply(lambda x: "Peers of " + x)
         df = sort_stocks(pd.concat([df, df_peers]), include_peers)
     return list(df[columns_list].to_records(index=False))
 
@@ -80,7 +80,7 @@ def validate_ticker(ctx: click.Context, param: str, value: str) -> Optional[str]
 def validate_tickers(ctx: click.Context, param: str, value: str) -> Optional[str]:
     tickers = {d[0] for d in get_stocks(True)}
     if not ctx.resilient_parsing:
-        invalid_tickers = [*set(value.replace(" ", "").upper().split(",")) - tickers] if value else []
+        invalid_tickers = [*set(value.replace(" ", "").split(",")) - tickers] if value else []
         if value and invalid_tickers:
             msg = "are not valid ticker names." if len(invalid_tickers) > 1 else "is not a valid ticker name."
             click.echo(

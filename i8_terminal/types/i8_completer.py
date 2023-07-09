@@ -81,7 +81,7 @@ class I8Completer(ClickCompleter):
                     for (ticker, name) in matched_param.type.get_suggestions(  # type: ignore
                         incomplete if incomplete else " ", True, include_peers
                     ):
-                        choices.append(Completion(text_type(ticker.upper()), -len(incomplete), display_meta=name))
+                        choices.append(Completion(text_type(ticker), -len(incomplete), display_meta=name))
                 elif type(matched_param.type) in [MetricParamType, IndicatorParamType]:
                     filter_choices = False
                     parts = ctx.incomplete.split(",")
