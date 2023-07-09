@@ -42,9 +42,17 @@ def get_current_metrics(tickers: str, metric_names: str) -> MetricsCurrentResult
         ColumnInfo(name="period", col_type="context", display_name="Period", data_type="str", unit="string"),
     ]
 
-    for c in df.columns:
-        if c not in ["symbol", "period"]:
-            col_infos.append(ColumnInfo(name=c, col_type="metric"))
+    input_metrics = [m.split(".")[0].lower() for m in metric_names.split(",")]
+    missed_metrics = []
+    for m in input_metrics:
+        if m in df.columns:
+            col_infos.append(ColumnInfo(name=m, col_type="metric"))
+        else:
+            missed_metrics.append(m)
+
+    warning = ""
+    if len(missed_metrics) > 0:
+        warning = f"No data found for metric(s) `{','.join(missed_metrics)}` for the given tickers!"
 
     cc = ColumnsContext(col_infos)
-    return MetricsCurrentResult(df, cc)
+    return MetricsCurrentResult(df, cc, warning)
