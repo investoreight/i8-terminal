@@ -54,7 +54,7 @@ class I8Completer(ClickCompleter):
                     for o in ctx.used_options
                     if cursor_position - command_string.find(o) > 0
                 ]
-                matched = min(options_positions, key=lambda option_position: option_position[1])
+                matched = min(options_positions, key=lambda option_position: option_position[1])  # type: ignore
                 matched_params = [p for p in command.params if isinstance(p, click.Option) and matched[0] in p.opts]
             else:
                 matched_params = [
