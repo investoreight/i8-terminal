@@ -59,6 +59,14 @@ def sort_by_tickers(df: pd.DataFrame, sorted_tickers: List[str]) -> pd.DataFrame
     return df
 
 
+def reindex_df(df: pd.DataFrame, metrics_include_periods: List[str]) -> pd.DataFrame:
+    column_orders = list(df.columns)
+    for metric_period in set(metrics_include_periods):
+        column_orders.pop(column_orders.index(f"{metric_period} (Period)"))
+        column_orders.insert(column_orders.index(metric_period), f"{metric_period} (Period)")
+    return df.reindex(columns=column_orders)
+
+
 @screen.command()
 @click.option(
     "--condition",
@@ -90,6 +98,7 @@ def sort_by_tickers(df: pd.DataFrame, sorted_tickers: List[str]) -> pd.DataFrame
 @click.option(
     "--sort_order", "sort_order", "-so", type=SortOrderParamType(), help="Order to sort the output by.", default="desc"
 )
+@click.option("--include_period", "-ip", is_flag=True, default=False, help="Output will contain the periods.")
 @pass_command
 def search(
     condition: Tuple[str],
@@ -98,6 +107,7 @@ def search(
     export_path: Optional[str],
     sort_by: Optional[str],
     sort_order: Optional[str],
+    include_period: bool,
 ) -> None:
     console = Console()
     if not metrics and not view_name:
@@ -122,20 +132,50 @@ def search(
     for m in no_data_metrics:
         console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
     columns_justify: Dict[str, Any] = {}
+    df["display_name"] = df.apply(
+        lambda metric: f'{metric["display_name"]} - {metric["input_metric"].split(".")[-1].upper()}'
+        if len(metric["input_metric"].split(".")) > 1
+        else metric["display_name"],
+        axis=1,
+    )
+    metric_names: List[str] = []
+    if include_period:
+        period_rows = []
+        for index, row in df.iterrows():
+            if row["display_format"] not in ["str"]:
+                metric_names.append(row["display_name"])
+                period_rows.append(
+                    {
+                        "Ticker": row["Ticker"],
+                        "metric_name": row["metric_name"],
+                        "input_metric": row["input_metric"],
+                        "value": row["period"],
+                        "display_name": f"{row['display_name']} (Period)",
+                        "data_format": "str",
+                        "display_format": "str",
+                    }
+                )
+        df = pd.concat([pd.DataFrame(period_rows), df], ignore_index=True, axis=0)
     if export_path:
         if export_path.split(".")[-1] == "html":
             for metric_display_name, metric_df in df.groupby("display_name"):
                 columns_justify[metric_display_name] = (
                     "left" if metric_df["display_format"].values[0] == "str" else "right"
                 )
+            df_result = sort_by_tickers(prepare_current_metrics_formatted_df(df, "console"), sorted_tickers)
+            if include_period:
+                df_result = reindex_df(df_result, metric_names)
             table = df2Table(
-                sort_by_tickers(prepare_current_metrics_formatted_df(df, "console"), sorted_tickers),
+                df_result,
                 columns_justify=columns_justify,
             )
             export_to_html(table, export_path)
             return
+        df_result = sort_by_tickers(prepare_current_metrics_formatted_df(df, "store"), sorted_tickers)
+        if include_period:
+            df_result = reindex_df(df_result, metric_names)
         export_data(
-            sort_by_tickers(prepare_current_metrics_formatted_df(df, "store"), sorted_tickers),
+            df_result,
             export_path,
             column_width=18,
             column_format=APP_SETTINGS["styles"]["xlsx"]["financials"]["column"],
@@ -143,8 +183,11 @@ def search(
     else:
         for metric_display_name, metric_df in df.groupby("display_name"):
             columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
+        df_result = sort_by_tickers(prepare_current_metrics_formatted_df(df, "console"), sorted_tickers)
+        if include_period:
+            df_result = reindex_df(df_result, metric_names)
         table = df2Table(
-            sort_by_tickers(prepare_current_metrics_formatted_df(df, "console"), sorted_tickers),
+            df_result,
             columns_justify=columns_justify,
         )
         console.print(table)
