@@ -7,6 +7,7 @@ from click_repl import ClickCompleter, text_type
 from prompt_toolkit.completion import CompleteEvent, Completion
 from prompt_toolkit.document import Document
 
+from i8_terminal.common.utils import get_matched_params
 from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
 from i8_terminal.types.chart_param_type import ChartParamType
 from i8_terminal.types.command_parser import CommandParser
@@ -45,21 +46,7 @@ class I8Completer(ClickCompleter):
         filter_choices = True
 
         if ctx.last_option:
-            if not document.is_cursor_at_the_end:
-                command_string = document.current_line
-                cursor_position = document.cursor_position
-                options_positions = [
-                    (o, cursor_position - command_string.find(o))
-                    for c in command.params
-                    for o in ctx.used_options
-                    if cursor_position - command_string.find(o) > 0
-                ]
-                matched = min(options_positions, key=lambda option_position: option_position[1])  # type: ignore
-                matched_params = [p for p in command.params if isinstance(p, click.Option) and matched[0] in p.opts]
-            else:
-                matched_params = [
-                    p for p in command.params if isinstance(p, click.Option) and ctx.last_option in p.opts
-                ]
+            matched_params = get_matched_params(ctx, command, document)
             if len(matched_params) > 0:
                 matched_param = matched_params[0]
                 if type(matched_param.type) is click.types.Choice:

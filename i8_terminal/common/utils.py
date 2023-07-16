@@ -5,10 +5,13 @@ from io import StringIO
 from typing import Any, Callable, Dict, List, Optional, TypeVar
 
 import arrow
+import click
 import pandas as pd
+from prompt_toolkit.document import Document
 from rich.console import Console
 
 from i8_terminal.config import APP_SETTINGS
+from i8_terminal.types.command_parser import CompleterContext
 
 T = TypeVar("T")
 
@@ -126,3 +129,20 @@ def status(text: str = "Fetching data...", spinner: str = "material") -> Callabl
 
 def concat_and(items: List[str]) -> str:
     return " and ".join(", ".join(items).rsplit(", ", 1))
+
+
+def get_matched_params(ctx: CompleterContext, command: click.Command, document: Document) -> List[click.Option]:
+    if not document.is_cursor_at_the_end:
+        command_string = document.current_line
+        cursor_position = document.cursor_position
+        options_positions = [
+            (o, cursor_position - command_string.find(o))
+            for c in command.params
+            for o in ctx.used_options
+            if cursor_position - command_string.find(o) > 0
+        ]
+        matched = min(options_positions, key=lambda option_position: option_position[1])  # type: ignore
+        matched_params = [p for p in command.params if isinstance(p, click.Option) and matched[0] in p.opts]
+    else:
+        matched_params = [p for p in command.params if isinstance(p, click.Option) and ctx.last_option in p.opts]
+    return matched_params
