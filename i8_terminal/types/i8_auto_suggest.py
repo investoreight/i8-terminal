@@ -7,6 +7,7 @@ from prompt_toolkit.auto_suggest import AutoSuggest, Suggestion
 from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.document import Document
 
+from i8_terminal.common.utils import get_matched_params
 from i8_terminal.types.command_parser import CommandParser
 from i8_terminal.types.fin_identifier_param_type import FinancialsIdentifierParamType
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
@@ -28,7 +29,7 @@ class I8AutoSuggest(AutoSuggest):
         command = ctx.click_ctx.command
 
         if ctx.last_option:
-            matched_params = [p for p in command.params if isinstance(p, click.Option) and ctx.last_option in p.opts]
+            matched_params = get_matched_params(ctx, command, document)
             if len(matched_params) > 0:
                 matched_param = matched_params[0]
                 if type(matched_param.type) is click.types.DateTime:
