@@ -172,6 +172,17 @@ class I8Completer(ClickCompleter):
                         incomplete if incomplete else " ", False, param_type, period_sub_parts[0], period, value_field
                     ):
                         choices.append(Completion(text_type(idf), -len(incomplete), display_meta=name))
+                elif type(matched_param.type) is click.types.BoolParamType:
+                    for param in command.params:
+                        if isinstance(param, click.Option):
+                            if not any(o in ctx.used_options for o in param.opts) or param.multiple:
+                                choices.append(
+                                    Completion(
+                                        text_type(max(param.opts, key=len)),
+                                        -len(ctx.incomplete),
+                                        display_meta=f"({param.opts[-1]}) {param.help}",
+                                    )
+                                )
         else:
             for param in command.params:
                 if isinstance(param, click.Option):
