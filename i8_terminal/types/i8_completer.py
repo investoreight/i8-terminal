@@ -7,6 +7,7 @@ from click_repl import ClickCompleter, text_type
 from prompt_toolkit.completion import CompleteEvent, Completion
 from prompt_toolkit.document import Document
 
+from i8_terminal.common.utils import get_matched_params
 from i8_terminal.types.auto_complete_choice import AutoCompleteChoice
 from i8_terminal.types.chart_param_type import ChartParamType
 from i8_terminal.types.command_parser import CommandParser
@@ -45,7 +46,7 @@ class I8Completer(ClickCompleter):
         filter_choices = True
 
         if ctx.last_option:
-            matched_params = [p for p in command.params if isinstance(p, click.Option) and ctx.last_option in p.opts]
+            matched_params = get_matched_params(ctx, command, document)
             if len(matched_params) > 0:
                 matched_param = matched_params[0]
                 if type(matched_param.type) is click.types.Choice:
@@ -171,6 +172,17 @@ class I8Completer(ClickCompleter):
                         incomplete if incomplete else " ", False, param_type, period_sub_parts[0], period, value_field
                     ):
                         choices.append(Completion(text_type(idf), -len(incomplete), display_meta=name))
+                elif type(matched_param.type) is click.types.BoolParamType:
+                    for param in command.params:
+                        if isinstance(param, click.Option):
+                            if not any(o in ctx.used_options for o in param.opts) or param.multiple:
+                                choices.append(
+                                    Completion(
+                                        text_type(max(param.opts, key=len)),
+                                        -len(ctx.incomplete),
+                                        display_meta=f"({param.opts[-1]}) {param.help}",
+                                    )
+                                )
         else:
             for param in command.params:
                 if isinstance(param, click.Option):
