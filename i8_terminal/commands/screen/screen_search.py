@@ -6,7 +6,7 @@ import pandas as pd
 from rich.console import Console
 
 from i8_terminal.commands.screen import screen
-from i8_terminal.common.cli import pass_command
+from i8_terminal.common.cli import is_server_call, pass_command
 from i8_terminal.common.layout import df2Table
 from i8_terminal.common.metrics import (
     get_current_metrics_df,
@@ -16,39 +16,33 @@ from i8_terminal.common.metrics import (
 )
 from i8_terminal.common.utils import export_data, export_to_html
 from i8_terminal.config import APP_SETTINGS
+from i8_terminal.i8_exception import I8Exception
+from i8_terminal.services.screen import search as screen_search
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 from i8_terminal.types.metric_view_param_type import MetricViewParamType
 from i8_terminal.types.screening_condition_param_type import ScreeningConditionParamType
 from i8_terminal.types.sort_order_param_type import SortOrderParamType
 
-RELATIVE_PERIOD_TYPES: Dict[str, str] = {
-    "D": ".d",
-    "R": ".r",
-    "FY": ".fy",
-    "Q": ".q",
-}
-
-
-def prepare_screen_df(
-    conditions: List[str], metrics: str, sort_by: Optional[str], sort_order: Optional[str]
-) -> Tuple[List[str], Optional[pd.DataFrame]]:
-    max_count = 20
-    for index, condition in enumerate(conditions):
-        condition_parts = condition.split(":")
-        metric = condition_parts[0]
-        metric_parts = metric.split(".")
-        if len(metric_parts) == 1:
-            metric_default_period_type = get_metric_info(metric_parts[0])["default_period_type"]
-            period_type = RELATIVE_PERIOD_TYPES.get(metric_default_period_type, "")
-            metric_new = f"{metric}{period_type}"
-            conditions[index] = conditions[index].replace(metric, metric_new)
-    if not sort_by:
-        sort_by = metrics.split(",")[0]
-    tickers_list = investor8_sdk.ScreenerApi().search(
-        conditions=",".join(conditions), order_by=sort_by, order_direction=sort_order
-    )
-    screen_df = get_current_metrics_df(",".join(tickers_list[:max_count]), metrics)
-    return tickers_list, screen_df
+# def prepare_screen_df(
+#     conditions: List[str], metrics: str, sort_by: Optional[str], sort_order: Optional[str]
+# ) -> Tuple[List[str], Optional[pd.DataFrame]]:
+#     max_count = 20
+#     for index, condition in enumerate(conditions):
+#         condition_parts = condition.split(":")
+#         metric = condition_parts[0]
+#         metric_parts = metric.split(".")
+#         if len(metric_parts) == 1:
+#             metric_default_period_type = get_metric_info(metric_parts[0])["default_period_type"]
+#             period_type = RELATIVE_PERIOD_TYPES.get(metric_default_period_type, "")
+#             metric_new = f"{metric}{period_type}"
+#             conditions[index] = conditions[index].replace(metric, metric_new)
+#     if not sort_by:
+#         sort_by = metrics.split(",")[0]
+#     tickers_list = investor8_sdk.ScreenerApi().search(
+#         conditions=",".join(conditions), order_by=sort_by, order_direction=sort_order
+#     )
+#     screen_df = get_current_metrics_df(",".join(tickers_list[:max_count]), metrics)
+#     return tickers_list, screen_df
 
 
 def sort_by_tickers(df: pd.DataFrame, sorted_tickers: List[str]) -> pd.DataFrame:
@@ -69,13 +63,13 @@ def reindex_df(df: pd.DataFrame, metrics_include_periods: List[str]) -> pd.DataF
 
 @screen.command()
 @click.option(
-    "--condition",
-    "condition",
+    "--conditions",
+    "conditions",
     "-c",
     required=True,
     type=ScreeningConditionParamType(),
     multiple=True,
-    help="Condition of metric.",
+    help="Conditions of search.",
 )
 @click.option(
     "--view_name", "view_name", "-v", type=MetricViewParamType(), help="Metric view name in configuration file."
@@ -101,7 +95,7 @@ def reindex_df(df: pd.DataFrame, metrics_include_periods: List[str]) -> pd.DataF
 @click.option("--include_period", "-ip", is_flag=True, default=False, help="Output will contain the periods.")
 @pass_command
 def search(
-    condition: Tuple[str],
+    conditions: str,
     view_name: Optional[str],
     metrics: Optional[str],
     export_path: Optional[str],
@@ -121,6 +115,37 @@ def search(
         return
     if view_name:
         metrics = ",".join(get_view_metrics(view_name))
+
+    console = Console()
+    try:
+        res = screen_search(conditions, metrics, sort_by)
+        if is_server_call():
+            return res
+    except I8Exception as ex:
+        if is_server_call():
+            raise
+        else:
+            console.print(str(ex))
+
+    info = res.get_info()
+    if info:
+        console.print(info)
+
+    if export_path:
+        extension = export_path.split(".")[-1]
+        if extension == "html":
+            res.to_html(export_path)
+        elif extension == "xlsx":
+            res.to_xlsx(export_path)
+        elif extension == "csv":
+            res.to_csv(export_path)
+        else:
+            console.print("Unknown export extension!")
+    else:
+        res.to_console(format="humanize")
+
+    return
+
     with console.status("Fetching data...", spinner="material"):
         sorted_tickers, df = prepare_screen_df(list(condition), metrics, sort_by, sort_order)  # type: ignore
     if df is None:
