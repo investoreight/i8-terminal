@@ -150,7 +150,10 @@ class ServiceResult:
             else:
                 display_names[ci.name] = ci.display_name
 
-            if ci.data_type in ["int", "unsigned_int", "float", "unsigned_float"] and self._df[ci.name].max() < 1e6:
+            if (
+                ci.data_type in ["int", "unsigned_int", "float", "unsigned_float"]
+                and pd.to_numeric(self._df[ci.name]).max() < 1e6
+            ):
                 if format == "raw":
                     formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)
                 else:
@@ -166,7 +169,7 @@ class ServiceResult:
             else:
                 return lambda x: x
 
-        if data_type == "str" or unit == "string":
+        if data_type in ["str", "string", "categorical"] or unit == "string":
             return lambda x: x
 
         if unit == "datetime":
@@ -177,15 +180,15 @@ class ServiceResult:
 
         if format == "default":
             if data_type in ["int", "unsigned_int"]:
-                return lambda x: format_number_v2(x, percision=0, unit=unit)
+                return lambda x: format_number_v2(int(x), percision=0, unit=unit)
             elif data_type in ["float", "unsigned_float"]:
-                return lambda x: format_number_v2(x, percision=2, unit=unit)
+                return lambda x: format_number_v2(float(x), percision=2, unit=unit)
         elif format == "humanize":
-            return lambda x: format_number_v2(x, percision=2, unit=unit, humanize=True)
+            return lambda x: format_number_v2(float(x), percision=2, unit=unit, humanize=True)
         elif format == "millionize":
             if data_type in ["int", "unsigned_int"]:
-                return lambda x: format_number_v2(x, percision=0, unit=unit, in_millions=True)
+                return lambda x: format_number_v2(int(x), percision=0, unit=unit, in_millions=True)
             elif data_type in ["float", "unsigned_float"]:
-                return lambda x: format_number_v2(x, percision=2, unit=unit, in_millions=True)
+                return lambda x: format_number_v2(float(x), percision=2, unit=unit, in_millions=True)
 
         return lambda x: x

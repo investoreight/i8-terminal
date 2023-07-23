@@ -33,8 +33,10 @@ def get_current_metrics(tickers: str, metric_names: str) -> MetricsCurrentResult
 
     df = pd.DataFrame([m.to_dict() for m in metrics.data])
     df = df[["metric", "period", "symbol", "value"]]
-
-    df = df.pivot_table(index=["symbol", "period"], columns="metric", values=["value"]).reset_index()
+    df = df.replace(r"^\s*$", "NA", regex=True)
+    df = df.pivot_table(
+        index=["symbol", "period"], columns="metric", values=["value"], aggfunc=lambda x: x
+    ).reset_index()
     df.columns = [l2 if l1 == "value" else l1 for l1, l2 in df.columns]
 
     col_infos = [
