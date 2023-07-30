@@ -11,7 +11,6 @@ from i8_terminal.i8_exception import I8Exception
 from i8_terminal.service_result.column_info import ColumnInfo
 from i8_terminal.service_result.columns_context import ColumnsContext
 from i8_terminal.service_result.metrics_current_result import MetricsCurrentResult
-from i8_terminal.service_result.screen_search_result import ScreenSearchResult
 from i8_terminal.services.metrics import get_current_metrics
 
 RELATIVE_PERIOD_TYPES: Dict[str, str] = {
