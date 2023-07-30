@@ -8,6 +8,7 @@ from i8_terminal.common.cli import is_server_call, pass_command
 from i8_terminal.common.layout import df2Table
 from i8_terminal.common.metrics import (
     get_current_metrics_df,
+    get_view_metrics,
     prepare_current_metrics_formatted_df,
 )
 from i8_terminal.common.stock_info import validate_tickers
@@ -16,6 +17,7 @@ from i8_terminal.config import APP_SETTINGS
 from i8_terminal.i8_exception import I8Exception
 from i8_terminal.services.metrics import get_current_metrics
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
+from i8_terminal.types.metric_view_param_type import MetricViewParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
 
 
@@ -32,12 +34,14 @@ from i8_terminal.types.ticker_param_type import TickerParamType
     "--metrics",
     "-m",
     type=MetricIdentifierParamType(),
-    default="pe_ratio_ttm",
     help="Comma-separated list of daily metrics.",
+)
+@click.option(
+    "--view_name", "view_name", "-v", type=MetricViewParamType(), help="Metric view name in configuration file."
 )
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
-def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
+def current(tickers: str, metrics: str, view_name: Optional[str], export_path: Optional[str]) -> None:
     """
     Lists the given metrics for a given list of companies. TICKERS is a comma-separated list of tickers.
     METRICS can be in the below format:
@@ -55,6 +59,18 @@ def current(tickers: str, metrics: str, export_path: Optional[str]) -> None:
     `i8 metrics current --metrics total_revenue.q,net_income.fy,close.d,total_revenue --tickers AMD,INTC,QCOM`
     """  # noqa: E501
     console = Console()
+    if not metrics and not view_name:
+        console.print("The 'metrics' or 'view_name' parameter must be provided", style="yellow")
+        return
+    if view_name and metrics:
+        console.print(
+            "The 'metrics' or 'view_name' options are mutually exclusive. Provide a value only for one of them.",
+            style="yellow",
+        )
+        return
+    if view_name:
+        metrics = ",".join(get_view_metrics(view_name))
+
     try:
         res = get_current_metrics(tickers, metrics)
         if is_server_call():
