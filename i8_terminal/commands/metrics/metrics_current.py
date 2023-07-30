@@ -15,8 +15,8 @@ from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.common.utils import export_data, export_to_html
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
-from i8_terminal.types.ticker_param_type import TickerParamType
 from i8_terminal.types.metric_view_param_type import MetricViewParamType
+from i8_terminal.types.ticker_param_type import TickerParamType
 
 
 @metrics.command()
@@ -75,7 +75,7 @@ def current(tickers: str, metrics: str, view_name: Optional[str], export_path: O
         return
     for m in [*set(metric.split(".")[0] for metric in set(metrics.split(","))) - set(df["metric_name"])]:
         console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
-    columns_jumestify: Dict[str, Any] = {}
+    columns_justify: Dict[str, Any] = {}
     if export_path:
         if export_path.split(".")[-1] == "html":
             for metric_display_name, metric_df in df.groupby("display_name"):
