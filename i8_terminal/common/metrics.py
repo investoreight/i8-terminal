@@ -148,7 +148,9 @@ def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFr
 def prepare_current_metrics_formatted_df(df: DataFrame, target: str, include_period: bool = False) -> DataFrame:
     formatted_df = format_metrics_df(df, target)
     if include_period:
-        formatted_df["value"] = formatted_df.apply(lambda x: f"{x['value']}\n({x['period']})" if x["period"] else x["value"], axis=1)
+        formatted_df["value"] = formatted_df.apply(
+            lambda x: f"{x['value']}\n({x['period']})" if x["period"] else x["value"], axis=1
+        )
     return (
         formatted_df.pivot(index="Ticker", columns="display_name", values="value")
         .reset_index(level=0)
