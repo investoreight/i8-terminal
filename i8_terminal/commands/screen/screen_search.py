@@ -139,23 +139,6 @@ def search(
         axis=1,
     )
     metric_names: List[str] = []
-    if include_period:
-        period_rows = []
-        for index, row in df.iterrows():
-            if row["display_format"] not in ["str"]:
-                metric_names.append(row["display_name"])
-                period_rows.append(
-                    {
-                        "Ticker": row["Ticker"],
-                        "metric_name": row["metric_name"],
-                        "input_metric": row["input_metric"],
-                        "value": row["period"],
-                        "display_name": f"{row['display_name']} (Period)",
-                        "data_format": "str",
-                        "display_format": "str",
-                    }
-                )
-        df = pd.concat([pd.DataFrame(period_rows), df], ignore_index=True, axis=0)
     if export_path:
         if export_path.split(".")[-1] == "html":
             for metric_display_name, metric_df in df.groupby("display_name"):
@@ -183,7 +166,7 @@ def search(
     else:
         for metric_display_name, metric_df in df.groupby("display_name"):
             columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
-        df_result = sort_by_tickers(prepare_current_metrics_formatted_df(df, "console"), sorted_tickers)
+        df_result = sort_by_tickers(prepare_current_metrics_formatted_df(df, "console", include_period), sorted_tickers)
         if include_period:
             df_result = reindex_df(df_result, metric_names)
         table = df2Table(
