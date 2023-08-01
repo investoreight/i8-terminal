@@ -11,7 +11,7 @@ from pandas import DataFrame, read_csv
 
 from i8_terminal.common.layout import format_metrics_df
 from i8_terminal.common.stock_info import get_stocks_df
-from i8_terminal.common.utils import is_cached_file_expired, reverse_period, similarity
+from i8_terminal.common.utils import is_cached_file_expired, similarity
 from i8_terminal.config import APP_SETTINGS, SETTINGS_FOLDER
 
 
