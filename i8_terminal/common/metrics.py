@@ -148,15 +148,7 @@ def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFr
 def prepare_current_metrics_formatted_df(df: DataFrame, target: str, include_period: bool = False) -> DataFrame:
     formatted_df = format_metrics_df(df, target)
     if include_period:
-        formatted_df.rename(columns={"period": "Period"}, inplace=True)
-        formatted_df = formatted_df.pivot(
-            index=["Ticker", "Period"], columns="display_name", values="value"
-        ).reset_index()
-        formatted_df["reversed_period"] = formatted_df.apply(lambda row: reverse_period(row.Period), axis=1)
-        formatted_df.sort_values(["Ticker", "reversed_period"], ascending=False, inplace=True)
-        formatted_df.drop(columns=["reversed_period"], inplace=True)
-        formatted_df["Period"].replace("", "NA", inplace=True)
-        return formatted_df
+        formatted_df["value"] = formatted_df.apply(lambda x: f"{x['value']}\n({x['period']})" if x["period"] else x["value"], axis=1)
     return (
         formatted_df.pivot(index="Ticker", columns="display_name", values="value")
         .reset_index(level=0)
