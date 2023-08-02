@@ -23,6 +23,7 @@ from i8_terminal.types.output_param_type import OutputParamType
 from i8_terminal.types.period_type_param_type import PeriodTypeParamType
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
 from i8_terminal.types.screening_condition_param_type import ScreeningConditionParamType
+from i8_terminal.types.screening_profile_param_type import ScreeningProfileParamType
 from i8_terminal.types.sort_order_param_type import SortOrderParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
 from i8_terminal.types.user_watchlist_tickers_param_type import (
@@ -125,6 +126,14 @@ class I8Completer(ClickCompleter):
                         incomplete if incomplete else " ", True
                     ):  # type: ignore
                         choices.append(Completion(text_type(metric_view), -len(incomplete), display_meta=desc))
+                elif type(matched_param.type) is ScreeningProfileParamType:
+                    filter_choices = False
+                    parts = ctx.incomplete.split(",")
+                    incomplete = parts[-1] if len(parts) > 0 else " "
+                    for (profile, desc) in matched_param.type.get_suggestions(
+                        incomplete if incomplete else " ", True
+                    ):  # type: ignore
+                        choices.append(Completion(text_type(profile), -len(incomplete), display_meta=desc))
                 elif type(matched_param.type) is MetricIdentifierParamType:
                     param_type = "metric"
                     filter_choices = False
