@@ -28,6 +28,8 @@ RELATIVE_PERIOD_TYPES: Dict[str, str] = {
     "Q": ".q",
 }
 
+DEFAULT_PERIOD_TYPES_MAPPER: Dict[str, str] = {"D": "d", "R": "r", "FY": "mry", "": ""}
+
 
 def prepare_screen_df(
     conditions: List[str], metrics: str, sort_by: Optional[str], sort_order: Optional[str]
@@ -59,11 +61,11 @@ def sort_by_tickers(df: pd.DataFrame, sorted_tickers: List[str]) -> pd.DataFrame
     return df
 
 
-def reindex_df(df: pd.DataFrame, metrics_include_periods: List[str]) -> pd.DataFrame:
+def reindex_df(df: pd.DataFrame, metrics_include_sector_stats: List[str]) -> pd.DataFrame:
     column_orders = list(df.columns)
-    for metric_period in set(metrics_include_periods):
-        column_orders.pop(column_orders.index(f"{metric_period} (Period)"))
-        column_orders.insert(column_orders.index(metric_period), f"{metric_period} (Period)")
+    for metric_sector_stats in set(metrics_include_sector_stats):
+        column_orders.pop(column_orders.index(f"Sector Stats ({metric_sector_stats})"))
+        column_orders.insert(column_orders.index(metric_sector_stats) + 1, f"Sector Stats ({metric_sector_stats})")
     return df.reindex(columns=column_orders)
 
 
@@ -79,6 +81,14 @@ def reindex_df(df: pd.DataFrame, metrics_include_periods: List[str]) -> pd.DataF
 )
 @click.option(
     "--view_name", "view_name", "-v", type=MetricViewParamType(), help="Metric view name in configuration file."
+)
+@click.option(
+    "--include_sector_stats",
+    "include_sector_stats",
+    "-s",
+    is_flag=True,
+    default=False,
+    help="Add sector stats in the output.",
 )
 @click.option(
     "--metrics",
@@ -103,6 +113,7 @@ def reindex_df(df: pd.DataFrame, metrics_include_periods: List[str]) -> pd.DataF
 def search(
     condition: Tuple[str],
     view_name: Optional[str],
+    include_sector_stats: bool,
     metrics: Optional[str],
     export_path: Optional[str],
     sort_by: Optional[str],
@@ -119,10 +130,15 @@ def search(
             style="yellow",
         )
         return
+
     if view_name:
         metrics = ",".join(get_view_metrics(view_name))
+
+    metrics = metrics + ",sector" if include_sector_stats else metrics
+
     with console.status("Fetching data...", spinner="material"):
         sorted_tickers, df = prepare_screen_df(list(condition), metrics, sort_by, sort_order)  # type: ignore
+
     if df is None:
         console.print("No data found for the provided screen conditions", style="yellow")
         return
@@ -138,6 +154,46 @@ def search(
         else metric["display_name"],
         axis=1,
     )
+
+    sector_stats = None
+    df_metric_names: List[str] = []
+    if include_sector_stats:
+        ticker_sectors = df[df["metric_name"] == "sector"][["Ticker", "value"]].set_index("Ticker")
+        ticker_sectors["value"] = ticker_sectors["value"].apply(lambda x: x.replace(" ", "-").lower())
+        ticker_sectors = ticker_sectors.to_dict()["value"]
+        # metrics = metrics + ",sector"
+        result = investor8_sdk.MetricsApi().get_metrics_statistics(metrics=metrics, in_millions=False)
+        sector_stats = result.metrics if result else None
+        period_rows = []
+        new_df = df[df["metric_name"] != "sector"]
+        new_df["period_type"] = new_df.apply(
+            lambda x: x["input_metric"].split(".")[1]
+            if len(x["input_metric"].split(".")) == 2
+            else DEFAULT_PERIOD_TYPES_MAPPER[x["default_period_type"]],
+            axis=1,
+        )
+        for index, row in new_df.iterrows():
+            if row["display_format"] not in ["str"] and row["period_type"]:
+                metric_period = f"{row['metric_name']}.{row['period_type']}"
+                value = sector_stats[metric_period].get(ticker_sectors.get(row["Ticker"], {}), {}).get("median")
+                # if not value:
+                #     continue
+                display_name = f"Sector Stats ({row['display_name']})"
+                df_metric_names.append(row["display_name"])
+                period_rows.append(
+                    {
+                        "Ticker": row["Ticker"],
+                        "metric_name": row["metric_name"],
+                        "input_metric": row["input_metric"],
+                        "value": value if value else "",
+                        "display_name": display_name,
+                        "data_format": "str",
+                        "display_format": "str",
+                    }
+                )
+        df = new_df.copy()
+        df = pd.concat([pd.DataFrame(period_rows), df], ignore_index=True, axis=0)
+
     metric_names: List[str] = []
     if include_period:
         period_rows = []
@@ -149,8 +205,8 @@ def search(
                         "Ticker": row["Ticker"],
                         "metric_name": row["metric_name"],
                         "input_metric": row["input_metric"],
-                        "value": row["period"],
-                        "display_name": f"{row['display_name']} (Period)",
+                        "value": row["period"],  #
+                        "display_name": f"{row['display_name']} (Period)",  #
                         "data_format": "str",
                         "display_format": "str",
                     }
@@ -184,8 +240,8 @@ def search(
         for metric_display_name, metric_df in df.groupby("display_name"):
             columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
         df_result = sort_by_tickers(prepare_current_metrics_formatted_df(df, "console"), sorted_tickers)
-        if include_period:
-            df_result = reindex_df(df_result, metric_names)
+        if include_sector_stats:
+            df_result = reindex_df(df_result, set(metric_names))
         table = df2Table(
             df_result,
             columns_justify=columns_justify,
