@@ -134,7 +134,7 @@ def search(
     if view_name:
         metrics = ",".join(get_view_metrics(view_name))
 
-    metrics = metrics + ",sector" if include_sector_stats else metrics
+    metrics = metrics + ",sector" if include_sector_stats and metrics else metrics
 
     with console.status("Fetching data...", spinner="material"):
         sorted_tickers, df = prepare_screen_df(list(condition), metrics, sort_by, sort_order)  # type: ignore
@@ -241,7 +241,7 @@ def search(
             columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
         df_result = sort_by_tickers(prepare_current_metrics_formatted_df(df, "console"), sorted_tickers)
         if include_sector_stats:
-            df_result = reindex_df(df_result, set(metric_names))
+            df_result = reindex_df(df_result, list(set(metric_names)))
         table = df2Table(
             df_result,
             columns_justify=columns_justify,
