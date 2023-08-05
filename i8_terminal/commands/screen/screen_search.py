@@ -161,7 +161,6 @@ def search(
         ticker_sectors = df[df["metric_name"] == "sector"][["Ticker", "value"]].set_index("Ticker")
         ticker_sectors["value"] = ticker_sectors["value"].apply(lambda x: x.replace(" ", "-").lower())
         ticker_sectors = ticker_sectors.to_dict()["value"]
-        # metrics = metrics + ",sector"
         result = investor8_sdk.MetricsApi().get_metrics_statistics(metrics=metrics, in_millions=False)
         sector_stats = result.metrics if result else None
         period_rows = []
@@ -176,8 +175,6 @@ def search(
             if row["display_format"] not in ["str"] and row["period_type"]:
                 metric_period = f"{row['metric_name']}.{row['period_type']}"
                 value = sector_stats[metric_period].get(ticker_sectors.get(row["Ticker"], {}), {}).get("median")
-                # if not value:
-                #     continue
                 display_name = f"Sector Stats ({row['display_name']})"
                 df_metric_names.append(row["display_name"])
                 period_rows.append(
