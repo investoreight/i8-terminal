@@ -131,10 +131,16 @@ def concat_and(items: List[str]) -> str:
     return " and ".join(", ".join(items).rsplit(", ", 1))
 
 
-def get_matched_params(ctx: CompleterContext, command: click.Command, document: Document) -> List[click.Option]:
+def get_matched_params(
+    ctx: CompleterContext, command: click.Command, document: Document
+) -> Optional[List[click.Option]]:
     if not document.is_cursor_at_the_end:
         command_string = document.current_line
         cursor_position = document.cursor_position
+        if document.char_before_cursor == " " and not document.current_line_before_cursor.split(" ")[-2].startswith(
+            "-"
+        ):
+            return None
         options_positions = [
             (o, cursor_position - command_string.find(o))
             for c in command.params

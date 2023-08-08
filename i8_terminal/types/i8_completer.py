@@ -46,9 +46,9 @@ class I8Completer(ClickCompleter):
         choices = []
         filter_choices = True
 
-        if ctx.last_option:
+        if ctx.last_option or not document.is_cursor_at_the_end:
             matched_params = get_matched_params(ctx, command, document)
-            if len(matched_params) > 0:
+            if matched_params and len(matched_params) > 0:
                 matched_param = matched_params[0]
                 if type(matched_param.type) is click.types.Choice:
                     for c in matched_param.type.choices:
@@ -192,6 +192,17 @@ class I8Completer(ClickCompleter):
                                         display_meta=f"({param.opts[-1]}) {param.help}",
                                     )
                                 )
+            else:
+                for param in command.params:
+                    if isinstance(param, click.Option):
+                        if not any(o in ctx.used_options for o in param.opts) or param.multiple:
+                            choices.append(
+                                Completion(
+                                    text_type(max(param.opts, key=len)),
+                                    -len(ctx.incomplete),
+                                    display_meta=f"({param.opts[-1]}) {param.help}",
+                                )
+                            )
         else:
             for param in command.params:
                 if isinstance(param, click.Option):
