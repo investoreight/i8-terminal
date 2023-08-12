@@ -188,10 +188,9 @@ def create_fig(
 
 
 def historical_metrics_df2tree(df: DataFrame) -> Tree:
+    period_dict = dict(df[["PeriodDateTime", "Period"]].sort_values("PeriodDateTime", ascending=False).values)
     df = df.pivot(index=["Metric", "Ticker"], columns="Period", values="value").reset_index()
-    reversed_periods = [reverse_period(p) for p in list(df.columns[2:])]
-    reversed_periods.sort(reverse=True)
-    sorted_periods = [reverse_period(rp) for rp in reversed_periods]
+    sorted_periods = [period_dict[p] for p in period_dict.keys()]
     col_width = 15
     plot_title = f"Historical {' and '.join(list(set(df['Metric'])))}"
     tree = Tree(Panel(plot_title, width=50))
@@ -332,7 +331,14 @@ def historical(
     with console.status("Fetching data...", spinner="material") as status:
         df = get_historical_metrics_df(tickers_list, metrics_list, period_type, from_date, to_date)
         df = df.sort_values(["PeriodDateTime"], ascending=False).groupby(["Ticker", "Metric", "Period"]).head(1)
-        if len(df["default_period_type"].unique()) > 1:
+        if not period_type:
+            if len(df["default_period_type"].unique()) > 1:
+                console.print(
+                    "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type. Check `metrics describe` command to find more about metrics.",  # noqa: E501
+                    style="yellow",
+                )
+                return
+        if len(df["metric_name"].unique()) < len(metrics_list):
             console.print(
                 "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type. Check `metrics describe` command to find more about metrics.",  # noqa: E501
                 style="yellow",
