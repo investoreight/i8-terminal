@@ -23,7 +23,7 @@ from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.formatting import data_format_mapper
 from i8_terminal.common.layout import df2Table, format_metrics_df
 from i8_terminal.common.metrics import get_all_metrics_type_and_data_types_df
-from i8_terminal.common.stock_info import validate_tickers
+from i8_terminal.common.stock_info import get_tickers_list, validate_tickers
 from i8_terminal.common.utils import PlotType, reverse_period
 from i8_terminal.config import get_table_style
 from i8_terminal.types.chart_param_type import ChartParamType
@@ -305,7 +305,7 @@ def historical(
     if to_date:
         command_path_parsed_options_dict["--to_date"] = to_date.strftime("%Y-%m-%d")
     command_path = get_click_command_path(ctx, command_path_parsed_options_dict)
-    tickers_list = tickers.replace(" ", "").upper().split(",")
+    tickers_list = get_tickers_list(tickers.replace(" ", ""))
     if len(tickers_list) > 5:
         click.echo(click.style("You can enter up to 5 tickers.", fg="yellow"))
         return
