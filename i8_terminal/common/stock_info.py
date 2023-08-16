@@ -1,4 +1,5 @@
 import os
+from ast import literal_eval
 from typing import List, Optional, Tuple
 
 import click
@@ -91,3 +92,16 @@ def validate_tickers(ctx: click.Context, param: str, value: str) -> Optional[str
             )
             ctx.exit()
     return value
+
+
+def get_tickers_list(tickers: str) -> List[str]:
+    stocks_peers = get_stocks_df()[["ticker", "peers"]].set_index("ticker").to_dict()["peers"]
+    tickers_list = []
+    for tk in tickers.split(","):
+        if "peers" in tk and stocks_peers.get(tk.split(".")[0]):
+            ticker_name = tk.split(".")[0]
+            tickers_list.append(ticker_name)
+            tickers_list.extend(literal_eval(stocks_peers.get(ticker_name)))
+        else:
+            tickers_list.append(tk)
+    return tickers_list

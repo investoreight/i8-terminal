@@ -13,7 +13,7 @@ from i8_terminal.commands.company import company
 from i8_terminal.common.cli import pass_command
 from i8_terminal.common.layout import format_metrics_df
 from i8_terminal.common.metrics import get_current_metrics_df
-from i8_terminal.common.stock_info import validate_tickers
+from i8_terminal.common.stock_info import get_tickers_list, validate_tickers
 from i8_terminal.common.utils import export_to_html
 from i8_terminal.config import APP_SETTINGS, get_table_style
 from i8_terminal.types.ticker_param_type import TickerParamType
@@ -62,8 +62,8 @@ def get_stock_infos_df(tickers: str, target: str) -> Optional[DataFrame]:
     )
 
 
-def companies_df2tree(df: DataFrame) -> Tree:
-    tickers_list = df.columns.to_list()[1:-1]
+def companies_df2tree(df: DataFrame, tickers: str) -> Tree:
+    tickers_list = get_tickers_list(tickers)
     col_width = 40
     plot_title = f"Comparison of {', '.join(tickers_list)}"
     plot_title = " and ".join(plot_title.rsplit(", ", 1))
@@ -164,7 +164,7 @@ def compare(tickers: str, export_path: Optional[str]) -> None:
             return
     if export_path:
         if export_path.split(".")[-1] == "html":
-            tree = companies_df2tree(stock_infos_df)
+            tree = companies_df2tree(stock_infos_df, tickers)
             export_to_html(tree, export_path)
             return
         export_companies_data(
@@ -172,5 +172,5 @@ def compare(tickers: str, export_path: Optional[str]) -> None:
             export_path,
         )
     else:
-        tree = companies_df2tree(stock_infos_df)
+        tree = companies_df2tree(stock_infos_df, tickers)
         console.print(tree)
