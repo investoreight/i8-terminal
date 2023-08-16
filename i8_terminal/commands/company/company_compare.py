@@ -62,8 +62,8 @@ def get_stock_infos_df(tickers: str, target: str) -> Optional[DataFrame]:
     )
 
 
-def companies_df2tree(df: DataFrame, tickers: str) -> Tree:
-    tickers_list = tickers.replace(" ", "").upper().split(",")
+def companies_df2tree(df: DataFrame) -> Tree:
+    tickers_list = df.columns.to_list()[1:-1]
     col_width = 40
     plot_title = f"Comparison of {', '.join(tickers_list)}"
     plot_title = " and ".join(plot_title.rsplit(", ", 1))
@@ -164,7 +164,7 @@ def compare(tickers: str, export_path: Optional[str]) -> None:
             return
     if export_path:
         if export_path.split(".")[-1] == "html":
-            tree = companies_df2tree(stock_infos_df, tickers)
+            tree = companies_df2tree(stock_infos_df)
             export_to_html(tree, export_path)
             return
         export_companies_data(
@@ -172,5 +172,5 @@ def compare(tickers: str, export_path: Optional[str]) -> None:
             export_path,
         )
     else:
-        tree = companies_df2tree(stock_infos_df, tickers)
+        tree = companies_df2tree(stock_infos_df)
         console.print(tree)
