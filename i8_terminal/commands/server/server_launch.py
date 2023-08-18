@@ -11,10 +11,14 @@ from i8_terminal.commands.server import server
 from i8_terminal.common.cli import pass_command
 
 
-def create_resp(result):
+def create_resp(result, resp_format):
     res = {}
+
+    if resp_format == "html":
+        return result.to_html(format="humanize")
+
+    df = result.to_df("humanize", True)
     res["text"] = "Here is a sample text response for the query."
-    df = result._wide_df("humanize", "suffix")
     res["table"] = df.to_dict(orient="records")
 
     fig = result.to_plot(show=False)
@@ -54,6 +58,6 @@ def launch(port: Optional[int]) -> None:
 
         res = ctx.invoke(command, *args, **kwargs)
 
-        return create_resp(res)
+        return create_resp(res, request.args.get("_resp_format"))
 
     app.run(port=port or 8085)

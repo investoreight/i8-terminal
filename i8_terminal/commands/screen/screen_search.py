@@ -145,7 +145,7 @@ def search(
     if profile:
         conds_list, sort_by, sort_order = get_screening_profile(profile)
     else:
-        conds_list = list(conditions)  # type: ignore
+        conds_list = conditions.split(",")
 
     console = Console()
     try:

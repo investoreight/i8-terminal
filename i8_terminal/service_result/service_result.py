@@ -27,7 +27,7 @@ class ServiceResult:
     def get_info(self) -> str:
         return self._info
 
-    def to_df(self, format: str = "default") -> DataFrame:
+    def to_df(self, format: str = "default", include_raw=False) -> DataFrame:
         """
         Args:
             formating: possible options are
@@ -35,6 +35,9 @@ class ServiceResult:
                 `default`: number (e.g. 123456.7890 => 123,456.79) and display formatting (net_income => Net Income)
                 `humanize`: numbers are formatted to human-friendly formats (e.g. 1200000 => $1.20 M)
         """
+        if include_raw:
+            return self._wide_df(format, "suffix")
+
         return self._format_df(self._df.copy(), format)
 
     def _wide_df(self, format: str = "humanize", raw_col_names="default") -> DataFrame:
@@ -86,13 +89,17 @@ class ServiceResult:
     def to_plot(self, x: str, y: List[str], kind: str = "bar", show=True) -> Any:
         return self._to_plot(x, y, kind, show)
 
-    def to_html(self, export_path, format: str = "default") -> str:
+    def to_html(self, export_path: str = None, format: str = "default") -> str:
         table = self._to_rich_table(format, "default")
         console = Console(record=True, file=StringIO(), width=800)
         console.print(table)
         res = console.export_html(inline_styles=True, code_format="<pre>{code}</pre>")
-        with open(export_path, "w", encoding="utf-8") as file:
-            file.write(res)
+
+        if export_path:
+            with open(export_path, "w", encoding="utf-8") as file:
+                file.write(res)
+
+        return res
 
     def _to_plot(self, x: str, y: List[str], kind: str = "bar", show=True) -> Any:
         df = self._df[[x] + y]
