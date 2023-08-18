@@ -30,7 +30,7 @@ class I8AutoSuggest(AutoSuggest):
 
         if ctx.last_option:
             matched_params = get_matched_params(ctx, command, document)
-            if len(matched_params) > 0:
+            if matched_params and len(matched_params) > 0:
                 matched_param = matched_params[0]
                 if type(matched_param.type) is click.types.DateTime:
                     return Suggestion("YYYY-MM-DD"[len(ctx.incomplete) :])  # noqa: E203

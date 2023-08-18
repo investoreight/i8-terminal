@@ -23,6 +23,7 @@ from i8_terminal.types.output_param_type import OutputParamType
 from i8_terminal.types.period_type_param_type import PeriodTypeParamType
 from i8_terminal.types.price_period_param_type import PricePeriodParamType
 from i8_terminal.types.screening_condition_param_type import ScreeningConditionParamType
+from i8_terminal.types.screening_profile_param_type import ScreeningProfileParamType
 from i8_terminal.types.sort_order_param_type import SortOrderParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
 from i8_terminal.types.user_watchlist_tickers_param_type import (
@@ -45,9 +46,9 @@ class I8Completer(ClickCompleter):
         choices = []
         filter_choices = True
 
-        if ctx.last_option:
+        if ctx.last_option or not document.is_cursor_at_the_end:
             matched_params = get_matched_params(ctx, command, document)
-            if len(matched_params) > 0:
+            if matched_params and len(matched_params) > 0:
                 matched_param = matched_params[0]
                 if type(matched_param.type) is click.types.Choice:
                     for c in matched_param.type.choices:
@@ -125,6 +126,14 @@ class I8Completer(ClickCompleter):
                         incomplete if incomplete else " ", True
                     ):  # type: ignore
                         choices.append(Completion(text_type(metric_view), -len(incomplete), display_meta=desc))
+                elif type(matched_param.type) is ScreeningProfileParamType:
+                    filter_choices = False
+                    parts = ctx.incomplete.split(",")
+                    incomplete = parts[-1] if len(parts) > 0 else " "
+                    for (profile, desc) in matched_param.type.get_suggestions(
+                        incomplete if incomplete else " ", True
+                    ):  # type: ignore
+                        choices.append(Completion(text_type(profile), -len(incomplete), display_meta=desc))
                 elif type(matched_param.type) is MetricIdentifierParamType:
                     param_type = "metric"
                     filter_choices = False
@@ -183,6 +192,17 @@ class I8Completer(ClickCompleter):
                                         display_meta=f"({param.opts[-1]}) {param.help}",
                                     )
                                 )
+            else:
+                for param in command.params:
+                    if isinstance(param, click.Option):
+                        if not any(o in ctx.used_options for o in param.opts) or param.multiple:
+                            choices.append(
+                                Completion(
+                                    text_type(max(param.opts, key=len)),
+                                    -len(ctx.incomplete),
+                                    display_meta=f"({param.opts[-1]}) {param.help}",
+                                )
+                            )
         else:
             for param in command.params:
                 if isinstance(param, click.Option):

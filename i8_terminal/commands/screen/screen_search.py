@@ -21,6 +21,7 @@ from i8_terminal.services.screen import search as screen_search
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 from i8_terminal.types.metric_view_param_type import MetricViewParamType
 from i8_terminal.types.screening_condition_param_type import ScreeningConditionParamType
+from i8_terminal.types.screening_profile_param_type import ScreeningProfileParamType
 from i8_terminal.types.sort_order_param_type import SortOrderParamType
 
 # def prepare_screen_df(
@@ -61,19 +62,22 @@ def reindex_df(df: pd.DataFrame, metrics_include_periods: List[str]) -> pd.DataF
     return df.reindex(columns=column_orders)
 
 
+def get_screening_profile(profile: str) -> Tuple[List[str], str, str]:
+    screening_profile = investor8_sdk.ScreenerApi().get_screening_profile_by_name(profile)
+    return screening_profile.conditions.split(","), screening_profile.sort_metric, screening_profile.sort_order
+
+
 @screen.command()
+@click.option("--profile", "profile", "-p", type=ScreeningProfileParamType(), help="Screening profile name.")
 @click.option(
     "--conditions",
     "conditions",
     "-c",
-    required=True,
     type=ScreeningConditionParamType(),
     multiple=True,
     help="Conditions of search.",
 )
-@click.option(
-    "--view_name", "view_name", "-v", type=MetricViewParamType(), help="Metric view name in configuration file."
-)
+@click.option("--view_name", "view_name", "-v", type=MetricViewParamType(), help="Metric view name.")
 @click.option(
     "--metrics",
     "metrics",
@@ -89,13 +93,12 @@ def reindex_df(df: pd.DataFrame, metrics_include_periods: List[str]) -> pd.DataF
     type=MetricIdentifierParamType(),
     help="Metric to sort the output by.",
 )
-@click.option(
-    "--sort_order", "sort_order", "-so", type=SortOrderParamType(), help="Order to sort the output by.", default="desc"
-)
+@click.option("--sort_order", "sort_order", "-so", type=SortOrderParamType(), help="Order to sort the output by.")
 @click.option("--include_period", "-ip", is_flag=True, default=False, help="Output will contain the periods.")
 @pass_command
 def search(
-    conditions: str,
+    profile: Optional[str],
+    conditions: Optional[Tuple[str]],
     view_name: Optional[str],
     metrics: Optional[str],
     export_path: Optional[str],
@@ -113,12 +116,40 @@ def search(
             style="yellow",
         )
         return
+    if not conditions and not profile:
+        console.print("The 'conditions' or 'profile' parameter must be provided", style="yellow")
+        return
+    if profile and conditions:
+        console.print(
+            "The 'conditions' or 'profile' options are mutually exclusive. Provide a value only for one of them.",
+            style="yellow",
+        )
+        return
+    if profile and sort_by:
+        console.print(
+            "The 'sort_by' or 'profile' options are mutually exclusive. Provide a value only for one of them.",
+            style="yellow",
+        )
+        return
+    if profile and sort_order:
+        console.print(
+            "The 'sort_order' or 'profile' options are mutually exclusive. Provide a value only for one of them.",
+            style="yellow",
+        )
+        return
+    if not profile and not sort_order:
+        sort_order = "desc"
     if view_name:
         metrics = ",".join(get_view_metrics(view_name))
 
+    if profile:
+        conds_list, sort_by, sort_order = get_screening_profile(profile)
+    else:
+        conds_list = list(conditions)  # type: ignore
+
     console = Console()
     try:
-        res = screen_search(conditions, metrics, sort_by)
+        res = screen_search(conds_list, metrics, sort_by)
         if is_server_call():
             return res
     except I8Exception as ex:
@@ -147,7 +178,7 @@ def search(
     return
 
     with console.status("Fetching data...", spinner="material"):
-        sorted_tickers, df = prepare_screen_df(list(condition), metrics, sort_by, sort_order)  # type: ignore
+        sorted_tickers, df = prepare_screen_df(conditionList, metrics, sort_by, sort_order)  # type: ignore
     if df is None:
         console.print("No data found for the provided screen conditions", style="yellow")
         return
