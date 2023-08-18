@@ -24,27 +24,6 @@ from i8_terminal.types.screening_condition_param_type import ScreeningConditionP
 from i8_terminal.types.screening_profile_param_type import ScreeningProfileParamType
 from i8_terminal.types.sort_order_param_type import SortOrderParamType
 
-# def prepare_screen_df(
-#     conditions: List[str], metrics: str, sort_by: Optional[str], sort_order: Optional[str]
-# ) -> Tuple[List[str], Optional[pd.DataFrame]]:
-#     max_count = 20
-#     for index, condition in enumerate(conditions):
-#         condition_parts = condition.split(":")
-#         metric = condition_parts[0]
-#         metric_parts = metric.split(".")
-#         if len(metric_parts) == 1:
-#             metric_default_period_type = get_metric_info(metric_parts[0])["default_period_type"]
-#             period_type = RELATIVE_PERIOD_TYPES.get(metric_default_period_type, "")
-#             metric_new = f"{metric}{period_type}"
-#             conditions[index] = conditions[index].replace(metric, metric_new)
-#     if not sort_by:
-#         sort_by = metrics.split(",")[0]
-#     tickers_list = investor8_sdk.ScreenerApi().search(
-#         conditions=",".join(conditions), order_by=sort_by, order_direction=sort_order
-#     )
-#     screen_df = get_current_metrics_df(",".join(tickers_list[:max_count]), metrics)
-#     return tickers_list, screen_df
-
 
 def sort_by_tickers(df: pd.DataFrame, sorted_tickers: List[str]) -> pd.DataFrame:
     sorterIndex = dict(zip(sorted_tickers, range(len(sorted_tickers))))
@@ -162,6 +141,7 @@ def search(
     if info:
         console.print(info)
 
+    # TODO: implements xlsx and --include_period
     if export_path:
         extension = export_path.split(".")[-1]
         if extension == "html":
