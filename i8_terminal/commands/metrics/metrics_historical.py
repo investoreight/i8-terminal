@@ -253,7 +253,6 @@ def historical_metrics_df2tree(df: DataFrame) -> Tree:
     "--plot_type",
     "-p",
     type=ChartParamType([("bar", "Bar chart"), ("line", "Line chart")]),
-    default="line",
     help="Plot can be bar or line chart.",
 )
 @click.option("--pivot", "-pv", is_flag=True, default=False, help="Output will be pivot table.")
@@ -271,7 +270,7 @@ def historical(
     tickers: str,
     metrics: str,
     output: str,
-    plot_type: str,
+    plot_type: Optional[str],
     pivot: bool,
     period_type: Optional[str],
     from_date: Optional[datetime],
@@ -296,7 +295,7 @@ def historical(
         "--tickers": tickers,
         "--metrics": metrics,
         "--output": output,
-        "--plot_type": plot_type,
+        "--plot_type": plot_type if plot_type else "line",
     }
     if period_type:
         command_path_parsed_options_dict["--period_type"] = period_type
@@ -309,7 +308,7 @@ def historical(
     if len(tickers_list) > 5:
         click.echo(click.style("You can enter up to 5 tickers.", fg="yellow"))
         return
-    if plot_type not in ["bar", "line"]:
+    if plot_type and plot_type not in ["bar", "line"]:
         click.echo(click.style(f"`{plot_type}` is not valid chart type.", fg="yellow"))
         return
     cmd_context = {
@@ -344,12 +343,12 @@ def historical(
                 style="yellow",
             )
             return
-        if output == "plot":
+        if output == "plot" or plot_type:
             cmd_context["plot_title"] = f"Historical {' and '.join(list(set(df['Metric'])))}"
             status.update("Generating plot...")
-            fig = create_fig(df, cmd_context, tickers_list, plot_type, metrics_type_df)
+            fig = create_fig(df, cmd_context, tickers_list, plot_type if plot_type else "line", metrics_type_df)
 
-    if output == "plot":
+    if output == "plot" or plot_type:
         serve_plot(fig, cmd_context)
         return
     formatted_df = format_metrics_df(df, "console")
