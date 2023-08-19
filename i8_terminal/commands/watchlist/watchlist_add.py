@@ -8,7 +8,7 @@ from rich.style import Style
 from i8_terminal.app.layout import get_terminal_command_layout
 from i8_terminal.commands.watchlist import watchlist
 from i8_terminal.common.cli import pass_command
-from i8_terminal.common.stock_info import validate_tickers
+from i8_terminal.common.stock_info import get_tickers_list, validate_tickers
 from i8_terminal.config import USER_SETTINGS
 from i8_terminal.types.ticker_param_type import TickerParamType
 from i8_terminal.types.user_watchlists_param_type import UserWatchlistsParamType
@@ -46,7 +46,7 @@ def add(name: str, tickers: str) -> None:
 
     """
     console = Console()
-    tickers_list = tickers.replace(" ", "").upper().split(",")
+    tickers_list = get_tickers_list(tickers.replace(" ", ""))
     with console.status("Updating Watchlist...", spinner="material"):
         add_tickers_to_watchlist(name, tickers_list)
     console.print(

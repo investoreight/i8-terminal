@@ -16,7 +16,7 @@ from i8_terminal.common.price import (
     get_historical_price_df,
     get_historical_price_export_df,
 )
-from i8_terminal.common.stock_info import validate_tickers
+from i8_terminal.common.stock_info import get_tickers_list, validate_tickers
 from i8_terminal.common.utils import (
     PlotType,
     export_data,
@@ -124,7 +124,7 @@ def compare(
     command_path = get_click_command_path(ctx)
     period = period.replace(" ", "").upper()
     period_code = get_period_code(period)
-    tickers_list = tickers.replace(" ", "").upper().split(",")
+    tickers_list = get_tickers_list(tickers.replace(" ", ""))
     plot_title = f"Comparison of {', '.join(tickers_list)} prices"
     plot_title = " and ".join(plot_title.rsplit(", ", 1))
 

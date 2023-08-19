@@ -17,7 +17,9 @@ def get_user_watchlist_tickers() -> List[Tuple[str, str]]:
 class UserWatchlistTickersParamType(AutoCompleteChoice):
     name = "userwatchlisttickers"
 
-    def get_suggestions(self, keyword: str, pre_populate: bool = False) -> List[Tuple[str, str]]:
+    def get_suggestions(
+        self, keyword: str, pre_populate: bool = False, include_peers: bool = False
+    ) -> List[Tuple[str, str]]:
         if not self.is_loaded:
             self.set_choices(get_user_watchlist_tickers())
 
