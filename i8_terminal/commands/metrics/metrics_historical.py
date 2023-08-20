@@ -188,9 +188,15 @@ def create_fig(
 
 
 def historical_metrics_df2tree(df: DataFrame) -> Tree:
-    period_dict = dict(df[["PeriodDateTime", "Period"]].sort_values("PeriodDateTime", ascending=False).values)
-    df = df.pivot(index=["Metric", "Ticker"], columns="Period", values="value").reset_index()
-    sorted_periods = [period_dict[p] for p in period_dict.keys()]
+    if any(set(["D", "R"]) & set(df["default_period_type"].unique())):
+        period_dict = dict(df[["PeriodDateTime", "Period"]].sort_values("PeriodDateTime", ascending=False).values)
+        sorted_periods = [period_dict[p] for p in period_dict.keys()]
+        df = df.pivot(index=["Metric", "Ticker"], columns="Period", values="value").reset_index()
+    else:
+        df = df.pivot(index=["Metric", "Ticker"], columns="Period", values="value").reset_index()
+        reversed_periods = [reverse_period(p) for p in list(df.columns[2:])]
+        reversed_periods.sort(reverse=True)
+        sorted_periods = [reverse_period(rp) for rp in reversed_periods]
     col_width = 15
     plot_title = f"Historical {' and '.join(list(set(df['Metric'])))}"
     tree = Tree(Panel(plot_title, width=50))
@@ -304,7 +310,7 @@ def historical(
     if to_date:
         command_path_parsed_options_dict["--to_date"] = to_date.strftime("%Y-%m-%d")
     command_path = get_click_command_path(ctx, command_path_parsed_options_dict)
-    tickers_list = get_tickers_list(tickers.replace(" ", ""))
+    tickers_list = get_tickers_list(tickers.replace(" ", "").upper())
     if len(tickers_list) > 5:
         click.echo(click.style("You can enter up to 5 tickers.", fg="yellow"))
         return
@@ -359,11 +365,20 @@ def historical(
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in df.groupby("Metric"):
         columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
-    formatted_df = formatted_df.pivot(
-        index=["Ticker", "Period", "PeriodDateTime"], columns="Metric", values="value"
-    ).reset_index()
-    formatted_df.sort_values(["Ticker", "PeriodDateTime"], ascending=False, inplace=True)
-    formatted_df.drop(columns=["PeriodDateTime"], inplace=True)
+    if any(set(["D", "R"]) & set(formatted_df["default_period_type"].unique())):
+        formatted_df = formatted_df.pivot(
+            index=["Ticker", "Period", "PeriodDateTime"], columns="Metric", values="value"
+        ).reset_index()
+        formatted_df.sort_values(["Ticker", "PeriodDateTime"], ascending=False, inplace=True)
+        formatted_df.drop(columns=["PeriodDateTime"], inplace=True)
+    else:
+        formatted_df = formatted_df.pivot(index=["Ticker", "Period"], columns="Metric", values="value").reset_index()
+        formatted_df["reversed_period"] = formatted_df.apply(
+            lambda row: reverse_period(row.Period),
+            axis=1,
+        )
+        formatted_df.sort_values(["Ticker", "reversed_period"], ascending=False, inplace=True)
+        formatted_df.drop(columns=["reversed_period"], inplace=True)
     table = df2Table(
         formatted_df,
         columns_justify=columns_justify,

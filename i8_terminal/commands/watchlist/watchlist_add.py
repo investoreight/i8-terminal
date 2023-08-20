@@ -46,7 +46,7 @@ def add(name: str, tickers: str) -> None:
 
     """
     console = Console()
-    tickers_list = get_tickers_list(tickers.replace(" ", ""))
+    tickers_list = get_tickers_list(tickers.replace(" ", "").upper())
     with console.status("Updating Watchlist...", spinner="material"):
         add_tickers_to_watchlist(name, tickers_list)
     console.print(

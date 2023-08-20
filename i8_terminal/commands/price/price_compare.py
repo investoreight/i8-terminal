@@ -124,7 +124,7 @@ def compare(
     command_path = get_click_command_path(ctx)
     period = period.replace(" ", "").upper()
     period_code = get_period_code(period)
-    tickers_list = get_tickers_list(tickers.replace(" ", ""))
+    tickers_list = get_tickers_list(tickers.replace(" ", "").upper())
     plot_title = f"Comparison of {', '.join(tickers_list)} prices"
     plot_title = " and ".join(plot_title.rsplit(", ", 1))
 

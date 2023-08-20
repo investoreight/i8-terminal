@@ -63,7 +63,7 @@ def get_stock_infos_df(tickers: str, target: str) -> Optional[DataFrame]:
 
 
 def companies_df2tree(df: DataFrame, tickers: str) -> Tree:
-    tickers_list = get_tickers_list(tickers)
+    tickers_list = get_tickers_list(tickers.replace(" ", "").upper())
     col_width = 40
     plot_title = f"Comparison of {', '.join(tickers_list)}"
     plot_title = " and ".join(plot_title.rsplit(", ", 1))

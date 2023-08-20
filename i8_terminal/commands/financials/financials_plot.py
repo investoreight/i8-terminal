@@ -205,7 +205,7 @@ def plot(
     if to_date:
         command_path_parsed_options_dict["--to_date"] = to_date.strftime("%Y-%m-%d")
     command_path = get_click_command_path(ctx, command_path_parsed_options_dict)
-    tickers_list = get_tickers_list(tickers.replace(" ", ""))
+    tickers_list = get_tickers_list(tickers.replace(" ", "").upper())
     if len(tickers_list) > 5:
         click.echo("You can enter up to 5 tickers.")
         return

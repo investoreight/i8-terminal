@@ -81,7 +81,12 @@ def validate_ticker(ctx: click.Context, param: str, value: str) -> Optional[str]
 def validate_tickers(ctx: click.Context, param: str, value: str) -> Optional[str]:
     tickers = {d[0] for d in get_stocks(True)}
     if not ctx.resilient_parsing:
-        invalid_tickers = [*set(value.replace(" ", "").split(",")) - tickers] if value else []
+        inputted_tickers = []
+        for ticker in value.replace(" ", "").split(","):
+            splitted_ticker = ticker.split(".")
+            splitted_ticker[0] = splitted_ticker[0].upper()
+            inputted_tickers.append(".".join(splitted_ticker))
+        invalid_tickers = [*set(inputted_tickers) - tickers] if value else []
         if value and invalid_tickers:
             msg = "are not valid ticker names." if len(invalid_tickers) > 1 else "is not a valid ticker name."
             click.echo(
@@ -98,7 +103,7 @@ def get_tickers_list(tickers: str) -> List[str]:
     stocks_peers = get_stocks_df()[["ticker", "peers"]].set_index("ticker").to_dict()["peers"]
     tickers_list = []
     for tk in tickers.split(","):
-        if "peers" in tk and stocks_peers.get(tk.split(".")[0]):
+        if "peers" in tk.lower() and stocks_peers.get(tk.split(".")[0]):
             ticker_name = tk.split(".")[0]
             tickers_list.append(ticker_name)
             tickers_list.extend(literal_eval(stocks_peers.get(ticker_name)))

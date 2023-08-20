@@ -42,7 +42,7 @@ def create(name: str, tickers: str) -> None:
 
     """
     console = Console()
-    tickers_list = get_tickers_list(tickers.replace(" ", ""))
+    tickers_list = get_tickers_list(tickers.replace(" ", "").upper())
     with console.status("Creating Watchlist...", spinner="material"):
         create_watchlist(name, tickers_list)
     console.print(f"✅ Watchlist [cyan]{name}[/cyan] is created successfully!")
