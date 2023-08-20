@@ -136,7 +136,13 @@ def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFr
     return df
 
 
-def prepare_current_metrics_formatted_df(df: DataFrame, target: str, include_period: bool = False) -> DataFrame:
+def prepare_current_metrics_formatted_df(
+    df: DataFrame,
+    target: str,
+    include_period: bool = False,
+    tickers_order: Optional[List[str]] = None,
+    metrics_order: Optional[List[str]] = None,
+) -> DataFrame:
     formatted_df = format_metrics_df(df, target)
     if include_period:
         formatted_df.rename(columns={"period": "Period"}, inplace=True)
@@ -144,9 +150,18 @@ def prepare_current_metrics_formatted_df(df: DataFrame, target: str, include_per
             index=["Ticker", "Period"], columns="display_name", values="value"
         ).reset_index()
         formatted_df["reversed_period"] = formatted_df.apply(lambda row: reverse_period(row.Period), axis=1)
-        formatted_df.sort_values(["Ticker", "reversed_period"], ascending=False, inplace=True)
-        formatted_df.drop(columns=["reversed_period"], inplace=True)
+        if tickers_order:
+            sorterTickerIndex = dict(zip(tickers_order, range(len(tickers_order))))
+            formatted_df["TickerRank"] = formatted_df["Ticker"].map(sorterTickerIndex)
+            formatted_df.sort_values(["TickerRank", "reversed_period"], ascending=[True, False], inplace=True)
+            formatted_df.drop(columns=["reversed_period", "TickerRank"], inplace=True)
+        else:
+            formatted_df.sort_values("reversed_period", ascending=False, inplace=True)
+            formatted_df.drop(columns="reversed_period", inplace=True)
         formatted_df["Period"].replace("", "NA", inplace=True)
+        if metrics_order:
+            metrics_order[:0] = ["Ticker", "Period"]
+            formatted_df = formatted_df.reindex(columns=metrics_order)
         return formatted_df
     return (
         formatted_df.pivot(index="Ticker", columns="display_name", values="value")

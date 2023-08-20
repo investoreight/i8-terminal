@@ -369,16 +369,23 @@ def historical(
         formatted_df = formatted_df.pivot(
             index=["Ticker", "Period", "PeriodDateTime"], columns="Metric", values="value"
         ).reset_index()
-        formatted_df.sort_values(["Ticker", "PeriodDateTime"], ascending=False, inplace=True)
-        formatted_df.drop(columns=["PeriodDateTime"], inplace=True)
+        sorterTickerIndex = dict(zip(tickers_list, range(len(tickers_list))))
+        formatted_df["TickerRank"] = formatted_df["Ticker"].map(sorterTickerIndex)
+        formatted_df.sort_values(["TickerRank", "PeriodDateTime"], ascending=[True, False], inplace=True)
+        formatted_df.drop(columns=["TickerRank", "PeriodDateTime"], inplace=True)
     else:
         formatted_df = formatted_df.pivot(index=["Ticker", "Period"], columns="Metric", values="value").reset_index()
         formatted_df["reversed_period"] = formatted_df.apply(
             lambda row: reverse_period(row.Period),
             axis=1,
         )
-        formatted_df.sort_values(["Ticker", "reversed_period"], ascending=False, inplace=True)
-        formatted_df.drop(columns=["reversed_period"], inplace=True)
+        sorterTickerIndex = dict(zip(tickers_list, range(len(tickers_list))))
+        formatted_df["TickerRank"] = formatted_df["Ticker"].map(sorterTickerIndex)
+        formatted_df.sort_values(["TickerRank", "reversed_period"], ascending=[True, False], inplace=True)
+        formatted_df.drop(columns=["TickerRank", "reversed_period"], inplace=True)
+    metrics_order = [df.loc[df["metric_name"] == metric]["Metric"].values[0] for metric in metrics_list]
+    metrics_order[:0] = ["Ticker", "Period"]
+    formatted_df = formatted_df.reindex(columns=metrics_order)
     table = df2Table(
         formatted_df,
         columns_justify=columns_justify,

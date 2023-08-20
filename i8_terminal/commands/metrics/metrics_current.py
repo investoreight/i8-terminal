@@ -11,7 +11,7 @@ from i8_terminal.common.metrics import (
     get_view_metrics,
     prepare_current_metrics_formatted_df,
 )
-from i8_terminal.common.stock_info import validate_tickers
+from i8_terminal.common.stock_info import get_tickers_list, validate_tickers
 from i8_terminal.common.utils import export_data, export_to_html
 from i8_terminal.config import APP_SETTINGS
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
@@ -75,6 +75,8 @@ def current(tickers: str, metrics: str, view_name: Optional[str], export_path: O
         return
     for m in [*set(metric.split(".")[0] for metric in set(metrics.split(","))) - set(df["metric_name"])]:
         console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
+    tickers_order = get_tickers_list(tickers)
+    metrics_order = [df.loc[df["input_metric"] == metric]["display_name"].values[0] for metric in metrics.split(",")]
     columns_justify: Dict[str, Any] = {}
     if export_path:
         if export_path.split(".")[-1] == "html":
@@ -83,13 +85,17 @@ def current(tickers: str, metrics: str, view_name: Optional[str], export_path: O
                     "left" if metric_df["display_format"].values[0] == "str" else "right"
                 )
             table = df2Table(
-                prepare_current_metrics_formatted_df(df, "console", include_period=True),
+                prepare_current_metrics_formatted_df(
+                    df, "console", include_period=True, tickers_order=tickers_order, metrics_order=metrics_order
+                ),
                 columns_justify=columns_justify,
             )
             export_to_html(table, export_path)
             return
         export_data(
-            prepare_current_metrics_formatted_df(df, "store", include_period=True),
+            prepare_current_metrics_formatted_df(
+                df, "store", include_period=True, tickers_order=tickers_order, metrics_order=metrics_order
+            ),
             export_path,
             column_width=18,
             column_format=APP_SETTINGS["styles"]["xlsx"]["financials"]["column"],
@@ -98,6 +104,9 @@ def current(tickers: str, metrics: str, view_name: Optional[str], export_path: O
         for metric_display_name, metric_df in df.groupby("display_name"):
             columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
         table = df2Table(
-            prepare_current_metrics_formatted_df(df, "console", include_period=True), columns_justify=columns_justify
+            prepare_current_metrics_formatted_df(
+                df, "console", include_period=True, tickers_order=tickers_order, metrics_order=metrics_order
+            ),
+            columns_justify=columns_justify,
         )
         console.print(table)
