@@ -151,8 +151,7 @@ def prepare_current_metrics_formatted_df(
         ).reset_index()
         formatted_df["reversed_period"] = formatted_df.apply(lambda row: reverse_period(row.Period), axis=1)
         if tickers_order:
-            sorterTickerIndex = dict(zip(tickers_order, range(len(tickers_order))))
-            formatted_df["TickerRank"] = formatted_df["Ticker"].map(sorterTickerIndex)
+            formatted_df = add_ticker_rank_to_df(formatted_df, tickers_order)
             formatted_df.sort_values(["TickerRank", "reversed_period"], ascending=[True, False], inplace=True)
             formatted_df.drop(columns=["reversed_period", "TickerRank"], inplace=True)
         else:
@@ -191,3 +190,9 @@ def get_view_metrics(viewName: str) -> List[str]:
         for m in mg.metrics:
             metric_names.append(m.name)
     return metric_names
+
+
+def add_ticker_rank_to_df(df: DataFrame, tickers_list: List[str]) -> DataFrame:
+    sorter_ticker_index = dict(zip(tickers_list, range(len(tickers_list))))
+    df["TickerRank"] = df["Ticker"].map(sorter_ticker_index)
+    return df

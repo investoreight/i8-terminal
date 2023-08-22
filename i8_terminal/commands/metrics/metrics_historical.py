@@ -22,7 +22,10 @@ from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.formatting import data_format_mapper
 from i8_terminal.common.layout import df2Table, format_metrics_df
-from i8_terminal.common.metrics import get_all_metrics_type_and_data_types_df
+from i8_terminal.common.metrics import (
+    add_ticker_rank_to_df,
+    get_all_metrics_type_and_data_types_df,
+)
 from i8_terminal.common.stock_info import get_tickers_list, validate_tickers
 from i8_terminal.common.utils import PlotType, reverse_period
 from i8_terminal.config import get_table_style
@@ -188,6 +191,8 @@ def create_fig(
 
 
 def historical_metrics_df2tree(df: DataFrame) -> Tree:
+    # If the period type is daily or real-time, the df must be sorted using the PeriodDateTime
+    # and if not must be sorted using reversed_period.
     if any(set(["D", "R"]) & set(df["default_period_type"].unique())):
         period_dict = dict(df[["PeriodDateTime", "Period"]].sort_values("PeriodDateTime", ascending=False).values)
         sorted_periods = [period_dict[p] for p in period_dict.keys()]
@@ -339,13 +344,15 @@ def historical(
         if not period_type:
             if len(df["default_period_type"].unique()) > 1:
                 console.print(
-                    "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type. Check `metrics describe` command to find more about metrics.",  # noqa: E501
+                    "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type or specify the period_type parameter. Check `metrics describe` command to find more about metrics.",  # noqa: E501
                     style="yellow",
                 )
                 return
         if len(df["metric_name"].unique()) < len(metrics_list):
+            # If all of the input metrics don't have data in the input period_type
+            # (eg. --metrics eps_growth,revenue_actual --period_type FY).
             console.print(
-                "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type. Check `metrics describe` command to find more about metrics.",  # noqa: E501
+                "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type or specify the period_type parameter. Check `metrics describe` command to find more about metrics.",  # noqa: E501
                 style="yellow",
             )
             return
@@ -365,12 +372,13 @@ def historical(
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in df.groupby("Metric"):
         columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
+    # If the period type is daily or real-time, the df must be sorted using the PeriodDateTime
+    # and if not must be sorted using reversed_period.
     if any(set(["D", "R"]) & set(formatted_df["default_period_type"].unique())):
         formatted_df = formatted_df.pivot(
             index=["Ticker", "Period", "PeriodDateTime"], columns="Metric", values="value"
         ).reset_index()
-        sorterTickerIndex = dict(zip(tickers_list, range(len(tickers_list))))
-        formatted_df["TickerRank"] = formatted_df["Ticker"].map(sorterTickerIndex)
+        formatted_df = add_ticker_rank_to_df(formatted_df, tickers_list)
         formatted_df.sort_values(["TickerRank", "PeriodDateTime"], ascending=[True, False], inplace=True)
         formatted_df.drop(columns=["TickerRank", "PeriodDateTime"], inplace=True)
     else:
@@ -379,8 +387,7 @@ def historical(
             lambda row: reverse_period(row.Period),
             axis=1,
         )
-        sorterTickerIndex = dict(zip(tickers_list, range(len(tickers_list))))
-        formatted_df["TickerRank"] = formatted_df["Ticker"].map(sorterTickerIndex)
+        formatted_df = add_ticker_rank_to_df(formatted_df, tickers_list)
         formatted_df.sort_values(["TickerRank", "reversed_period"], ascending=[True, False], inplace=True)
         formatted_df.drop(columns=["TickerRank", "reversed_period"], inplace=True)
     metrics_order = [df.loc[df["metric_name"] == metric]["Metric"].values[0] for metric in metrics_list]
