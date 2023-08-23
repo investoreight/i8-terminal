@@ -88,20 +88,18 @@ def create_fig(
     df: DataFrame, cmd_context: Dict[str, Any], tickers: List[str], chart_type: str, metrics_type_df: DataFrame
 ) -> go.Figure:
     vertical_spacing = 0.02
+    metrics = list(set(df["Metric"]))
+    rows_num = len(metrics)
+    row_width = [1] * rows_num
     layout = dict(
         title=cmd_context["plot_title"],
-        autosize=True,
+        autosize=False,
+        width=870,
+        height=400 * rows_num,
         hovermode="closest",
         legend=dict(font=dict(size=11), orientation="v"),
         margin=dict(b=20, l=50, r=65),
     )
-    metrics = list(set(df["Metric"]))
-    rows_num = len(metrics)
-
-    if rows_num == 2:
-        row_width = [0.5, 0.5]
-    else:
-        row_width = [1]
 
     fig = make_subplots(
         rows=rows_num,
@@ -298,9 +296,6 @@ def historical(
     metrics_list = metrics.replace(" ", "").split(",")
     if output not in ["terminal", "plot"]:
         click.echo(click.style(f"`{output}` is not valid output type.", fg="yellow"))
-        return
-    if output == "plot" and len(metrics_list) > 2:
-        click.echo(click.style("For the `plot` output type you can enter up to only two metrics.", fg="yellow"))
         return
     command_path_parsed_options_dict = {
         "--tickers": tickers,

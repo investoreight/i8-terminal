@@ -36,7 +36,7 @@ def create_plot_layout(fig: Figure, cmd_context: Dict[str, Any]) -> html.Div:
             html.Div(
                 [
                     html.Div(
-                        [dcc.Graph(id="mainPlot", figure=fig, responsive=True, config=fig_config)],
+                        [dcc.Graph(id="mainPlot", figure=fig, responsive=fig.layout.autosize, config=fig_config)],
                         className="pretty_container",
                     )
                 ],
