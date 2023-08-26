@@ -27,7 +27,7 @@ class ServiceResult:
     def get_info(self) -> str:
         return self._info
 
-    def to_df(self, format: str = "default", include_raw=False) -> DataFrame:
+    def to_df(self, format: str = "default", include_raw: bool = False) -> DataFrame:
         """
         Args:
             formating: possible options are
@@ -40,7 +40,7 @@ class ServiceResult:
 
         return self._format_df(self._df.copy(), format)
 
-    def _wide_df(self, format: str = "humanize", raw_col_names="default") -> DataFrame:
+    def _wide_df(self, format: str = "humanize", raw_col_names: str = "default") -> DataFrame:
         df_formatted = self._format_df(self._df.copy(), format)
         if raw_col_names == "default":
             df_raw = self._df.copy()
@@ -86,7 +86,7 @@ class ServiceResult:
 
         return table
 
-    def to_plot(self, x: str, y: List[str], kind: str = "bar", show=True) -> Any:
+    def to_plot(self, x: str, y: List[str], kind: str = "bar", show: bool = True) -> Any:
         return self._to_plot(x, y, kind, show)
 
     def to_html(self, export_path: str = None, format: str = "default") -> str:
@@ -101,7 +101,7 @@ class ServiceResult:
 
         return res
 
-    def _to_plot(self, x: str, y: List[str], kind: str = "bar", show=True) -> Any:
+    def _to_plot(self, x: str, y: List[str], kind: str = "bar", show: bool = True) -> Any:
         df = self._df[[x] + y]
         df_grouped = df.groupby(x)[y].mean().reset_index()
 

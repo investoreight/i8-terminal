@@ -1,15 +1,9 @@
-from ast import literal_eval
 from typing import Dict, List, Optional
 
 import investor8_sdk
-import pandas as pd
 
 from i8_terminal.common.metrics import get_metric_info
-from i8_terminal.common.stock_info import get_stocks_df
 from i8_terminal.common.utils import status
-from i8_terminal.i8_exception import I8Exception
-from i8_terminal.service_result.column_info import ColumnInfo
-from i8_terminal.service_result.columns_context import ColumnsContext
 from i8_terminal.service_result.metrics_current_result import MetricsCurrentResult
 from i8_terminal.services.metrics import get_current_metrics
 

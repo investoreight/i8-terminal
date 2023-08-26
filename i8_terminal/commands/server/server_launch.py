@@ -1,17 +1,13 @@
-from io import StringIO
-from typing import Optional
+from typing import Any, Optional
 
 import click
-from flask import Flask, jsonify, request
-from rich.console import Console
+from flask import Flask, request
 
-from i8_terminal import api as i8
 from i8_terminal.commands import cli
 from i8_terminal.commands.server import server
-from i8_terminal.common.cli import pass_command
 
 
-def create_resp(result, resp_format):
+def create_resp(result: Any, resp_format: str) -> Any:
     res = {}
 
     if resp_format == "html":
@@ -40,7 +36,7 @@ def launch(port: Optional[int]) -> None:
 
     @app.route("/", defaults={"command_path": ""})
     @app.route("/<path:command_path>", methods=["GET"])
-    def command_handler(command_path):
+    def command_handler(command_path: str) -> Any:
         command_names = command_path.split("/")
 
         # Traverse the Click command hierarchy to find the matching command

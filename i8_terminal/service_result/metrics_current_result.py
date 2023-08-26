@@ -1,8 +1,7 @@
-from typing import Any, List, Optional
+from typing import Any
 
 from pandas import DataFrame
 
-from i8_terminal.common.formatting import color
 from i8_terminal.service_result.columns_context import ColumnsContext
 from i8_terminal.service_result.service_result import ServiceResult
 

@@ -28,7 +28,7 @@ def get_current_metrics(tickers: str, metric_names: str) -> MetricsCurrentResult
     )
     if metrics.data is None:
         raise I8Exception(
-            "None of the provided metrics are available for the given tickers. Make sure you are using correct metric or ticker names."
+            "None of the provided metrics are available for the given tickers. Make sure you are using correct metric or ticker names."  # noqa: E501
         )
 
     df = pd.DataFrame([m.to_dict() for m in metrics.data])

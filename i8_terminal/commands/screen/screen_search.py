@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 import click
 import investor8_sdk
@@ -7,15 +7,7 @@ from rich.console import Console
 
 from i8_terminal.commands.screen import screen
 from i8_terminal.common.cli import is_server_call, pass_command
-from i8_terminal.common.layout import df2Table
-from i8_terminal.common.metrics import (
-    get_current_metrics_df,
-    get_metric_info,
-    get_view_metrics,
-    prepare_current_metrics_formatted_df,
-)
-from i8_terminal.common.utils import export_data, export_to_html
-from i8_terminal.config import APP_SETTINGS
+from i8_terminal.common.metrics import get_view_metrics
 from i8_terminal.i8_exception import I8Exception
 from i8_terminal.services.screen import search as screen_search
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType

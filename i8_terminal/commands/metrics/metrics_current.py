@@ -1,19 +1,12 @@
-from typing import Any, Dict, Optional
+from typing import Optional
 
 import click
 from rich.console import Console
 
 from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import is_server_call, pass_command
-from i8_terminal.common.layout import df2Table
-from i8_terminal.common.metrics import (
-    get_current_metrics_df,
-    get_view_metrics,
-    prepare_current_metrics_formatted_df,
-)
+from i8_terminal.common.metrics import get_view_metrics
 from i8_terminal.common.stock_info import validate_tickers
-from i8_terminal.common.utils import export_data, export_to_html
-from i8_terminal.config import APP_SETTINGS
 from i8_terminal.i8_exception import I8Exception
 from i8_terminal.services.metrics import get_current_metrics
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
