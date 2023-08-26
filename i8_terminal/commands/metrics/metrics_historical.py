@@ -94,7 +94,7 @@ def create_fig(
     layout = dict(
         title=cmd_context["plot_title"],
         autosize=False,
-        width=870,
+        width=846,
         height=400 * rows_num,
         hovermode="closest",
         legend=dict(font=dict(size=11), orientation="v"),
@@ -120,8 +120,7 @@ def create_fig(
                         y=ticker_df["value"],
                         name=ticker,
                         marker=dict(color=px.colors.qualitative.Plotly[idx]),
-                        legendgroup=f"group{idx}",
-                        showlegend=True if metrics.index(metric) == 0 else False,
+                        legendgroup=f"group{metric_idx}",
                     ),
                     row=metrics.index(metric) + 1,
                     col=1,
@@ -133,8 +132,7 @@ def create_fig(
                         y=ticker_df["value"],
                         name=ticker,
                         marker=dict(color=px.colors.qualitative.Plotly[idx]),
-                        legendgroup=f"group{idx}",
-                        showlegend=True if metrics.index(metric) == 0 else False,
+                        legendgroup=f"group{metric_idx}",
                     ),
                     row=metrics.index(metric) + 1,
                     col=1,
@@ -169,6 +167,7 @@ def create_fig(
         legend_title_text=None,
         xaxis_title=None,
         yaxis_title=None,
+        legend_tracegroupgap=310,
     )
 
     # Add yaxis titles
