@@ -93,7 +93,7 @@ class ServiceResult:
         table = self._to_rich_table(format, "default")
         console = Console(record=True, file=StringIO(), width=800)
         console.print(table)
-        res = console.export_html(inline_styles=True, code_format="<pre>{code}</pre>")
+        res: str = console.export_html(inline_styles=True, code_format="<pre>{code}</pre>")
 
         if export_path:
             with open(export_path, "w", encoding="utf-8") as file:
