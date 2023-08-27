@@ -18,7 +18,7 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 @click.option("--ticker", "-k", type=TickerParamType(), required=True, callback=validate_ticker, help="Company ticker.")
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
-def list(ticker: str, export_path: Optional[str]) -> None:
+def list(ticker: str, export_path: Optional[str]) -> Optional[EarningsListResult]:
     """
     Lists upcoming company earnings.
 
@@ -47,3 +47,4 @@ def list(ticker: str, export_path: Optional[str]) -> None:
             df = earnings_list.to_df()
             console = Console()
             console.print(earnings_list._to_rich_table("humanize", "default"))
+    return None

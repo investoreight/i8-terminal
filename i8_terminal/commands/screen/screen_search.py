@@ -9,6 +9,7 @@ from i8_terminal.commands.screen import screen
 from i8_terminal.common.cli import is_server_call, pass_command
 from i8_terminal.common.metrics import get_view_metrics
 from i8_terminal.i8_exception import I8Exception
+from i8_terminal.service_result.metrics_current_result import MetricsCurrentResult
 from i8_terminal.services.screen import search as screen_search
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 from i8_terminal.types.metric_view_param_type import MetricViewParamType
@@ -76,38 +77,38 @@ def search(
     sort_by: Optional[str],
     sort_order: Optional[str],
     include_period: bool,
-) -> None:
+) -> Optional[MetricsCurrentResult]:
     console = Console()
     if not metrics and not view_name:
         console.print("The 'metrics' or 'view_name' parameter must be provided", style="yellow")
-        return
+        return None
     if view_name and metrics:
         console.print(
             "The 'metrics' or 'view_name' options are mutually exclusive. Provide a value only for one of them.",
             style="yellow",
         )
-        return
+        return None
     if not conditions and not profile:
         console.print("The 'conditions' or 'profile' parameter must be provided", style="yellow")
-        return
+        return None
     if profile and conditions:
         console.print(
             "The 'conditions' or 'profile' options are mutually exclusive. Provide a value only for one of them.",
             style="yellow",
         )
-        return
+        return None
     if profile and sort_by:
         console.print(
             "The 'sort_by' or 'profile' options are mutually exclusive. Provide a value only for one of them.",
             style="yellow",
         )
-        return
+        return None
     if profile and sort_order:
         console.print(
             "The 'sort_order' or 'profile' options are mutually exclusive. Provide a value only for one of them.",
             style="yellow",
         )
-        return
+        return None
     if not profile and not sort_order:
         sort_order = "desc"
     if view_name:
@@ -115,12 +116,13 @@ def search(
 
     if profile:
         conds_list, sort_by, sort_order = get_screening_profile(profile)
-    else:
-        conds_list = conditions.split(",")
+
+    if conditions:
+        conds_list = [c for condition in conditions for c in condition.split(",")]
 
     console = Console()
     try:
-        res = screen_search(conds_list, metrics, sort_by)
+        res: MetricsCurrentResult = screen_search(conds_list, metrics, sort_by)
         if is_server_call():
             return res
     except I8Exception as ex:
@@ -146,3 +148,4 @@ def search(
             console.print("Unknown export extension!")
     else:
         res.to_console(format="humanize")
+    return None

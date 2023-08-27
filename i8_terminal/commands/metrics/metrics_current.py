@@ -8,6 +8,7 @@ from i8_terminal.common.cli import is_server_call, pass_command
 from i8_terminal.common.metrics import get_view_metrics
 from i8_terminal.common.stock_info import validate_tickers
 from i8_terminal.i8_exception import I8Exception
+from i8_terminal.service_result.metrics_current_result import MetricsCurrentResult
 from i8_terminal.services.metrics import get_current_metrics
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 from i8_terminal.types.metric_view_param_type import MetricViewParamType
@@ -34,7 +35,9 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 )
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
-def current(tickers: str, metrics: str, view_name: Optional[str], export_path: Optional[str]) -> None:
+def current(
+    tickers: str, metrics: str, view_name: Optional[str], export_path: Optional[str]
+) -> Optional[MetricsCurrentResult]:
     """
     Lists the given metrics for a given list of companies. TICKERS is a comma-separated list of tickers.
     METRICS can be in the below format:
@@ -54,18 +57,18 @@ def current(tickers: str, metrics: str, view_name: Optional[str], export_path: O
     console = Console()
     if not metrics and not view_name:
         console.print("The 'metrics' or 'view_name' parameter must be provided", style="yellow")
-        return
+        return None
     if view_name and metrics:
         console.print(
             "The 'metrics' or 'view_name' options are mutually exclusive. Provide a value only for one of them.",
             style="yellow",
         )
-        return
+        return None
     if view_name:
         metrics = ",".join(get_view_metrics(view_name))
 
     try:
-        res = get_current_metrics(tickers, metrics)
+        res: MetricsCurrentResult = get_current_metrics(tickers, metrics)
         if is_server_call():
             return res
     except I8Exception as ex:
@@ -90,3 +93,4 @@ def current(tickers: str, metrics: str, view_name: Optional[str], export_path: O
             console.print("Unknown export extension!")
     else:
         res.to_console(format="humanize")
+    return None

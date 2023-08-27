@@ -7,7 +7,7 @@ from i8_terminal.commands import cli
 from i8_terminal.commands.server import server
 
 
-def create_resp(result: Any, resp_format: str) -> Any:
+def create_resp(result: Any, resp_format: Optional[str]) -> Any:
     res = {}
 
     if resp_format == "html":
@@ -42,14 +42,16 @@ def launch(port: Optional[int]) -> None:
         # Traverse the Click command hierarchy to find the matching command
         command = cli
         for command_name in command_names:
-            command = command.get_command(None, command_name.replace("-", "_"))
+            command = command.get_command(None, command_name.replace("-", "_"))  # type: ignore
             if command is None:
                 return f"Unknown command: {command_name}", 404
 
         # Parse arguments and options from the Flask request
-        args = [request.args.get(arg.name) for arg in command.params if isinstance(arg, click.Argument)]
+        args = [request.args.get(arg.name) for arg in command.params if isinstance(arg, click.Argument) and arg.name]
         kwargs = {
-            opt.name: request.args.get(opt.name, opt.default) for opt in command.params if isinstance(opt, click.Option)
+            opt.name: request.args.get(opt.name, default=opt.default)
+            for opt in command.params
+            if isinstance(opt, click.Option) and opt.name
         }
 
         res = ctx.invoke(command, *args, **kwargs)

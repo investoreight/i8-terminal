@@ -39,7 +39,7 @@ class EarningsListResult(ServiceResult):
             fig.append_trace(trace, row=row, col=col)
         return fig
 
-    def to_plot(self, x: str = None, y: List[str] = None, kind: str = "bar", show=True) -> Any:
+    def to_plot(self, x: str = None, y: List[str] = None, kind: str = "bar", show: bool = True) -> Any:
         if x is None:
             x = "period"
         if y is None:

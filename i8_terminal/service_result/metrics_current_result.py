@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 
 from pandas import DataFrame
 
@@ -13,5 +13,5 @@ class MetricsCurrentResult(ServiceResult):
     def __repr__(self) -> str:
         return repr(self._df.head(2))
 
-    def to_plot(self, show=False) -> Any:
+    def to_plot(self, x: str, y: List[str], kind: str = "bar", show: bool = False) -> Any:
         return None
