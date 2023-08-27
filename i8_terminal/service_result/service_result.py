@@ -159,7 +159,7 @@ class ServiceResult:
 
             if (
                 ci.data_type in ["int", "unsigned_int", "float", "unsigned_float"]
-                and pd.to_numeric(self._df[ci.name]).max() < 1e6
+                and pd.to_numeric(self._df[ci.name]).max() < 1e6  # noqa: W503
             ):
                 if format == "raw":
                     formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)
