@@ -76,7 +76,7 @@ def format_number(
 
 
 def format_number_v2(
-    m: int,
+    m: Union[int, float],
     percision: int = 2,
     unit: Optional[str] = None,
     humanize: bool = False,

@@ -48,3 +48,8 @@ def pass_command(f: Any) -> Any:
         return ctx.invoke(f, *args, **kwargs)
 
     return update_wrapper(new_func, f)
+
+
+def is_server_call() -> bool:
+    ctx = click.get_current_context()
+    return "is_server_call" in ctx.obj and bool(ctx.obj["is_server_call"])

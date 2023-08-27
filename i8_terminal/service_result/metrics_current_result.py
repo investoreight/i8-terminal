@@ -1,0 +1,17 @@
+from typing import Any, List
+
+from pandas import DataFrame
+
+from i8_terminal.service_result.columns_context import ColumnsContext
+from i8_terminal.service_result.service_result import ServiceResult
+
+
+class MetricsCurrentResult(ServiceResult):
+    def __init__(self, data: DataFrame, columns_context: ColumnsContext, info: str = ""):
+        super().__init__(data, columns_context, info)
+
+    def __repr__(self) -> str:
+        return repr(self._df.head(2))
+
+    def to_plot(self, x: str, y: List[str], kind: str = "bar", show: bool = False) -> Any:
+        return None

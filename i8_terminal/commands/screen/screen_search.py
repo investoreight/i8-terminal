@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 import click
 import investor8_sdk
@@ -6,50 +6,16 @@ import pandas as pd
 from rich.console import Console
 
 from i8_terminal.commands.screen import screen
-from i8_terminal.common.cli import pass_command
-from i8_terminal.common.layout import df2Table
-from i8_terminal.common.metrics import (
-    get_current_metrics_df,
-    get_metric_info,
-    get_view_metrics,
-    prepare_current_metrics_formatted_df,
-)
-from i8_terminal.common.utils import export_data, export_to_html
-from i8_terminal.config import APP_SETTINGS
+from i8_terminal.common.cli import is_server_call, pass_command
+from i8_terminal.common.metrics import get_view_metrics
+from i8_terminal.i8_exception import I8Exception
+from i8_terminal.service_result.metrics_current_result import MetricsCurrentResult
+from i8_terminal.services.screen import search as screen_search
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 from i8_terminal.types.metric_view_param_type import MetricViewParamType
 from i8_terminal.types.screening_condition_param_type import ScreeningConditionParamType
 from i8_terminal.types.screening_profile_param_type import ScreeningProfileParamType
 from i8_terminal.types.sort_order_param_type import SortOrderParamType
-
-RELATIVE_PERIOD_TYPES: Dict[str, str] = {
-    "D": ".d",
-    "R": ".r",
-    "FY": ".fy",
-    "Q": ".q",
-}
-
-
-def prepare_screen_df(
-    conditions: List[str], metrics: str, sort_by: Optional[str], sort_order: Optional[str]
-) -> Tuple[List[str], Optional[pd.DataFrame]]:
-    max_count = 20
-    for index, condition in enumerate(conditions):
-        condition_parts = condition.split(":")
-        metric = condition_parts[0]
-        metric_parts = metric.split(".")
-        if len(metric_parts) == 1:
-            metric_default_period_type = get_metric_info(metric_parts[0])["default_period_type"]
-            period_type = RELATIVE_PERIOD_TYPES.get(metric_default_period_type, "")
-            metric_new = f"{metric}{period_type}"
-            conditions[index] = conditions[index].replace(metric, metric_new)
-    if not sort_by:
-        sort_by = metrics.split(",")[0]
-    tickers_list = investor8_sdk.ScreenerApi().search(
-        conditions=",".join(conditions), order_by=sort_by, order_direction=sort_order
-    )
-    screen_df = get_current_metrics_df(",".join(tickers_list[:max_count]), metrics)
-    return tickers_list, screen_df
 
 
 def sort_by_tickers(df: pd.DataFrame, sorted_tickers: List[str]) -> pd.DataFrame:
@@ -76,12 +42,12 @@ def get_screening_profile(profile: str) -> Tuple[List[str], str, str]:
 @screen.command()
 @click.option("--profile", "profile", "-p", type=ScreeningProfileParamType(), help="Screening profile name.")
 @click.option(
-    "--condition",
-    "condition",
+    "--conditions",
+    "conditions",
     "-c",
     type=ScreeningConditionParamType(),
     multiple=True,
-    help="Condition of metric.",
+    help="Conditions of search.",
 )
 @click.option("--view_name", "view_name", "-v", type=MetricViewParamType(), help="Metric view name.")
 @click.option(
@@ -104,120 +70,82 @@ def get_screening_profile(profile: str) -> Tuple[List[str], str, str]:
 @pass_command
 def search(
     profile: Optional[str],
-    condition: Optional[Tuple[str]],
+    conditions: Optional[Tuple[str]],
     view_name: Optional[str],
     metrics: Optional[str],
     export_path: Optional[str],
     sort_by: Optional[str],
     sort_order: Optional[str],
     include_period: bool,
-) -> None:
+) -> Optional[MetricsCurrentResult]:
     console = Console()
     if not metrics and not view_name:
         console.print("The 'metrics' or 'view_name' parameter must be provided", style="yellow")
-        return
+        return None
     if view_name and metrics:
         console.print(
             "The 'metrics' or 'view_name' options are mutually exclusive. Provide a value only for one of them.",
             style="yellow",
         )
-        return
-    if not condition and not profile:
-        console.print("The 'condition' or 'profile' parameter must be provided", style="yellow")
-        return
-    if profile and condition:
+        return None
+    if not conditions and not profile:
+        console.print("The 'conditions' or 'profile' parameter must be provided", style="yellow")
+        return None
+    if profile and conditions:
         console.print(
-            "The 'condition' or 'profile' options are mutually exclusive. Provide a value only for one of them.",
+            "The 'conditions' or 'profile' options are mutually exclusive. Provide a value only for one of them.",
             style="yellow",
         )
-        return
+        return None
     if profile and sort_by:
         console.print(
             "The 'sort_by' or 'profile' options are mutually exclusive. Provide a value only for one of them.",
             style="yellow",
         )
-        return
+        return None
     if profile and sort_order:
         console.print(
             "The 'sort_order' or 'profile' options are mutually exclusive. Provide a value only for one of them.",
             style="yellow",
         )
-        return
+        return None
     if not profile and not sort_order:
         sort_order = "desc"
     if view_name:
         metrics = ",".join(get_view_metrics(view_name))
+
     if profile:
-        conditionList, sort_by, sort_order = get_screening_profile(profile)
-    else:
-        conditionList = list(condition)  # type: ignore
-    with console.status("Fetching data...", spinner="material"):
-        sorted_tickers, df = prepare_screen_df(conditionList, metrics, sort_by, sort_order)  # type: ignore
-    if df is None:
-        console.print("No data found for the provided screen conditions", style="yellow")
-        return
-    no_data_metrics = [
-        *set(metric.split(".")[0] for metric in set(metrics.split(","))) - set(df["metric_name"])  # type: ignore
-    ]
-    for m in no_data_metrics:
-        console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
-    columns_justify: Dict[str, Any] = {}
-    df["display_name"] = df.apply(
-        lambda metric: f'{metric["display_name"]} - {metric["input_metric"].split(".")[-1].upper()}'
-        if len(metric["input_metric"].split(".")) > 1
-        else metric["display_name"],
-        axis=1,
-    )
-    metric_names: List[str] = []
-    if include_period:
-        period_rows = []
-        for index, row in df.iterrows():
-            if row["display_format"] not in ["str"]:
-                metric_names.append(row["display_name"])
-                period_rows.append(
-                    {
-                        "Ticker": row["Ticker"],
-                        "metric_name": row["metric_name"],
-                        "input_metric": row["input_metric"],
-                        "value": row["period"],
-                        "display_name": f"{row['display_name']} (Period)",
-                        "data_format": "str",
-                        "display_format": "str",
-                    }
-                )
-        df = pd.concat([pd.DataFrame(period_rows), df], ignore_index=True, axis=0)
+        conds_list, sort_by, sort_order = get_screening_profile(profile)
+
+    if conditions:
+        conds_list = [c for condition in conditions for c in condition.split(",")]
+
+    console = Console()
+    try:
+        res: MetricsCurrentResult = screen_search(conds_list, metrics, sort_by)
+        if is_server_call():
+            return res
+    except I8Exception as ex:
+        if is_server_call():
+            raise
+        else:
+            console.print(str(ex))
+
+    info = res.get_info()
+    if info:
+        console.print(info)
+
+    # TODO: implements xlsx and --include_period
     if export_path:
-        if export_path.split(".")[-1] == "html":
-            for metric_display_name, metric_df in df.groupby("display_name"):
-                columns_justify[metric_display_name] = (
-                    "left" if metric_df["display_format"].values[0] == "str" else "right"
-                )
-            df_result = sort_by_tickers(prepare_current_metrics_formatted_df(df, "console"), sorted_tickers)
-            if include_period:
-                df_result = reindex_df(df_result, metric_names)
-            table = df2Table(
-                df_result,
-                columns_justify=columns_justify,
-            )
-            export_to_html(table, export_path)
-            return
-        df_result = sort_by_tickers(prepare_current_metrics_formatted_df(df, "store"), sorted_tickers)
-        if include_period:
-            df_result = reindex_df(df_result, metric_names)
-        export_data(
-            df_result,
-            export_path,
-            column_width=18,
-            column_format=APP_SETTINGS["styles"]["xlsx"]["financials"]["column"],
-        )
+        extension = export_path.split(".")[-1]
+        if extension == "html":
+            res.to_html(export_path)
+        elif extension == "xlsx":
+            res.to_xlsx(export_path)
+        elif extension == "csv":
+            res.to_csv(export_path)
+        else:
+            console.print("Unknown export extension!")
     else:
-        for metric_display_name, metric_df in df.groupby("display_name"):
-            columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
-        df_result = sort_by_tickers(prepare_current_metrics_formatted_df(df, "console"), sorted_tickers)
-        if include_period:
-            df_result = reindex_df(df_result, metric_names)
-        table = df2Table(
-            df_result,
-            columns_justify=columns_justify,
-        )
-        console.print(table)
+        res.to_console(format="humanize")
+    return None

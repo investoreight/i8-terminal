@@ -1,3 +1,4 @@
+from io import StringIO
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import numpy as np
@@ -18,11 +19,15 @@ from i8_terminal.service_result.columns_context import ColumnsContext
 
 
 class ServiceResult:
-    def __init__(self, df: DataFrame, cols_context: ColumnsContext):
+    def __init__(self, df: DataFrame, cols_context: ColumnsContext, info: str = ""):
         self._df = df
         self._cols_context = cols_context
+        self._info = info
 
-    def to_df(self, format: str = "default") -> DataFrame:
+    def get_info(self) -> str:
+        return self._info
+
+    def to_df(self, format: str = "default", include_raw: bool = False) -> DataFrame:
         """
         Args:
             formating: possible options are
@@ -30,20 +35,28 @@ class ServiceResult:
                 `default`: number (e.g. 123456.7890 => 123,456.79) and display formatting (net_income => Net Income)
                 `humanize`: numbers are formatted to human-friendly formats (e.g. 1200000 => $1.20 M)
         """
+        if include_raw:
+            return self._wide_df(format, "suffix")
+
         return self._format_df(self._df.copy(), format)
 
-    def _wide_df(self, format: str) -> DataFrame:
+    def _wide_df(self, format: str = "humanize", raw_col_names: str = "default") -> DataFrame:
         df_formatted = self._format_df(self._df.copy(), format)
-        df_raw = self._df.copy()
+        if raw_col_names == "default":
+            df_raw = self._df.copy()
+        elif raw_col_names == "suffix":
+            df_raw = self._format_df(self._df.copy(), format="suffix")
 
         return pd.concat([df_formatted, df_raw], axis=1)
 
     def to_json(self) -> Any:
-        pass
+        return self.to_df().to_dict(orient="records")
 
-    def to_console(self, format: str = "default", style_profile: str = "default", width: int = 800) -> None:
+    def to_console(
+        self, format: str = "default", style_profile: str = "default", force_jupyter: bool = False, width: int = 800
+    ) -> None:
         table = self._to_rich_table(format, style_profile)
-        console = Console(force_jupyter=True, width=width)
+        console = Console(force_jupyter=force_jupyter, width=width)
         console.print(table)
 
     def _to_rich_table(self, format: str, style_profile: str) -> Table:
@@ -73,10 +86,22 @@ class ServiceResult:
 
         return table
 
-    def to_plot(self, x: str, y: List[str], kind: str = "bar") -> Any:
-        return self._to_plot(x, y, kind)
+    def to_plot(self, x: str, y: List[str], kind: str = "bar", show: bool = True) -> Any:
+        return self._to_plot(x, y, kind, show)
 
-    def _to_plot(self, x: str, y: List[str], kind: str = "bar") -> Any:
+    def to_html(self, export_path: str = None, format: str = "default") -> str:
+        table = self._to_rich_table(format, "default")
+        console = Console(record=True, file=StringIO(), width=800)
+        console.print(table)
+        res: str = console.export_html(inline_styles=True, code_format="<pre>{code}</pre>")
+
+        if export_path:
+            with open(export_path, "w", encoding="utf-8") as file:
+                file.write(res)
+
+        return res
+
+    def _to_plot(self, x: str, y: List[str], kind: str = "bar", show: bool = True) -> Any:
         df = self._df[[x] + y]
         df_grouped = df.groupby(x)[y].mean().reset_index()
 
@@ -106,7 +131,8 @@ class ServiceResult:
             xaxis_title=None,
             margin=dict(b=15, l=70, r=20),
         )
-        fig.show()
+        if show:
+            fig.show()
 
         return fig
 
@@ -126,8 +152,15 @@ class ServiceResult:
             if ci.display_name is None or ci.data_type is None or ci.unit is None:
                 raise I8Exception(f"Missing required metadata fields on colum: `{ci.name}`")
 
-            display_names[ci.name] = ci.display_name
-            if ci.data_type in ["int", "unsigned_int", "float", "unsigned_float"] and self._df[ci.name].max() < 1e6:
+            if format == "suffix":
+                display_names[ci.name] = ci.display_name + "_raw"
+            else:
+                display_names[ci.name] = ci.display_name
+
+            if (
+                ci.data_type in ["int", "unsigned_int", "float", "unsigned_float"]
+                and pd.to_numeric(self._df[ci.name]).max() < 1e6  # noqa: W503
+            ):
                 if format == "raw":
                     formatters[ci.name] = self._get_formatter(ci.unit, ci.data_type, format)
                 else:
@@ -143,7 +176,7 @@ class ServiceResult:
             else:
                 return lambda x: x
 
-        if data_type == "str" or unit == "string":
+        if data_type in ["str", "string", "categorical"] or unit == "string":
             return lambda x: x
 
         if unit == "datetime":
@@ -154,15 +187,15 @@ class ServiceResult:
 
         if format == "default":
             if data_type in ["int", "unsigned_int"]:
-                return lambda x: format_number_v2(x, percision=0, unit=unit)
+                return lambda x: format_number_v2(int(x), percision=0, unit=unit)
             elif data_type in ["float", "unsigned_float"]:
-                return lambda x: format_number_v2(x, percision=2, unit=unit)
+                return lambda x: format_number_v2(float(x), percision=2, unit=unit)
         elif format == "humanize":
-            return lambda x: format_number_v2(x, percision=2, unit=unit, humanize=True)
+            return lambda x: format_number_v2(float(x), percision=2, unit=unit, humanize=True)
         elif format == "millionize":
             if data_type in ["int", "unsigned_int"]:
-                return lambda x: format_number_v2(x, percision=0, unit=unit, in_millions=True)
+                return lambda x: format_number_v2(int(x), percision=0, unit=unit, in_millions=True)
             elif data_type in ["float", "unsigned_float"]:
-                return lambda x: format_number_v2(x, percision=2, unit=unit, in_millions=True)
+                return lambda x: format_number_v2(float(x), percision=2, unit=unit, in_millions=True)
 
         return lambda x: x

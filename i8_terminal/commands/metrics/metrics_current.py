@@ -1,19 +1,15 @@
-from typing import Any, Dict, Optional
+from typing import Optional
 
 import click
 from rich.console import Console
 
 from i8_terminal.commands.metrics import metrics
-from i8_terminal.common.cli import pass_command
-from i8_terminal.common.layout import df2Table
-from i8_terminal.common.metrics import (
-    get_current_metrics_df,
-    get_view_metrics,
-    prepare_current_metrics_formatted_df,
-)
+from i8_terminal.common.cli import is_server_call, pass_command
+from i8_terminal.common.metrics import get_view_metrics
 from i8_terminal.common.stock_info import validate_tickers
-from i8_terminal.common.utils import export_data, export_to_html
-from i8_terminal.config import APP_SETTINGS
+from i8_terminal.i8_exception import I8Exception
+from i8_terminal.service_result.metrics_current_result import MetricsCurrentResult
+from i8_terminal.services.metrics import get_current_metrics
 from i8_terminal.types.metric_identifier_param_type import MetricIdentifierParamType
 from i8_terminal.types.metric_view_param_type import MetricViewParamType
 from i8_terminal.types.ticker_param_type import TickerParamType
@@ -39,7 +35,9 @@ from i8_terminal.types.ticker_param_type import TickerParamType
 )
 @click.option("--export", "export_path", "-e", help="Filename to export the output to.")
 @pass_command
-def current(tickers: str, metrics: str, view_name: Optional[str], export_path: Optional[str]) -> None:
+def current(
+    tickers: str, metrics: str, view_name: Optional[str], export_path: Optional[str]
+) -> Optional[MetricsCurrentResult]:
     """
     Lists the given metrics for a given list of companies. TICKERS is a comma-separated list of tickers.
     METRICS can be in the below format:
@@ -59,45 +57,40 @@ def current(tickers: str, metrics: str, view_name: Optional[str], export_path: O
     console = Console()
     if not metrics and not view_name:
         console.print("The 'metrics' or 'view_name' parameter must be provided", style="yellow")
-        return
+        return None
     if view_name and metrics:
         console.print(
             "The 'metrics' or 'view_name' options are mutually exclusive. Provide a value only for one of them.",
             style="yellow",
         )
-        return
+        return None
     if view_name:
         metrics = ",".join(get_view_metrics(view_name))
-    with console.status("Fetching data...", spinner="material"):
-        df = get_current_metrics_df(tickers, metrics.replace(".p", ""))
-    if df is None or df.empty:
-        console.print("No data found for metrics with selected tickers", style="yellow")
-        return
-    for m in [*set(metric.split(".")[0] for metric in set(metrics.split(","))) - set(df["metric_name"])]:
-        console.print(f"\nNo data found for metric {m} with selected tickers", style="yellow")
-    columns_justify: Dict[str, Any] = {}
+
+    try:
+        res: MetricsCurrentResult = get_current_metrics(tickers, metrics)
+        if is_server_call():
+            return res
+    except I8Exception as ex:
+        if is_server_call():
+            raise
+        else:
+            console.print(str(ex))
+
+    info = res.get_info()
+    if info:
+        console.print(info)
+
     if export_path:
-        if export_path.split(".")[-1] == "html":
-            for metric_display_name, metric_df in df.groupby("display_name"):
-                columns_justify[metric_display_name] = (
-                    "left" if metric_df["display_format"].values[0] == "str" else "right"
-                )
-            table = df2Table(
-                prepare_current_metrics_formatted_df(df, "console", include_period=True),
-                columns_justify=columns_justify,
-            )
-            export_to_html(table, export_path)
-            return
-        export_data(
-            prepare_current_metrics_formatted_df(df, "store", include_period=True),
-            export_path,
-            column_width=18,
-            column_format=APP_SETTINGS["styles"]["xlsx"]["financials"]["column"],
-        )
+        extension = export_path.split(".")[-1]
+        if extension == "html":
+            res.to_html(export_path)
+        elif extension == "xlsx":
+            res.to_xlsx(export_path)
+        elif extension == "csv":
+            res.to_csv(export_path)
+        else:
+            console.print("Unknown export extension!")
     else:
-        for metric_display_name, metric_df in df.groupby("display_name"):
-            columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
-        table = df2Table(
-            prepare_current_metrics_formatted_df(df, "console", include_period=True), columns_justify=columns_justify
-        )
-        console.print(table)
+        res.to_console(format="humanize")
+    return None
