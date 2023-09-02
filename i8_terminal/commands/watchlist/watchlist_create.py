@@ -6,7 +6,7 @@ from rich.console import Console
 
 from i8_terminal.commands.watchlist import watchlist
 from i8_terminal.common.cli import pass_command
-from i8_terminal.common.stock_info import validate_tickers
+from i8_terminal.common.stock_info import get_tickers_list, validate_tickers
 from i8_terminal.config import USER_SETTINGS
 from i8_terminal.types.ticker_param_type import TickerParamType
 
@@ -42,7 +42,7 @@ def create(name: str, tickers: str) -> None:
 
     """
     console = Console()
-    tickers_list = tickers.replace(" ", "").upper().split(",")
+    tickers_list = get_tickers_list(tickers.replace(" ", "").upper())
     with console.status("Creating Watchlist...", spinner="material"):
         create_watchlist(name, tickers_list)
     console.print(f"✅ Watchlist [cyan]{name}[/cyan] is created successfully!")

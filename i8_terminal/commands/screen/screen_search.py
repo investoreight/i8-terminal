@@ -33,7 +33,7 @@ RELATIVE_PERIOD_TYPES: Dict[str, str] = {
 def prepare_screen_df(
     conditions: List[str], metrics: str, sort_by: Optional[str], sort_order: Optional[str]
 ) -> Tuple[List[str], Optional[pd.DataFrame]]:
-    max_count = 20
+    max_count = 520
     for index, condition in enumerate(conditions):
         condition_parts = condition.split(":")
         metric = condition_parts[0]

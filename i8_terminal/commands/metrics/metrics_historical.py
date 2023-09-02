@@ -22,8 +22,11 @@ from i8_terminal.commands.metrics import metrics
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.formatting import data_format_mapper
 from i8_terminal.common.layout import df2Table, format_metrics_df
-from i8_terminal.common.metrics import get_all_metrics_type_and_data_types_df
-from i8_terminal.common.stock_info import validate_tickers
+from i8_terminal.common.metrics import (
+    add_ticker_rank_to_df,
+    get_all_metrics_type_and_data_types_df,
+)
+from i8_terminal.common.stock_info import get_tickers_list, validate_tickers
 from i8_terminal.common.utils import PlotType, reverse_period
 from i8_terminal.config import get_table_style
 from i8_terminal.types.chart_param_type import ChartParamType
@@ -85,20 +88,18 @@ def create_fig(
     df: DataFrame, cmd_context: Dict[str, Any], tickers: List[str], chart_type: str, metrics_type_df: DataFrame
 ) -> go.Figure:
     vertical_spacing = 0.02
+    metrics = list(set(df["Metric"]))
+    rows_num = len(metrics)
+    row_width = [1] * rows_num
     layout = dict(
         title=cmd_context["plot_title"],
-        autosize=True,
+        autosize=False,
+        width=846,
+        height=400 * rows_num,
         hovermode="closest",
         legend=dict(font=dict(size=11), orientation="v"),
         margin=dict(b=20, l=50, r=65),
     )
-    metrics = list(set(df["Metric"]))
-    rows_num = len(metrics)
-
-    if rows_num == 2:
-        row_width = [0.5, 0.5]
-    else:
-        row_width = [1]
 
     fig = make_subplots(
         rows=rows_num,
@@ -119,8 +120,7 @@ def create_fig(
                         y=ticker_df["value"],
                         name=ticker,
                         marker=dict(color=px.colors.qualitative.Plotly[idx]),
-                        legendgroup=f"group{idx}",
-                        showlegend=True if metrics.index(metric) == 0 else False,
+                        legendgroup=f"group{metric_idx}",
                     ),
                     row=metrics.index(metric) + 1,
                     col=1,
@@ -132,8 +132,7 @@ def create_fig(
                         y=ticker_df["value"],
                         name=ticker,
                         marker=dict(color=px.colors.qualitative.Plotly[idx]),
-                        legendgroup=f"group{idx}",
-                        showlegend=True if metrics.index(metric) == 0 else False,
+                        legendgroup=f"group{metric_idx}",
                     ),
                     row=metrics.index(metric) + 1,
                     col=1,
@@ -168,6 +167,7 @@ def create_fig(
         legend_title_text=None,
         xaxis_title=None,
         yaxis_title=None,
+        legend_tracegroupgap=333,
     )
 
     # Add yaxis titles
@@ -188,10 +188,17 @@ def create_fig(
 
 
 def historical_metrics_df2tree(df: DataFrame) -> Tree:
-    df = df.pivot(index=["Metric", "Ticker"], columns="Period", values="value").reset_index()
-    reversed_periods = [reverse_period(p) for p in list(df.columns[2:])]
-    reversed_periods.sort(reverse=True)
-    sorted_periods = [reverse_period(rp) for rp in reversed_periods]
+    # If the period type is daily or real-time, the df must be sorted using the PeriodDateTime
+    # and if not must be sorted using reversed_period.
+    if any(set(["D", "R"]) & set(df["default_period_type"].unique())):
+        period_dict = dict(df[["PeriodDateTime", "Period"]].sort_values("PeriodDateTime", ascending=False).values)
+        sorted_periods = [period_dict[p] for p in period_dict.keys()]
+        df = df.pivot(index=["Metric", "Ticker"], columns="Period", values="value").reset_index()
+    else:
+        df = df.pivot(index=["Metric", "Ticker"], columns="Period", values="value").reset_index()
+        reversed_periods = [reverse_period(p) for p in list(df.columns[2:])]
+        reversed_periods.sort(reverse=True)
+        sorted_periods = [reverse_period(rp) for rp in reversed_periods]
     col_width = 15
     plot_title = f"Historical {' and '.join(list(set(df['Metric'])))}"
     tree = Tree(Panel(plot_title, width=50))
@@ -254,7 +261,6 @@ def historical_metrics_df2tree(df: DataFrame) -> Tree:
     "--plot_type",
     "-p",
     type=ChartParamType([("bar", "Bar chart"), ("line", "Line chart")]),
-    default="line",
     help="Plot can be bar or line chart.",
 )
 @click.option("--pivot", "-pv", is_flag=True, default=False, help="Output will be pivot table.")
@@ -272,7 +278,7 @@ def historical(
     tickers: str,
     metrics: str,
     output: str,
-    plot_type: str,
+    plot_type: Optional[str],
     pivot: bool,
     period_type: Optional[str],
     from_date: Optional[datetime],
@@ -290,14 +296,11 @@ def historical(
     if output not in ["terminal", "plot"]:
         click.echo(click.style(f"`{output}` is not valid output type.", fg="yellow"))
         return
-    if output == "plot" and len(metrics_list) > 2:
-        click.echo(click.style("For the `plot` output type you can enter up to only two metrics.", fg="yellow"))
-        return
     command_path_parsed_options_dict = {
         "--tickers": tickers,
         "--metrics": metrics,
         "--output": output,
-        "--plot_type": plot_type,
+        "--plot_type": plot_type if plot_type else "line",
     }
     if period_type:
         command_path_parsed_options_dict["--period_type"] = period_type
@@ -306,11 +309,11 @@ def historical(
     if to_date:
         command_path_parsed_options_dict["--to_date"] = to_date.strftime("%Y-%m-%d")
     command_path = get_click_command_path(ctx, command_path_parsed_options_dict)
-    tickers_list = tickers.replace(" ", "").upper().split(",")
+    tickers_list = get_tickers_list(tickers.replace(" ", "").upper())
     if len(tickers_list) > 5:
         click.echo(click.style("You can enter up to 5 tickers.", fg="yellow"))
         return
-    if plot_type not in ["bar", "line"]:
+    if plot_type and plot_type not in ["bar", "line"]:
         click.echo(click.style(f"`{plot_type}` is not valid chart type.", fg="yellow"))
         return
     cmd_context = {
@@ -332,18 +335,27 @@ def historical(
     with console.status("Fetching data...", spinner="material") as status:
         df = get_historical_metrics_df(tickers_list, metrics_list, period_type, from_date, to_date)
         df = df.sort_values(["PeriodDateTime"], ascending=False).groupby(["Ticker", "Metric", "Period"]).head(1)
-        if len(df["default_period_type"].unique()) > 1:
+        if not period_type:
+            if len(df["default_period_type"].unique()) > 1:
+                console.print(
+                    "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type or specify the period_type parameter. Check `metrics describe` command to find more about metrics.",  # noqa: E501
+                    style="yellow",
+                )
+                return
+        if len(df["metric_name"].unique()) < len(metrics_list):
+            # If all of the input metrics don't have data in the input period_type
+            # (eg. --metrics eps_growth,revenue_actual --period_type FY).
             console.print(
-                "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type. Check `metrics describe` command to find more about metrics.",  # noqa: E501
+                "The `period type` of the provided metrics are not compatible. Make sure the provided metrics have the same period type or specify the period_type parameter. Check `metrics describe` command to find more about metrics.",  # noqa: E501
                 style="yellow",
             )
             return
-        if output == "plot":
+        if output == "plot" or plot_type:
             cmd_context["plot_title"] = f"Historical {' and '.join(list(set(df['Metric'])))}"
             status.update("Generating plot...")
-            fig = create_fig(df, cmd_context, tickers_list, plot_type, metrics_type_df)
+            fig = create_fig(df, cmd_context, tickers_list, plot_type if plot_type else "line", metrics_type_df)
 
-    if output == "plot":
+    if output == "plot" or plot_type:
         serve_plot(fig, cmd_context)
         return
     formatted_df = format_metrics_df(df, "console")
@@ -354,11 +366,27 @@ def historical(
     columns_justify: Dict[str, Any] = {}
     for metric_display_name, metric_df in df.groupby("Metric"):
         columns_justify[metric_display_name] = "left" if metric_df["display_format"].values[0] == "str" else "right"
-    formatted_df = formatted_df.pivot(
-        index=["Ticker", "Period", "PeriodDateTime"], columns="Metric", values="value"
-    ).reset_index()
-    formatted_df.sort_values(["Ticker", "PeriodDateTime"], ascending=False, inplace=True)
-    formatted_df.drop(columns=["PeriodDateTime"], inplace=True)
+    # If the period type is daily or real-time, the df must be sorted using the PeriodDateTime
+    # and if not must be sorted using reversed_period.
+    if any(set(["D", "R"]) & set(formatted_df["default_period_type"].unique())):
+        formatted_df = formatted_df.pivot(
+            index=["Ticker", "Period", "PeriodDateTime"], columns="Metric", values="value"
+        ).reset_index()
+        formatted_df = add_ticker_rank_to_df(formatted_df, tickers_list)
+        formatted_df.sort_values(["TickerRank", "PeriodDateTime"], ascending=[True, False], inplace=True)
+        formatted_df.drop(columns=["TickerRank", "PeriodDateTime"], inplace=True)
+    else:
+        formatted_df = formatted_df.pivot(index=["Ticker", "Period"], columns="Metric", values="value").reset_index()
+        formatted_df["reversed_period"] = formatted_df.apply(
+            lambda row: reverse_period(row.Period),
+            axis=1,
+        )
+        formatted_df = add_ticker_rank_to_df(formatted_df, tickers_list)
+        formatted_df.sort_values(["TickerRank", "reversed_period"], ascending=[True, False], inplace=True)
+        formatted_df.drop(columns=["TickerRank", "reversed_period"], inplace=True)
+    metrics_order = [df.loc[df["metric_name"] == metric]["Metric"].values[0] for metric in metrics_list]
+    metrics_order[:0] = ["Ticker", "Period"]
+    formatted_df = formatted_df.reindex(columns=metrics_order)
     table = df2Table(
         formatted_df,
         columns_justify=columns_justify,

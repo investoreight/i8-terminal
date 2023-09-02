@@ -17,7 +17,7 @@ from i8_terminal.app.plot_server import serve_plot
 from i8_terminal.commands.financials import financials
 from i8_terminal.common.cli import get_click_command_path, pass_command
 from i8_terminal.common.metrics import find_similar_fin_metric
-from i8_terminal.common.stock_info import validate_tickers
+from i8_terminal.common.stock_info import get_tickers_list, validate_tickers
 from i8_terminal.common.utils import PlotType, reverse_period
 from i8_terminal.types.chart_param_type import ChartParamType, get_chart_param_types
 from i8_terminal.types.metric_param_type import MetricParamType
@@ -205,7 +205,7 @@ def plot(
     if to_date:
         command_path_parsed_options_dict["--to_date"] = to_date.strftime("%Y-%m-%d")
     command_path = get_click_command_path(ctx, command_path_parsed_options_dict)
-    tickers_list = tickers.replace(" ", "").upper().split(",")
+    tickers_list = get_tickers_list(tickers.replace(" ", "").upper())
     if len(tickers_list) > 5:
         click.echo("You can enter up to 5 tickers.")
         return

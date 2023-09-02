@@ -1,5 +1,4 @@
 import os
-from ast import literal_eval
 from typing import Dict, List, Optional
 
 import arrow
@@ -10,7 +9,7 @@ from investor8_sdk import MetricsApi
 from pandas import DataFrame, read_csv
 
 from i8_terminal.common.layout import format_metrics_df
-from i8_terminal.common.stock_info import get_stocks_df
+from i8_terminal.common.stock_info import get_tickers_list
 from i8_terminal.common.utils import is_cached_file_expired, reverse_period, similarity
 from i8_terminal.config import APP_SETTINGS, SETTINGS_FOLDER
 
@@ -102,7 +101,7 @@ def get_metric_info(name: str) -> Dict[str, str]:
         "type": metric.get("type", ""),
         "display_format": metric.get("display_format", ""),
         "default_period_type": metric.get("period_type_default", ""),
-        "description": metric.get("description", "No Description"),
+        "description": metric.get("short_description", "No Description"),
         "remarks": metric.get("remarks"),
     }
 
@@ -120,15 +119,7 @@ def get_period_start_date(period: str) -> str:
 
 
 def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFrame]:
-    stocks_peers = get_stocks_df()[["ticker", "peers"]].set_index("ticker").to_dict()["peers"]
-    tickers_list = []
-    for tk in tickers.split(","):
-        if "peers" in tk and stocks_peers.get(tk.split(".")[0]):
-            ticker_name = tk.split(".")[0]
-            tickers_list.append(ticker_name)
-            tickers_list.extend(literal_eval(stocks_peers.get(ticker_name)))
-        else:
-            tickers_list.append(tk)
+    tickers_list = get_tickers_list(tickers)
     metrics = investor8_sdk.MetricsApi().get_current_metrics(
         symbols=",".join(tickers_list),
         metrics=metricsList,
@@ -145,7 +136,13 @@ def get_current_metrics_df(tickers: str, metricsList: str) -> Optional[pd.DataFr
     return df
 
 
-def prepare_current_metrics_formatted_df(df: DataFrame, target: str, include_period: bool = False) -> DataFrame:
+def prepare_current_metrics_formatted_df(
+    df: DataFrame,
+    target: str,
+    include_period: bool = False,
+    tickers_order: Optional[List[str]] = None,
+    metrics_order: Optional[List[str]] = None,
+) -> DataFrame:
     formatted_df = format_metrics_df(df, target)
     if include_period:
         formatted_df.rename(columns={"period": "Period"}, inplace=True)
@@ -153,9 +150,17 @@ def prepare_current_metrics_formatted_df(df: DataFrame, target: str, include_per
             index=["Ticker", "Period"], columns="display_name", values="value"
         ).reset_index()
         formatted_df["reversed_period"] = formatted_df.apply(lambda row: reverse_period(row.Period), axis=1)
-        formatted_df.sort_values(["Ticker", "reversed_period"], ascending=False, inplace=True)
-        formatted_df.drop(columns=["reversed_period"], inplace=True)
+        if tickers_order:
+            formatted_df = add_ticker_rank_to_df(formatted_df, tickers_order)
+            formatted_df.sort_values(["TickerRank", "reversed_period"], ascending=[True, False], inplace=True)
+            formatted_df.drop(columns=["reversed_period", "TickerRank"], inplace=True)
+        else:
+            formatted_df.sort_values("reversed_period", ascending=False, inplace=True)
+            formatted_df.drop(columns="reversed_period", inplace=True)
         formatted_df["Period"].replace("", "NA", inplace=True)
+        if metrics_order:
+            metrics_order[:0] = ["Ticker", "Period"]
+            formatted_df = formatted_df.reindex(columns=metrics_order)
         return formatted_df
     return (
         formatted_df.pivot(index="Ticker", columns="display_name", values="value")
@@ -185,3 +190,9 @@ def get_view_metrics(viewName: str) -> List[str]:
         for m in mg.metrics:
             metric_names.append(m.name)
     return metric_names
+
+
+def add_ticker_rank_to_df(df: DataFrame, tickers_list: List[str]) -> DataFrame:
+    sorter_ticker_index = dict(zip(tickers_list, range(len(tickers_list))))
+    df["TickerRank"] = df["Ticker"].map(sorter_ticker_index)
+    return df
