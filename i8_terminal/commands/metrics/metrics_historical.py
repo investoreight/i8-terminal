@@ -167,7 +167,7 @@ def create_fig(
         legend_title_text=None,
         xaxis_title=None,
         yaxis_title=None,
-        legend_tracegroupgap=310,
+        legend_tracegroupgap=333,
     )
 
     # Add yaxis titles
