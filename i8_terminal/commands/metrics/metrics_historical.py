@@ -120,7 +120,8 @@ def create_fig(
                         y=ticker_df["value"],
                         name=ticker,
                         marker=dict(color=px.colors.qualitative.Plotly[idx]),
-                        legendgroup=f"group{metric_idx}",
+                        legendgroup=f"group{idx}",
+                        showlegend=True if metrics.index(metric) == 0 else False,
                     ),
                     row=metrics.index(metric) + 1,
                     col=1,
@@ -132,7 +133,8 @@ def create_fig(
                         y=ticker_df["value"],
                         name=ticker,
                         marker=dict(color=px.colors.qualitative.Plotly[idx]),
-                        legendgroup=f"group{metric_idx}",
+                        legendgroup=f"group{idx}",
+                        showlegend=True if metrics.index(metric) == 0 else False,
                     ),
                     row=metrics.index(metric) + 1,
                     col=1,
@@ -167,7 +169,6 @@ def create_fig(
         legend_title_text=None,
         xaxis_title=None,
         yaxis_title=None,
-        legend_tracegroupgap=333,
     )
 
     # Add yaxis titles
