@@ -8,7 +8,8 @@ rich==12.0.0
 plotly==5.3.1
 dash==2.3.1
 dash-bootstrap-components==1.1.0
-kaleido==0.1.0.post1
+kaleido==0.1.0.post1; platform_system == "Windows"
+kaleido==0.2.1; platform_system != "Windows"
 openpyxl==3.0.9
 xlsxwriter==3.0.3
 click-repl==0.2.0
