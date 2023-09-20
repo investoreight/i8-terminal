@@ -1,0 +1,2704 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.2">
+    
+    
+      
+        <title>Metrics - i8 Terminal Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.24c991ad.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#metrics-and-indicators" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="i8 Terminal Documentation" class="md-header__button md-logo" aria-label="i8 Terminal Documentation" data-md-component="logo">
+      
+  <img src="https://www.investoreight.com/media/logo-i8t.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            i8 Terminal Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Metrics
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="i8 Terminal Documentation" class="md-nav__button md-logo" aria-label="i8 Terminal Documentation" data-md-component="logo">
+      
+  <img src="https://www.investoreight.com/media/logo-i8t.png" alt="logo">
+
+    </a>
+    i8 Terminal Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Commands Reference
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../get_started/" class="md-nav__link">
+        Getting started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Metrics
+      </a>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="metrics-and-indicators">Metrics and Indicators</h1>
+<p>i8 Terminal uses more than 500 built-in financial metrics and indicators that are used in several commands and can be used to implement custom analysis. </p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Display Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="52_week_high/">52_week_high</a></td>
+<td>52 Week High</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="high_1m/">high_1m</a></td>
+<td>High (1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_1y_1m/">beta_1y_1m</a></td>
+<td>Beta (1Y-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_1y/">beta_1y</a></td>
+<td>Beta (1Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_1w_1w/">beta_1w_1w</a></td>
+<td>Beta (1W-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_1w_1m/">beta_1w_1m</a></td>
+<td>Beta (1W-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_1w/">beta_1w</a></td>
+<td>Beta (1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_1m_1w/">beta_1m_1w</a></td>
+<td>Beta (1M-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_1m_1m/">beta_1m_1m</a></td>
+<td>Beta (1M-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_1m/">beta_1m</a></td>
+<td>Beta (1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="gamma_2y/">gamma_2y</a></td>
+<td>Gamma (2Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="gamma_2w/">gamma_2w</a></td>
+<td>Gamma (2W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="52_week_low/">52_week_low</a></td>
+<td>52 Week Low</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="gamma_1y/">gamma_1y</a></td>
+<td>Gamma (1Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="low_1m/">low_1m</a></td>
+<td>Low (1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="low_1w/">low_1w</a></td>
+<td>Low (1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="low_1y/">low_1y</a></td>
+<td>Low (1Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="low_5y/">low_5y</a></td>
+<td>Low (5Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="low_6m/">low_6m</a></td>
+<td>Low (6M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="gamma_1w/">gamma_1w</a></td>
+<td>Gamma (1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="gamma_1m/">gamma_1m</a></td>
+<td>Gamma (1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_1y_1w/">beta_1y_1w</a></td>
+<td>Beta (1Y-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_2w/">beta_2w</a></td>
+<td>Beta (2W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_2w_1m/">beta_2w_1m</a></td>
+<td>Beta (2W-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_6m/">beta_6m</a></td>
+<td>Beta (6M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="high_1y/">high_1y</a></td>
+<td>High (1Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="high_5y/">high_5y</a></td>
+<td>High (5Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="high_6m/">high_6m</a></td>
+<td>High (6M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="gamma_6m/">gamma_6m</a></td>
+<td>Gamma (6M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="gamma_5y/">gamma_5y</a></td>
+<td>Gamma (5Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="gamma_3m/">gamma_3m</a></td>
+<td>Gamma (3M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_6m_1w/">beta_6m_1w</a></td>
+<td>Beta (6M-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_6m_1m/">beta_6m_1m</a></td>
+<td>Beta (6M-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_5y_1w/">beta_5y_1w</a></td>
+<td>Beta (5Y-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_2w_1w/">beta_2w_1w</a></td>
+<td>Beta (2W-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_5y_1m/">beta_5y_1m</a></td>
+<td>Beta (5Y-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_5y/">beta_5y</a></td>
+<td>Beta (5Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_3m_1w/">beta_3m_1w</a></td>
+<td>Beta (3M-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_3m_1m/">beta_3m_1m</a></td>
+<td>Beta (3M-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_3m/">beta_3m</a></td>
+<td>Beta (3M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_2y_1w/">beta_2y_1w</a></td>
+<td>Beta (2Y-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_2y_1m/">beta_2y_1m</a></td>
+<td>Beta (2Y-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="beta_2y/">beta_2y</a></td>
+<td>Beta (2Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_6m_1w/">alpha_6m_1w</a></td>
+<td>Alpha (6M-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_6m_1m/">alpha_6m_1m</a></td>
+<td>Alpha (6M-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_6m/">alpha_6m</a></td>
+<td>Alpha (6M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="ema52/">ema52</a></td>
+<td>Exponential Moving Average (52D)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="ma12/">ma12</a></td>
+<td>Moving Average (12D)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="ma26/">ma26</a></td>
+<td>Moving Average (26D)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="ma52/">ma52</a></td>
+<td>Moving Average (52D)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="ma5/">ma5</a></td>
+<td>Moving Average (5D)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="macd/">macd</a></td>
+<td>Moving Average Convergence Divergence</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="ema5/">ema5</a></td>
+<td>Exponential Moving Average (5D)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="adjlow/">adjlow</a></td>
+<td>Adjusted Low</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="adjhigh/">adjhigh</a></td>
+<td>Adjusted High</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="ema26/">ema26</a></td>
+<td>Exponential Moving Average (26D)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_1m_1m/">alpha_1m_1m</a></td>
+<td>Alpha (1M-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="ema12/">ema12</a></td>
+<td>Exponential Moving Average (12D)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="pe_ratio_fy/">pe_ratio_fy</a></td>
+<td>P/E Ratio (FY)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="pe_ratio_ttm/">pe_ratio_ttm</a></td>
+<td>P/E Ratio (TTM)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="rhml/">rhml</a></td>
+<td>Relative High Minus Low</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="rsi_14d/">rsi_14d</a></td>
+<td>Relative Strength Index (14D)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="rsi_1m/">rsi_1m</a></td>
+<td>Relative Strength Index (1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="rsi_3m/">rsi_3m</a></td>
+<td>Relative Strength Index (3M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="rsi_7d/">rsi_7d</a></td>
+<td>Relative Strength Index (7D)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_5y_1w/">alpha_5y_1w</a></td>
+<td>Alpha (5Y-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_1m/">alpha_1m</a></td>
+<td>Alpha (1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_1m_1w/">alpha_1m_1w</a></td>
+<td>Alpha (1M-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_2w_1w/">alpha_2w_1w</a></td>
+<td>Alpha (2W-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_5y_1m/">alpha_5y_1m</a></td>
+<td>Alpha (5Y-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_5y/">alpha_5y</a></td>
+<td>Alpha (5Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_3m_1w/">alpha_3m_1w</a></td>
+<td>Alpha (3M-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_3m_1m/">alpha_3m_1m</a></td>
+<td>Alpha (3M-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_3m/">alpha_3m</a></td>
+<td>Alpha (3M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_2y_1w/">alpha_2y_1w</a></td>
+<td>Alpha (2Y-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_2y_1m/">alpha_2y_1m</a></td>
+<td>Alpha (2Y-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_1w/">alpha_1w</a></td>
+<td>Alpha (1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_2y/">alpha_2y</a></td>
+<td>Alpha (2Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_2w_1m/">alpha_2w_1m</a></td>
+<td>Alpha (2W-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_2w/">alpha_2w</a></td>
+<td>Alpha (2W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_1y_1w/">alpha_1y_1w</a></td>
+<td>Alpha (1Y-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_1y_1m/">alpha_1y_1m</a></td>
+<td>Alpha (1Y-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_1y/">alpha_1y</a></td>
+<td>Alpha (1Y)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_1w_1w/">alpha_1w_1w</a></td>
+<td>Alpha (1W-1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="alpha_1w_1m/">alpha_1w_1m</a></td>
+<td>Alpha (1W-1M)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="high_1w/">high_1w</a></td>
+<td>High (1W)</td>
+<td>technical</td>
+</tr>
+<tr>
+<td><a href="ceo/">ceo</a></td>
+<td>Ceo</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="exchange_symbol/">exchange_symbol</a></td>
+<td>Exchange Symbol</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="company_name/">company_name</a></td>
+<td>Company Name</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="company_url/">company_url</a></td>
+<td>Company Url</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="long_description/">long_description</a></td>
+<td>Long Description</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="business_phone_no/">business_phone_no</a></td>
+<td>Business Phone Number</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="market_sector/">market_sector</a></td>
+<td>Market Sector</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="sector/">sector</a></td>
+<td>Sector</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="security_class/">security_class</a></td>
+<td>Security Class</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="security_type/">security_type</a></td>
+<td>Security Type</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="short_description/">short_description</a></td>
+<td>Short Description</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="stock_exchange/">stock_exchange</a></td>
+<td>Stock Exchange</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="business_address/">business_address</a></td>
+<td>Business Address</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="ticker_slug/">ticker_slug</a></td>
+<td>Ticker Slug</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="is_etf/">is_etf</a></td>
+<td>ETF</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="legal_name/">legal_name</a></td>
+<td>Legal Name</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="is_active/">is_active</a></td>
+<td>Is Active</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="industry_group/">industry_group</a></td>
+<td>Industry Group</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="employees/">employees</a></td>
+<td>Employees</td>
+<td>summary</td>
+</tr>
+<tr>
+<td><a href="low/">low</a></td>
+<td>Low Price</td>
+<td>price</td>
+</tr>
+<tr>
+<td><a href="open/">open</a></td>
+<td>Open Price</td>
+<td>price</td>
+</tr>
+<tr>
+<td><a href="exchange_volume/">exchange_volume</a></td>
+<td>Exchange Volume</td>
+<td>price</td>
+</tr>
+<tr>
+<td><a href="price/">price</a></td>
+<td>Latest Price</td>
+<td>price</td>
+</tr>
+<tr>
+<td><a href="high/">high</a></td>
+<td>High Price</td>
+<td>price</td>
+</tr>
+<tr>
+<td><a href="volume/">volume</a></td>
+<td>Volume</td>
+<td>price</td>
+</tr>
+<tr>
+<td><a href="close/">close</a></td>
+<td>Close Price</td>
+<td>price</td>
+</tr>
+<tr>
+<td><a href="return_2y/">return_2y</a></td>
+<td>Return (2Y)</td>
+<td>performance</td>
+</tr>
+<tr>
+<td><a href="return_ytd/">return_ytd</a></td>
+<td>Return (Ytd)</td>
+<td>performance</td>
+</tr>
+<tr>
+<td><a href="return_1w/">return_1w</a></td>
+<td>Return (1W)</td>
+<td>performance</td>
+</tr>
+<tr>
+<td><a href="return_1y/">return_1y</a></td>
+<td>Return (1Y)</td>
+<td>performance</td>
+</tr>
+<tr>
+<td><a href="return_2w/">return_2w</a></td>
+<td>Return (2W)</td>
+<td>performance</td>
+</tr>
+<tr>
+<td><a href="return_3m/">return_3m</a></td>
+<td>Return (3M)</td>
+<td>performance</td>
+</tr>
+<tr>
+<td><a href="return_5y/">return_5y</a></td>
+<td>Return (5Y)</td>
+<td>performance</td>
+</tr>
+<tr>
+<td><a href="return_6m/">return_6m</a></td>
+<td>Return (6M)</td>
+<td>performance</td>
+</tr>
+<tr>
+<td><a href="return_1m/">return_1m</a></td>
+<td>Return (1M)</td>
+<td>performance</td>
+</tr>
+<tr>
+<td><a href="change/">change</a></td>
+<td>Change</td>
+<td>performance</td>
+</tr>
+<tr>
+<td><a href="change_abs/">change_abs</a></td>
+<td>Change (Absolute)</td>
+<td>performance</td>
+</tr>
+<tr>
+<td><a href="total_current_liabilities/">total_current_liabilities</a></td>
+<td>Total Current Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="short_term_debt/">short_term_debt</a></td>
+<td>Short-Term Debt</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="net_inventory/">net_inventory</a></td>
+<td>Inventories, net</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="interest_bearing_deposits_at_other_banks/">interest_bearing_deposits_at_other_banks</a></td>
+<td>Interest Bearing Deposits at Other Banks</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="interest_bearing_deposits/">interest_bearing_deposits</a></td>
+<td>Interest Bearing Deposits</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="total_current_assets/">total_current_assets</a></td>
+<td>Total Current Assets</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="current_deferred_tax_liabilities/">current_deferred_tax_liabilities</a></td>
+<td>Current Deferred &amp; Payable Income Tax Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="total_equity_and_non_controlling_interests/">total_equity_and_non_controlling_interests</a></td>
+<td>Total Equity &amp; Noncontrolling Interests</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="issuance_of_common_equity/">issuance_of_common_equity</a></td>
+<td>Issuance of Common Equity</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="issuance_of_debt/">issuance_of_debt</a></td>
+<td>Issuance of Debt</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="latest_financials_end_date_fy/">latest_financials_end_date_fy</a></td>
+<td>Latest End Date (FY)</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="latest_financials_end_date_q/">latest_financials_end_date_q</a></td>
+<td>Latest End Date (Q)</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="latest_financial_year/">latest_financial_year</a></td>
+<td>Latest Period (FY)</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="latest_financial_quarter/">latest_financial_quarter</a></td>
+<td>Latest Period (Q)</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="intangible_assets/">intangible_assets</a></td>
+<td>Intangible Assets</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_current_non_operating_liabilities/">other_current_non_operating_liabilities</a></td>
+<td>Other Current Nonoperating Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_assets/">other_assets</a></td>
+<td>Other Assets</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_current_assets/">other_current_assets</a></td>
+<td>Other Current Assets</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_current_liabilities/">other_current_liabilities</a></td>
+<td>Other Current Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="capital_lease_obligations/">capital_lease_obligations</a></td>
+<td>Capital Lease Obligations</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_current_non_operating-assets/">other_current_non_operating-assets</a></td>
+<td>Other Current Nonoperating Assets</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="cash_and_equivalents/">cash_and_equivalents</a></td>
+<td>Cash &amp; Equivalents</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="bankers_acceptances/">bankers_acceptances</a></td>
+<td>Bankers Acceptance Outstanding</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_equity/">other_equity</a></td>
+<td>Other Equity Adjustments</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="goodwill/">goodwill</a></td>
+<td>Goodwill</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="cash_income_taxes_paid/">cash_income_taxes_paid</a></td>
+<td>Cash Income Taxes Paid</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="cash_interest_paid/">cash_interest_paid</a></td>
+<td>Cash Interest Paid</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_financing_activities_net/">other_financing_activities_net</a></td>
+<td>Other Financing Activities, net</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="future_policy_benefits/">future_policy_benefits</a></td>
+<td>Future Policy Benefits</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="note_receivable/">note_receivable</a></td>
+<td>Note &amp; Lease Receivable</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="long_term_debt/">long_term_debt</a></td>
+<td>Long-Term Debt</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="loans_held_for_sale/">loans_held_for_sale</a></td>
+<td>Loans Held for Sale</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="total_assets/">total_assets</a></td>
+<td>Total Assets</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="net_change_in_cash/">net_change_in_cash</a></td>
+<td>Net Change in Cash &amp; Equivalents</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="net_cash_from_operating_activities/">net_cash_from_operating_activities</a></td>
+<td>Net Cash From Operating Activities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="net_cash_from_investing_activities/">net_cash_from_investing_activities</a></td>
+<td>Net Cash From Investing Activities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="net_cash_from_financing_activities/">net_cash_from_financing_activities</a></td>
+<td>Net Cash From Financing Activities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="unearned_premiums_debit/">unearned_premiums_debit</a></td>
+<td>Unearned Premiums Debit</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="time_deposits_placed/">time_deposits_placed</a></td>
+<td>Time Deposits Placed and Other Short-Term Investments</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="net_cash_from_continuing_operating_activities/">net_cash_from_continuing_operating_activities</a></td>
+<td>Net Cash From Continuing Operating Activities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="net_cash_from_continuing_investing_activities/">net_cash_from_continuing_investing_activities</a></td>
+<td>Net Cash From Continuing Investing Activities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="net_cash_from_continuing_financing_activities/">net_cash_from_continuing_financing_activities</a></td>
+<td>Net Cash From Continuing Financing Activities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="unearned_premiums_credit/">unearned_premiums_credit</a></td>
+<td>Unearned Premiums Credit</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="allowance_for_loan_and_lease_losses/">allowance_for_loan_and_lease_losses</a></td>
+<td>Allowance for Loan and Lease Losses</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="mortgage_servicing_rights/">mortgage_servicing_rights</a></td>
+<td>Mortgage Servicing Rights</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="short_term_investments/">short_term_investments</a></td>
+<td>Short-Term Investments</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="current_deferred_tax_assets/">current_deferred_tax_assets</a></td>
+<td>Current Deferred &amp; Refundable Income Taxes</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="non_cash_adjustments_to_net_income/">non_cash_adjustments_to_net_income</a></td>
+<td>Non-Cash Adjustments To Reconcile Net Income</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="loans_and_leases/">loans_and_leases</a></td>
+<td>Loans and Leases</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="non_interest_bearing_deposits/">non_interest_bearing_deposits</a></td>
+<td>Non-Interest Bearing Deposits</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="treasury_stock/">treasury_stock</a></td>
+<td>Treasury Stock</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="trading_accounts_ecurities/">trading_accounts_ecurities</a></td>
+<td>Trading Account Securities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="asset_retirement_and_litigation_obligation/">asset_retirement_and_litigation_obligation</a></td>
+<td>Asset Retirement Reserve &amp; Litigation Obligation</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="non_controlling_interests/">non_controlling_interests</a></td>
+<td>Noncontrolling Interest</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="longterm_investments/">longterm_investments</a></td>
+<td>Long-Term Investments</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="non_current_deferred_tax_liabilities/">non_current_deferred_tax_liabilities</a></td>
+<td>Noncurrent Deferred &amp; Payable Income Tax Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="non_current_deferred_tax_assets/">non_current_deferred_tax_assets</a></td>
+<td>Noncurrent Deferred &amp; Refundable Income Taxes</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="non_current_deferred_revenue/">non_current_deferred_revenue</a></td>
+<td>Noncurrent Deferred Revenue</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="non_current_employee_benefit_liabilities/">non_current_employee_benefit_liabilities</a></td>
+<td>Noncurrent Employee Benefit Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_long_term_liabilities/">other_long_term_liabilities</a></td>
+<td>Other Long-Term Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="non_current_note_receivables/">non_current_note_receivables</a></td>
+<td>Noncurrent Note &amp; Lease Receivables</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="net_loans_and_leases/">net_loans_and_leases</a></td>
+<td>Loans and Leases, Net of Allowance</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="total_common_equity/">total_common_equity</a></td>
+<td>Total Common Equity</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_investing_activities_net/">other_investing_activities_net</a></td>
+<td>Other Investing Activities, net</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="total_equity/">total_equity</a></td>
+<td>Total Preferred &amp; Common Equity</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="separate_account_business_liabilities/">separate_account_business_liabilities</a></td>
+<td>Separate Account Business Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="deferred_acquisition_cost/">deferred_acquisition_cost</a></td>
+<td>Deferred Acquisition Cost</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="total_non_current_assets/">total_non_current_assets</a></td>
+<td>Total Noncurrent Assets</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="accrued_investment_income/">accrued_investment_income</a></td>
+<td>Accrued Investment Income</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="accrued_interest_payable/">accrued_interest_payable</a></td>
+<td>Accrued Interest Payable</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="customer_deposits/">customer_deposits</a></td>
+<td>Customer Deposits</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="participating_policy_holder_equity/">participating_policy_holder_equity</a></td>
+<td>Participating Policy Holder Equity</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="customer_and_other_receivables/">customer_and_other_receivables</a></td>
+<td>Customer and Other Receivables</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="ab/">ab</a></td>
+<td>Accounts Receivable</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="payment_of_dividends/">payment_of_dividends</a></td>
+<td>Payment of Dividends</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="gross_ppe/">gross_ppe</a></td>
+<td>Plant, Property &amp; Equipment, gross</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="employee_benefit_assets/">employee_benefit_assets</a></td>
+<td>Employee Benefit Assets</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="accumulated_depreciation/">accumulated_depreciation</a></td>
+<td>Accumulated Depreciation</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="net_ppe/">net_ppe</a></td>
+<td>Plant, Property, &amp; Equipment, net</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="policy_holder_funds/">policy_holder_funds</a></td>
+<td>Policy Holder Funds</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="repayment_of_debt/">repayment_of_debt</a></td>
+<td>Repayment of Debt</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="total_preferredequity/">total_preferredequity</a></td>
+<td>Preferred Stock</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="net_premises_and_equipment/">net_premises_and_equipment</a></td>
+<td>Premises and Equipment, Net</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="prepaid_expenses/">prepaid_expenses</a></td>
+<td>Prepaid Expenses</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="retained_earnings/">retained_earnings</a></td>
+<td>Retained Earnings</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="purchase_of_plant_property_and_equipment/">purchase_of_plant_property_and_equipment</a></td>
+<td>Purchase of Property, Plant &amp; Equipment</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="total_non_current_liabilities/">total_non_current_liabilities</a></td>
+<td>Total Noncurrent Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="redeemable_non_controlling_interest/">redeemable_non_controlling_interest</a></td>
+<td>Redeemable Noncontrolling Interest</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_taxes_payable/">other_taxes_payable</a></td>
+<td>Other Taxes Payable</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="accounts_payable/">accounts_payable</a></td>
+<td>Accounts Payable</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="claims_and_claim_expenses/">claims_and_claim_expenses</a></td>
+<td>Claims and Claim Expense</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="separate_account_business_assets/">separate_account_business_assets</a></td>
+<td>Separate Account Business Assets</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="dividends_payable/">dividends_payable</a></td>
+<td>Dividends Payable</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_non_current_non_operating_assets/">other_non_current_non_operating_assets</a></td>
+<td>Other Noncurrent Nonoperating Assets</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_non_current_non_operating_liabilities/">other_non_current_non_operating_liabilities</a></td>
+<td>Other Noncurrent Nonoperating Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="accrued_expenses/">accrued_expenses</a></td>
+<td>Accrued Expenses</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="fed_funds_sold/">fed_funds_sold</a></td>
+<td>Federal Funds Sold</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="total_liabilities/">total_liabilities</a></td>
+<td>Total Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="fed_funds_purchased/">fed_funds_purchased</a></td>
+<td>Federal Funds Purchased and Securities Sold</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="current_deferred_revenue/">current_deferred_revenue</a></td>
+<td>Current Deferred Revenue</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="current_employee_benefit_liabilities/">current_employee_benefit_liabilities</a></td>
+<td>Current Employee Benefit Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="increase_decrease_in_operating_capital/">increase_decrease_in_operating_capital</a></td>
+<td>Changes in Operating Assets and Liabilities, net</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="commitments_and_contingencies/">commitments_and_contingencies</a></td>
+<td>Commitments &amp; Contingencies</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="total_liabilities_and_equity/">total_liabilities_and_equity</a></td>
+<td>Total Liabilities &amp; Shareholders' Equity</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_non_current_assets/">other_non_current_assets</a></td>
+<td>Other Noncurrent Operating Assets</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="common_equity/">common_equity</a></td>
+<td>Common Stock</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_non_current_liabilities/">other_non_current_liabilities</a></td>
+<td>Other Noncurrent Operating Liabilities</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="acquisitions/">acquisitions</a></td>
+<td>Acquisitions</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="aoci/">aoci</a></td>
+<td>Accumulated Other Comprehensive Income</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="other_short_term_payables/">other_short_term_payables</a></td>
+<td>Other Short-Term Payables</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="restricted_cash/">restricted_cash</a></td>
+<td>Restricted Cash</td>
+<td>fin_statement</td>
+</tr>
+<tr>
+<td><a href="st_debt_to_cap/">st_debt_to_cap</a></td>
+<td>Short-Term Debt to Total Capital</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="nopat/">nopat</a></td>
+<td>Net Operating Profit after Tax (NOPAT)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="nwc/">nwc</a></td>
+<td>Net Working Capital (NWC)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="nwc_to_rev/">nwc_to_rev</a></td>
+<td>Net Working Capital to Revenue</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="revenue_growth/">revenue_growth</a></td>
+<td>Revenue Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="roa/">roa</a></td>
+<td>Return on Assets (ROA)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_nonop_obligations/">net_nonop_obligations</a></td>
+<td>Net Nonoperating Obligations (NNO)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="nnep/">nnep</a></td>
+<td>Net Nonoperating Expense Percent (NNEP)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_non_opex/">net_non_opex</a></td>
+<td>Net Nonoperating Expense (NNE)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_interest_income/">net_interest_income</a></td>
+<td>Net Interest Income</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_income_qoq_growth/">net_income_qoq_growth</a></td>
+<td>Net Income Q/Q Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_income_growth/">net_income_growth</a></td>
+<td>Net Income Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_income_discontinued/">net_income_discontinued</a></td>
+<td>Net Income Discontinued Operations</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="roce/">roce</a></td>
+<td>Return on Common Equity (ROCE)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_income_to_noncontrolling_interest/">net_income_to_noncontrolling_interest</a></td>
+<td>Net Income Attributable to Non-controlling Interest</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="roe/">roe</a></td>
+<td>Return on Equity (ROE)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="roe_simple/">roe_simple</a></td>
+<td>Return on Equity Simple (ROE_SIMPLE)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_income_to_common/">net_income_to_common</a></td>
+<td>Net Income Attributable to Common Shareholders</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_income/">net_income</a></td>
+<td>Net Income</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ap_turnover/">ap_turnover</a></td>
+<td>Accounts Payable Turnover</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="price_to_earnings/">price_to_earnings</a></td>
+<td>Price to Earnings (P/E)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ar_turnover/">ar_turnover</a></td>
+<td>Accounts Receivable Turnover</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="nonoperating_income/">nonoperating_income</a></td>
+<td>Non-operating Income</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="total_other_income/">total_other_income</a></td>
+<td>Other Income</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="other_gains/">other_gains</a></td>
+<td>Other Gains</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_debt_to_nopat/">net_debt_to_nopat</a></td>
+<td>Net Debt to NOPAT</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="operating_revenue/">operating_revenue</a></td>
+<td>Operating Revenue</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="oroa/">oroa</a></td>
+<td>Operating Return on Assets (OROA)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="operating_margin/">operating_margin</a></td>
+<td>Operating Margin</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_income_continuing/">net_income_continuing</a></td>
+<td>Operating Income</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="opex_to_revenue/">opex_to_revenue</a></td>
+<td>Operating Expenses to Revenue</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ocf_to_interest_ex/">ocf_to_interest_ex</a></td>
+<td>Operating Cash Flow to Interest Expense</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ocf_to_capex/">ocf_to_capex</a></td>
+<td>Operating Cash Flow to CapEx</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ocf_qoq_growth/">ocf_qoq_growth</a></td>
+<td>Operating Cash Flow Q/Q Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ocf_less_capex_to_interest_ex/">ocf_less_capex_to_interest_ex</a></td>
+<td>Operating Cash Flow Less CapEx to Interest Expense</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ocf_growth/">ocf_growth</a></td>
+<td>Operating Cash Flow Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="pre_tax_income_margin/">pre_tax_income_margin</a></td>
+<td>Pre Tax Income Margin</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="preferred_to_cap/">preferred_to_cap</a></td>
+<td>Preferred Equity to Total Capital</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="normalized_nopat/">normalized_nopat</a></td>
+<td>Normalized Net Operating Profit after Tax (NOPAT)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="price_to_book/">price_to_book</a></td>
+<td>Price to Book Value (P/BV)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="normalized_nopat_margin/">normalized_nopat_margin</a></td>
+<td>Normalized NOPAT Margin</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="other_income/">other_income</a></td>
+<td>Other Income</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="price_to_revenue/">price_to_revenue</a></td>
+<td>Price to Revenue (P/Rev)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="price_to_tangible_book/">price_to_tangible_book</a></td>
+<td>Price to Tangible Book Value (P/TBV)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="profit_margin/">profit_margin</a></td>
+<td>Profit (Net Income) Margin</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="sga_ex_to_revenue/">sga_ex_to_revenue</a></td>
+<td>SG&amp;A Expenses to Revenue</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="revenue_qoq_growth/">revenue_qoq_growth</a></td>
+<td>Revenue Q/Q Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="quick_ratio/">quick_ratio</a></td>
+<td>Quick Ratio</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="rd_ex_to_revenue/">rd_ex_to_revenue</a></td>
+<td>R&amp;D to Revenue</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="non_control_int_to_cap/">non_control_int_to_cap</a></td>
+<td>Noncontrolling Interests to Total Capital</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="roic_nnep_spread/">roic_nnep_spread</a></td>
+<td>ROIC Less NNEP Spread (ROIC-NNEP)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="non_controlling_interest_sharing_ratio/">non_controlling_interest_sharing_ratio</a></td>
+<td>Noncontrolling Interest Sharing Ratio</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="extraordinary_income/">extraordinary_income</a></td>
+<td>Net Extraordinary Income</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="roic/">roic</a></td>
+<td>Return on Invested Capital (ROIC)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_debt_to_ebitda/">net_debt_to_ebitda</a></td>
+<td>Net Debt to EBITDA</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ev_to_ebitda/">ev_to_ebitda</a></td>
+<td>Enterprise Value to EBITDA (EV/EBITDA)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="eps_qoq_growth/">eps_qoq_growth</a></td>
+<td>EPS Q/Q Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="cost_of_rev_to_revenue/">cost_of_rev_to_revenue</a></td>
+<td>Cost of Revenue to Revenue</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="earnings_yield/">earnings_yield</a></td>
+<td>Earnings Yield</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ebit/">ebit</a></td>
+<td>Earnings before Interest and Taxes (EBIT)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ebitda/">ebitda</a></td>
+<td>Earnings before Interest, Taxes, Depreciation and Amortization (EBITDA)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="lt_debt_and_capleases/">lt_debt_and_capleases</a></td>
+<td>Total Long-Term Debt</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="eff_tax_rate/">eff_tax_rate</a></td>
+<td>Effective Tax Rate</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="compound_leverage_factor/">compound_leverage_factor</a></td>
+<td>Compound Leverage Factor</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="enter_prise_value/">enter_prise_value</a></td>
+<td>Enterprise Value (EV)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ev_to_ebit/">ev_to_ebit</a></td>
+<td>Enterprise Value to EBIT (EV/EBIT)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ev_to_fcff/">ev_to_fcff</a></td>
+<td>Enterprise Value to Free Cash Flow (EV/FCFF)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ebitda_qoq_growth/">ebitda_qoq_growth</a></td>
+<td>EBITDA Q/Q Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ev_to_invested_capital/">ev_to_invested_capital</a></td>
+<td>Enterprise Value to Invested Capital (EV/IC)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ev_to_nopat/">ev_to_nopat</a></td>
+<td>Enterprise Value to NOPAT (EV/NOPAT)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ev_to_ocf/">ev_to_ocf</a></td>
+<td>Enterprise Value to Operating Cash Flow (EV/OCF)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ev_to_revenue/">ev_to_revenue</a></td>
+<td>Enterprise Value to Revenue (EV/Rev)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="net_debt/">net_debt</a></td>
+<td>Net Debt</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="fin_leverage/">fin_leverage</a></td>
+<td>Financial Leverage</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="fa_turnover/">fa_turnover</a></td>
+<td>Fixed Asset Turnover</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="fcff_growth/">fcff_growth</a></td>
+<td>Free Cash Flow Firm Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="fcff_qoq_growth/">fcff_qoq_growth</a></td>
+<td>Free Cash Flow Firm Q/Q Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="free_cash_flow/">free_cash_flow</a></td>
+<td>Free Cash Flow to Firm (FCFF)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="eps_growth/">eps_growth</a></td>
+<td>EPS Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ebitda_margin/">ebitda_margin</a></td>
+<td>EBITDA Margin</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="invested_capital_increase_decrease/">invested_capital_increase_decrease</a></td>
+<td>Change in Invested Capital</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="df_cf_nwc/">df_cf_nwc</a></td>
+<td>Debt-free, Cash-free Net Working Capital (DFCFNWC)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="current_ratio/">current_ratio</a></td>
+<td>Current Ratio</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="dio/">dio</a></td>
+<td>Days Inventory Outstanding (DIO)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="dpo/">dpo</a></td>
+<td>Days Payable Outstanding (DPO)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="dso/">dso</a></td>
+<td>Days Sales Outstanding (DSO)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="debt_to_ebitda/">debt_to_ebitda</a></td>
+<td>Debt to EBITDA</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="debt_to_equity/">debt_to_equity</a></td>
+<td>Debt to Equity</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="debt_to_nopat/">debt_to_nopat</a></td>
+<td>Debt to NOPAT</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="debt_to_total_capital/">debt_to_total_capital</a></td>
+<td>Debt to Total Capital</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="df_nwc/">df_nwc</a></td>
+<td>Debt-free Net Working Capital (DFNWC)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="df_nwc_to_rev/">df_nwc_to_rev</a></td>
+<td>Debt-free Net Working Capital to Revenue</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="dfcfnwc_to_rev/">dfcfnwc_to_rev</a></td>
+<td>Debt-free, Cash-free Net Working Capital to Revenue</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ebitda_growth/">ebitda_growth</a></td>
+<td>EBITDA Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="diluted_eps/">diluted_eps</a></td>
+<td>Diluted Earnings per Share</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="div_payout_ratio/">div_payout_ratio</a></td>
+<td>Dividend Payout Ratio</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="dividend_yield/">dividend_yield</a></td>
+<td>Dividend Yield</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="dividendyield_fy/">dividendyield_fy</a></td>
+<td>Dividend yield (FY)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="dividendyield_ttm/">dividendyield_ttm</a></td>
+<td>Dividend yield (TTM)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ebit_growth/">ebit_growth</a></td>
+<td>EBIT Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ebit_less_capex_to_interest_ex/">ebit_less_capex_to_interest_ex</a></td>
+<td>EBIT Less CapEx to Interest Expense</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ebit_margin/">ebit_margin</a></td>
+<td>EBIT Margin</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ebit_qoq_growth/">ebit_qoq_growth</a></td>
+<td>EBIT Q/Q Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ebit_to_interest_ex/">ebit_to_interest_ex</a></td>
+<td>EBIT to Interest Expense</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="fcff_to_interest_ex/">fcff_to_interest_ex</a></td>
+<td>Free Cash Flow to Firm to Interest Expense</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="common_to_cap/">common_to_cap</a></td>
+<td>Common Equity to Total Capital</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="croic/">croic</a></td>
+<td>Cash Return on Invested Capital (CROIC)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="altman_zscore/">altman_zscore</a></td>
+<td>Altman Z-Score</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="invested_capital/">invested_capital</a></td>
+<td>Invested Capital</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="invested_capital_growth/">invested_capital_growth</a></td>
+<td>Invested Capital Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="invested_capital_turnover/">invested_capital_turnover</a></td>
+<td>Invested Capital Turnover</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="basic_eps/">basic_eps</a></td>
+<td>Basic Earnings per Share</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="other_adjustments_to_consolidated_net_income/">other_adjustments_to_consolidated_net_income</a></td>
+<td>Adjustments to Consolidated Net Income</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="leverage_ratio/">leverage_ratio</a></td>
+<td>Leverage Ratio</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="marketcap/">marketcap</a></td>
+<td>Market Capitalization</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="interest_burden_pct/">interest_burden_pct</a></td>
+<td>Interest Burden Percent</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="asset_turnover/">asset_turnover</a></td>
+<td>Asset Turnover</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="total_capital/">total_capital</a></td>
+<td>Total Capital</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="augmented_payout_ratio/">augmented_payout_ratio</a></td>
+<td>Augmented Payout Ratio</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="lt_debt_to_ebitda/">lt_debt_to_ebitda</a></td>
+<td>Long-Term Debt to EBITDA</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="lt_debt_to_equity/">lt_debt_to_equity</a></td>
+<td>Long-Term Debt to Equity</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="lt_debt_to_nopat/">lt_debt_to_nopat</a></td>
+<td>Long-Term Debt to NOPAT</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="inv_turnover/">inv_turnover</a></td>
+<td>Inventory Turnover</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="invested_capital_qoq_growth/">invested_capital_qoq_growth</a></td>
+<td>Invested Capital Q/Q Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="debt/">debt</a></td>
+<td>Total Debt</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="depreciation_and_amortization/">depreciation_and_amortization</a></td>
+<td>Total Depreciation and Amortization (D&amp;A)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="tang_book_value_per_share/">tang_book_value_per_share</a></td>
+<td>Tangible Book Value per Share</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="tax_burden_pct/">tax_burden_pct</a></td>
+<td>Tax Burden Percent</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="gross_margin/">gross_margin</a></td>
+<td>Gross Margin</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="ccc/">ccc</a></td>
+<td>Cash Conversion Cycle (CCC)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="total_revenue/">total_revenue</a></td>
+<td>Total Revenue</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="capex/">capex</a></td>
+<td>Capital Expenditures (CapEx)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="rnnoa/">rnnoa</a></td>
+<td>Return on Net Nonoperating Assets (RNNOA)</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="nopat_to_interest_ex/">nopat_to_interest_ex</a></td>
+<td>NOPAT to Interest Expense</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="nopat_qoq_growth/">nopat_qoq_growth</a></td>
+<td>NOPAT Q/Q Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="lt_debt_to_cap/">lt_debt_to_cap</a></td>
+<td>Long-Term Debt to Total Capital</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="nopat_margin/">nopat_margin</a></td>
+<td>NOPAT Margin</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="nopat_less_capex_to_int_ex/">nopat_less_capex_to_int_ex</a></td>
+<td>NOPAT Less CapEx to Interest Expense</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="nopat_growth/">nopat_growth</a></td>
+<td>NOPAT Growth</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="other_adjustments_to_net_income_to_common/">other_adjustments_to_net_income_to_common</a></td>
+<td>Adjustment to Net Income Attributable to Common Shareholders</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="book_value_per_share/">book_value_per_share</a></td>
+<td>Book Value per Share</td>
+<td>fin_metric</td>
+</tr>
+<tr>
+<td><a href="revenue_consensus/">revenue_consensus</a></td>
+<td>Revenue Consensus</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="revenue_beat_rate/">revenue_beat_rate</a></td>
+<td>Revenue Beat Rate</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="revenue_actual/">revenue_actual</a></td>
+<td>Revenue Actual</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="earnings_next_intra_return_max/">earnings_next_intra_return_max</a></td>
+<td>Max Earnings Return (Next Intra)</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="earnings_next_close_return_max/">earnings_next_close_return_max</a></td>
+<td>Max Earnings Return (Next Close)</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="earnings_next_close_return_min/">earnings_next_close_return_min</a></td>
+<td>Min Earnings Return (Next Close)</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="earnings_next_open_return_min/">earnings_next_open_return_min</a></td>
+<td>Min Earnings Return (Next Open)</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="earnings_next_close_return_avg/">earnings_next_close_return_avg</a></td>
+<td>Avg Earnings Return (Next Close)</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="earnings_next_open_return_max/">earnings_next_open_return_max</a></td>
+<td>Max Earnings Return (Next Open)</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="eps_actual/">eps_actual</a></td>
+<td>EPS Actual</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="revenue_surprise/">revenue_surprise</a></td>
+<td>Revenue Surprise</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="earning_call_time/">earning_call_time</a></td>
+<td>Earning Call Time</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="eps_surprise/">eps_surprise</a></td>
+<td>Eps Surprise</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="eps_beat_rate/">eps_beat_rate</a></td>
+<td>Eps Beat Rate</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="earning_date/">earning_date</a></td>
+<td>Earning Date</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="earnings_next_intra_return_min/">earnings_next_intra_return_min</a></td>
+<td>Min Earnings Return (Next Intra)</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="eps_consensus/">eps_consensus</a></td>
+<td>EPS Consensus</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="earnings_next_intra_return_avg/">earnings_next_intra_return_avg</a></td>
+<td>Avg Earnings Return (Next Intra)</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="earnings_next_open_return_avg/">earnings_next_open_return_avg</a></td>
+<td>Avg Earnings Return (Next Open)</td>
+<td>earnings</td>
+</tr>
+<tr>
+<td><a href="total_noninterest_expense/">total_noninterest_expense</a></td>
+<td>Total Non-Interest Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="weighted_ave_basic_shares_os/">weighted_ave_basic_shares_os</a></td>
+<td>Weighted Average Basic Shares Outstanding</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="total_operating_income/">total_operating_income</a></td>
+<td>Total Operating Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="service_charges_on_deposits_income/">service_charges_on_deposits_income</a></td>
+<td>Service Charges on Deposit Accounts</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="total_interest_expense/">total_interest_expense</a></td>
+<td>Total Interest Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="short_term_borrowing_interest_expense/">short_term_borrowing_interest_expense</a></td>
+<td>Short-Term Borrowings Interest Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="total_pre_tax_income/">total_pre_tax_income</a></td>
+<td>Total Pre-Tax Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="sga_expense/">sga_expense</a></td>
+<td>Selling, General &amp; Admin Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="total_gross_profit/">total_gross_profit</a></td>
+<td>Total Gross Profit</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="trust_fee_income/">trust_fee_income</a></td>
+<td>Trust Fees by Commissions</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="total_cost_of_revenue/">total_cost_of_revenue</a></td>
+<td>Total Cost of Revenue</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="weighted_ave_basic_diluted_shares_os/">weighted_ave_basic_diluted_shares_os</a></td>
+<td>Weighted Average Basic &amp; Diluted Shares Outstanding</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="salaries_and_employee_benefits_expense/">salaries_and_employee_benefits_expense</a></td>
+<td>Salaries and Employee Benefits</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="total_operating_expenses/">total_operating_expenses</a></td>
+<td>Total Operating Expenses</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="sale_of_plant_property_and_equipment/">sale_of_plant_property_and_equipment</a></td>
+<td>Sale of Property, Leasehold Improvements and Equipment</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="total_noninterest_income/">total_noninterest_income</a></td>
+<td>Total Non-Interest Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="sale_of_investments/">sale_of_investments</a></td>
+<td>Sale and/or Maturity of Investments</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="trading_account_interest_income/">trading_account_interest_income</a></td>
+<td>Trading Account Interest Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="loans_held_for_sale_net/">loans_held_for_sale_net</a></td>
+<td>Loans Held for Sale, Net</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="restructuring_charge/">restructuring_charge</a></td>
+<td>Restructuring Charge</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="rd_expense/">rd_expense</a></td>
+<td>Research &amp; Development Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="investment_banking_income/">investment_banking_income</a></td>
+<td>Investment Banking Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="total_interest_income/">total_interest_income</a></td>
+<td>Interest &amp; Investment Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="policy_acquisition_costs/">policy_acquisition_costs</a></td>
+<td>Insurance Policy Acquisition Costs</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="income_tax_expense/">income_tax_expense</a></td>
+<td>Income Tax Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="impairment_expense/">impairment_expense</a></td>
+<td>Impairment Charge</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="fed_funds_and_repo_interest_income/">fed_funds_and_repo_interest_income</a></td>
+<td>Federal Funds Sold and Securities Borrowed Interest Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="fed_funds_and_repo_interest_expense/">fed_funds_and_repo_interest_expense</a></td>
+<td>Federal Funds Purchased and Securities Sold Interest Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="exploration_expense/">exploration_expense</a></td>
+<td>Exploration Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="effect_of_exchange_rate_changes/">effect_of_exchange_rate_changes</a></td>
+<td>Effect of Exchange Rate Changes</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="divestitures/">divestitures</a></td>
+<td>Divestitures</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="depreciation_expense/">depreciation_expense</a></td>
+<td>Depreciation Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="deposits_interest_income/">deposits_interest_income</a></td>
+<td>Deposits and Money Market Investments Interest Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="deposits_interest_expense/">deposits_interest_expense</a></td>
+<td>Deposits Interest Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="depletion_expense/">depletion_expense</a></td>
+<td>Depletion Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="current_and_future_benefits/">current_and_future_benefits</a></td>
+<td>Current and Future Benefits</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="cash_interest_received/">cash_interest_received</a></td>
+<td>Cash Interest Received</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="cash_dividends_per_share/">cash_dividends_per_share</a></td>
+<td>Cash Dividends to Common per Share</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="capitalized_lease_obligation_interest_expense/">capitalized_lease_obligation_interest_expense</a></td>
+<td>Capitalized Lease Obligations Interest Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="basic_diluted_eps/">basic_diluted_eps</a></td>
+<td>Basic &amp; Diluted Earnings per Share</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="amortization_of_deferred_policy_acquisition_costs/">amortization_of_deferred_policy_acquisition_costs</a></td>
+<td>Amortization of Deferred Policy Acquisition Costs</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="amortization_expense/">amortization_expense</a></td>
+<td>Amortization Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="adj_weighted_ave_diluted_shares_os/">adj_weighted_ave_diluted_shares_os</a></td>
+<td>Adjusted Weighted Average Diluted Shares Outstanding</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="adj_weighted_ave_basic_shares_os/">adj_weighted_ave_basic_shares_os</a></td>
+<td>Adjusted Weighted Average Basic Shares Outstanding</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="adj_weighted_ave_basic_diluted_shares_os/">adj_weighted_ave_basic_diluted_shares_os</a></td>
+<td>Adjusted Weighted Average Basic &amp; Diluted Shares Outstanding</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="adj_diluted_eps/">adj_diluted_eps</a></td>
+<td>Adjusted Diluted Earnings per Share</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="adj_basic_eps/">adj_basic_eps</a></td>
+<td>Adjusted Basic Earnings per Share</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="adj_basic_diluted_eps/">adj_basic_diluted_eps</a></td>
+<td>Adjusted Basic &amp; Diluted Earnings per Share</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="investment_securities_interest_income/">investment_securities_interest_income</a></td>
+<td>Investment Securities Interest Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="issuance_of_preferred_equity/">issuance_of_preferred_equity</a></td>
+<td>Issuance of Preferred Equity</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="loans_and_lease_interest_income/">loans_and_lease_interest_income</a></td>
+<td>Loans and Leases Interest Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="other_noninterest_income/">other_noninterest_income</a></td>
+<td>Other Non-Interest Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="repurchase_of_preferred_equity/">repurchase_of_preferred_equity</a></td>
+<td>Repurchase of Preferred Equity</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="repurchase_of_common_equity/">repurchase_of_common_equity</a></td>
+<td>Repurchase of Common Equity</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="purchase_of_investments/">purchase_of_investments</a></td>
+<td>Purchase of Investment Securities</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="provision_for_credit_losses/">provision_for_credit_losses</a></td>
+<td>Provision for Credit Losses</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="provision_for_loan_losses/">provision_for_loan_losses</a></td>
+<td>Provision For Loan Losses</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="property_liability_insurance_claims/">property_liability_insurance_claims</a></td>
+<td>Property &amp; Liability Insurance Claims</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="premium_searned/">premium_searned</a></td>
+<td>Premiums Earned</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="preferred_dividends/">preferred_dividends</a></td>
+<td>Preferred Stock Dividends Declared</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="other_special_charges/">other_special_charges</a></td>
+<td>Other Special Charges</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="other_service_charge_income/">other_service_charge_income</a></td>
+<td>Other Service Charges</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="other_revenue/">other_revenue</a></td>
+<td>Other Revenue</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="other_operating_expenses/">other_operating_expenses</a></td>
+<td>Other Operating Expenses</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="other_net_changes_in_cash/">other_net_changes_in_cash</a></td>
+<td>Other Net Changes in Cash</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="long_term_debt_interest_expense/">long_term_debt_interest_expense</a></td>
+<td>Long-Term Debt Interest Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="other_interes_tincome/">other_interes_tincome</a></td>
+<td>Other Interest Income</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="other_interest_expense/">other_interest_expense</a></td>
+<td>Other Interest Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="other_cost_of_revenue/">other_cost_of_revenue</a></td>
+<td>Other Cost of Revenue</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="operating_cost_of_revenue/">operating_cost_of_revenue</a></td>
+<td>Operating Cost of Revenue</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="net_realized_capital_gains/">net_realized_capital_gains</a></td>
+<td>Net Realized &amp; Unrealized Capital Gains on Investments</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="net_occupancy_equipment_expense/">net_occupancy_equipment_expense</a></td>
+<td>Net Occupancy &amp; Equipment Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="net_increase_in_fed_funds_sold/">net_increase_in_fed_funds_sold</a></td>
+<td>Net Increase in Fed Funds Sold</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="net_change_in_deposits/">net_change_in_deposits</a></td>
+<td>Net Change in Deposits</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="net_cash_from_discontinued_operating_activities/">net_cash_from_discontinued_operating_activities</a></td>
+<td>Net Cash From Discontinued Operating Activities</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="net_cash_from_discontinued_investing_activities/">net_cash_from_discontinued_investing_activities</a></td>
+<td>Net Cash From Discontinued Investing Activities</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="net_cash_from_discontinued_financing_activities/">net_cash_from_discontinued_financing_activities</a></td>
+<td>Net Cash From Discontinued Financing Activities</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="marketing_expense/">marketing_expense</a></td>
+<td>Marketing Expense</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="weighted_ave_diluted_shares_os/">weighted_ave_diluted_shares_os</a></td>
+<td>Weighted Average Diluted Shares Outstanding</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../get_started/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Getting started" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Getting started
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.e99e714c.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.bc35569b.min.js"></script>
+      
+    
+  </body>
+</html>

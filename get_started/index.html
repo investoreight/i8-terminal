@@ -1,0 +1,743 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.2">
+    
+    
+      
+        <title>Getting started - i8 Terminal Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.24c991ad.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#getting-started" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="i8 Terminal Documentation" class="md-header__button md-logo" aria-label="i8 Terminal Documentation" data-md-component="logo">
+      
+  <img src="https://www.investoreight.com/media/logo-i8t.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            i8 Terminal Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Getting started
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="i8 Terminal Documentation" class="md-nav__button md-logo" aria-label="i8 Terminal Documentation" data-md-component="logo">
+      
+  <img src="https://www.investoreight.com/media/logo-i8t.png" alt="logo">
+
+    </a>
+    i8 Terminal Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Commands Reference
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Getting started
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Getting started
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#binary-installer" class="md-nav__link">
+    Binary Installer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installing-with-python-pip" class="md-nav__link">
+    Installing with Python pip
+  </a>
+  
+    <nav class="md-nav" aria-label="Installing with Python pip">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on-mac-os-or-linux" class="md-nav__link">
+    On Mac OS or Linux:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-windows-using-git-bash" class="md-nav__link">
+    On Windows (Using Git Bash):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-windows-using-command-prompt-or-powershell" class="md-nav__link">
+    On Windows (Using Command Prompt or PowerShell):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-from-code" class="md-nav__link">
+    Running from Code
+  </a>
+  
+    <nav class="md-nav" aria-label="Running from Code">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on-mac-os-or-linux_1" class="md-nav__link">
+    On Mac OS or Linux:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-windows-using-git-bash_1" class="md-nav__link">
+    On Windows (Using Git Bash):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-windows-using-command-prompt-or-powershell_1" class="md-nav__link">
+    On Windows (Using Command Prompt or PowerShell):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-run-i8-terminal" class="md-nav__link">
+    How to Run i8 Terminal
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sign-up-sign-in-to-i8-terminal-server" class="md-nav__link">
+    Sign Up / Sign In to i8 Terminal Server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subscription-plans" class="md-nav__link">
+    Subscription Plans
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-first-command" class="md-nav__link">
+    Your First Command
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics/" class="md-nav__link">
+        Metrics
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#binary-installer" class="md-nav__link">
+    Binary Installer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installing-with-python-pip" class="md-nav__link">
+    Installing with Python pip
+  </a>
+  
+    <nav class="md-nav" aria-label="Installing with Python pip">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on-mac-os-or-linux" class="md-nav__link">
+    On Mac OS or Linux:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-windows-using-git-bash" class="md-nav__link">
+    On Windows (Using Git Bash):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-windows-using-command-prompt-or-powershell" class="md-nav__link">
+    On Windows (Using Command Prompt or PowerShell):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-from-code" class="md-nav__link">
+    Running from Code
+  </a>
+  
+    <nav class="md-nav" aria-label="Running from Code">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on-mac-os-or-linux_1" class="md-nav__link">
+    On Mac OS or Linux:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-windows-using-git-bash_1" class="md-nav__link">
+    On Windows (Using Git Bash):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-windows-using-command-prompt-or-powershell_1" class="md-nav__link">
+    On Windows (Using Command Prompt or PowerShell):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-run-i8-terminal" class="md-nav__link">
+    How to Run i8 Terminal
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sign-up-sign-in-to-i8-terminal-server" class="md-nav__link">
+    Sign Up / Sign In to i8 Terminal Server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subscription-plans" class="md-nav__link">
+    Subscription Plans
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-first-command" class="md-nav__link">
+    Your First Command
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="getting-started">Getting Started</h1>
+<h2 id="introduction">Introduction<a href="#introduction"></a></h2>
+<p>i8 terminal is a modern python-based terminal application that gives you superior power and flexibility to understand and analyze the market. The interface is simple, efficient, and powerful: it's command-line!</p>
+<p><strong>i8 Terminal is open-source and backed by the Investoreight Platform and currently covers major U.S. exchanges.</strong></p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#installation">Installation</a><ul>
+<li><a href="#binary-installer">Binary Installer</a></li>
+<li><a href="#installing-with-python-pip">Installing with Python pip</a></li>
+<li><a href="#running-from-code">Running from Code</a></li>
+</ul>
+</li>
+<li><a href="#how-to-run-i8-terminal">How to Run i8 Terminal</a></li>
+<li><a href="#signup-signin-to-the-i8-terminal-server">Sign Up / Sign In to the i8 Terminal Server</a></li>
+<li><a href="#subscription-plans">Subscription Plans</a></li>
+<li><a href="#your-first-command">Your First Command</a></li>
+</ul>
+<hr />
+<h2 id="installation">Installation<a href="#installation"></a></h2>
+<p>i8 Terminal can be directly installed on your computer via our installation program. Within this section, you are guided through the installation process. If you are a developer, please have a look <a href="https://https://github.com/investoreight/i8-terminal">here</a>. If you struggle with the installation process, please visit our <a href="https://www.i8terminal.io/contact">contact page</a>.</p>
+<h3 id="binary-installer">Binary Installer<a href="#binary-installer"></a></h3>
+<p>The process starts by downloading the installer, see below for how to download the most recent release:</p>
+<ol>
+<li>Go to <a href="https://www.i8terminal.io/download">the i8terminal.io website download page</a></li>
+<li>Click on the <code>Download For Windows</code> button in the Download i8 Terminal section</li>
+</ol>
+<p>When the file is downloaded, use the following steps to run i8 Terminal:</p>
+<p><strong>Step 1: Double-click the <code>.msi</code> file that got downloaded to your <code>Downloads</code> folder</strong></p>
+<p>You will most likely receive the error below stating “Windows protected your PC”. This is because the installer is still in the beta phase, and the team has not yet requested verification from Windows.</p>
+<p><a href="https://www.investoreight.com/media/i8terminal-binaryinstaller-step1.png"><img alt="windows_protected_your_pc" src="https://www.investoreight.com/media/i8terminal-binaryinstaller-step1.png" /></a></p>
+<p><strong>Step 2: Click on <code>More info</code> and select <code>Run anyway</code> to start the installation process</strong></p>
+<p>Proceed by following the steps.</p>
+<p><a href="https://www.investoreight.com/media/i8terminal-binaryinstaller-step2.png"><img alt="run_anyway" src="https://www.investoreight.com/media/i8terminal-binaryinstaller-step2.png" /></a></p>
+<p><strong>Step 3: Select the destination directory you want to install i8 Terminal</strong></p>
+<p>i8 Terminal is installed now!</p>
+<p><a href="https://www.investoreight.com/media/i8terminal-binaryinstaller-step3.png"><img alt="select_destination" src="https://www.investoreight.com/media/i8terminal-binaryinstaller-step3.png" /></a></p>
+<h3 id="installing-with-python-pip">Installing with Python pip<a href="#installing-with-python-pip"></a></h3>
+<p>If you have Python 3 installed, you can simply install the tool with Python pip:</p>
+<pre><code>pip install i8-terminal
+</code></pre>
+<p>We recommend installing i8 Terminal in an isolated virtual environment. This can be done as follows:</p>
+<h4 id="on-mac-os-or-linux">On Mac OS or Linux:</h4>
+<pre><code>python3 -m venv .venv
+source .venv/bin/activate
+pip install i8-terminal
+</code></pre>
+<h4 id="on-windows-using-git-bash">On Windows (Using Git Bash):</h4>
+<pre><code>python3 -m venv .venv
+source .venv/Scripts/activate
+pip install i8-terminal
+</code></pre>
+<h4 id="on-windows-using-command-prompt-or-powershell">On Windows (Using Command Prompt or PowerShell):</h4>
+<pre><code>python3 -m venv .venv
+.venv\\Scripts\\activate
+pip install i8-terminal
+</code></pre>
+<h3 id="running-from-code">Running from Code<a href="#running-from-code"></a></h3>
+<p>The process starts by cloning the code, see below for how to run the terminal from the code:</p>
+<p><strong>Step 1: Clone the repo</strong></p>
+<pre><code>git clone git@github.com:investoreight/i8-terminal.git
+</code></pre>
+<p><strong>Step 2: Go to the directory</strong></p>
+<pre><code>cd i8-terminal
+</code></pre>
+<p><strong>Step 3: Activate the isolated virtual environment</strong></p>
+<h4 id="on-mac-os-or-linux_1">On Mac OS or Linux:</h4>
+<pre><code>python3 -m venv .venv
+source .venv/bin/activate
+</code></pre>
+<h4 id="on-windows-using-git-bash_1">On Windows (Using Git Bash):</h4>
+<pre><code>python3 -m venv .venv
+source .venv/Scripts/activate
+</code></pre>
+<h4 id="on-windows-using-command-prompt-or-powershell_1">On Windows (Using Command Prompt or PowerShell):</h4>
+<pre><code>python3 -m venv .venv
+.venv\\Scripts\\activate
+</code></pre>
+<p><strong>Step 4: Install required libraries</strong></p>
+<pre><code>pip install -r requirements.txt
+</code></pre>
+<p><strong>Step 5: Run commands and enjoy!</strong></p>
+<pre><code>python -m i8-terminal.main shell
+</code></pre>
+<h2 id="how-to-run-i8-terminal">How to Run i8 Terminal<a href="#how-to-run-i8-terminal"></a></h2>
+<p>You can verify whether i8 Terminal is installed successfully by running the i8 script:</p>
+<pre><code>i8
+</code></pre>
+<p>If you are using the application for the first time, you should first sign in. Run the following command, which will open a browser and redirect you to the Investoreight platform to sign in (or sign up):</p>
+<pre><code>i8 user login
+</code></pre>
+<p>After a successful login, the most convenient way to use i8 terminal is to use its own shell:</p>
+<pre><code>i8 shell
+</code></pre>
+<p>You should now be able to run i8 commands. Check our documentation for more details.</p>
+<p><a href="https://docs.i8terminal.io">Read the Docs</a></p>
+<h2 id="sign-up-sign-in-to-i8-terminal-server">Sign Up / Sign In to i8 Terminal Server<a href="#signup-signin-to-the-i8-terminal-server"></a></h2>
+<p>If you want to use i8 Terminal you should first sign in. Within this section, you are guided through the sign-in process.</p>
+<p><a href="https://www.investoreight.com/media/i8terminal-signin-gif.gif"><img alt="user-sign-in" src="https://www.investoreight.com/media/i8terminal-signin-gif.gif" /></a></p>
+<p>Also, you can sign in using the terminal with your email and password:</p>
+<p><a href="https://www.investoreight.com/media/i8terminal-signin-with-terminal-gif.gif"><img alt="user-sign-in-with-terminal" src="https://www.investoreight.com/media/i8terminal-signin-with-terminal-gif.gif" /></a></p>
+<h2 id="subscription-plans">Subscription Plans<a href="#subscription-plans"></a></h2>
+<p>In Free Edition you will have full access to DOW 30 Stocks.</p>
+<p>For more features please have a look <a href="https://www.i8terminal.io/#pricing">here</a>.</p>
+<h2 id="your-first-command">Your First Command<a href="#your-first-command"></a></h2>
+<p>If you want to list financial metrics of Microsoft you can use i8 Terminal financials list command:</p>
+<pre><code>financials list --identifier MSFT
+</code></pre>
+<p><a href="https://www.investoreight.com/media/i8terminal-your-first-command.png"><img alt="your_first_command" src="https://www.investoreight.com/media/i8terminal-your-first-command.png" /></a></p>
+<p>For i8 Terminal more sample commands, please watch this video:</p>
+<p><a href="https://youtu.be/NpOCqcb-RxY">i8 Terminal Sample Commands</a></p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Commands Reference" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Commands Reference
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../metrics/" class="md-footer__link md-footer__link--next" aria-label="Next: Metrics" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Metrics
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.e99e714c.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.bc35569b.min.js"></script>
+      
+    
+  </body>
+</html>

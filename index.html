@@ -1,0 +1,3206 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.2">
+    
+    
+      
+        <title>i8 Terminal Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.24c991ad.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.3f5d1f46.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL(".",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#commands-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="i8 Terminal Documentation" class="md-header__button md-logo" aria-label="i8 Terminal Documentation" data-md-component="logo">
+      
+  <img src="https://www.investoreight.com/media/logo-i8t.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            i8 Terminal Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Commands Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="i8 Terminal Documentation" class="md-nav__button md-logo" aria-label="i8 Terminal Documentation" data-md-component="logo">
+      
+  <img src="https://www.investoreight.com/media/logo-i8t.png" alt="logo">
+
+    </a>
+    i8 Terminal Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Commands Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        Commands Reference
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#i8" class="md-nav__link">
+    i8
+  </a>
+  
+    <nav class="md-nav" aria-label="i8">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-browse" class="md-nav__link">
+    browse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-clear" class="md-nav__link">
+    clear
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-company" class="md-nav__link">
+    company
+  </a>
+  
+    <nav class="md-nav" aria-label="company">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-company-compare" class="md-nav__link">
+    compare
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-company-details" class="md-nav__link">
+    details
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-company-search" class="md-nav__link">
+    search
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-earnings" class="md-nav__link">
+    earnings
+  </a>
+  
+    <nav class="md-nav" aria-label="earnings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-earnings-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-earnings-plot" class="md-nav__link">
+    plot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-earnings-recent" class="md-nav__link">
+    recent
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-earnings-upcoming" class="md-nav__link">
+    upcoming
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-exit" class="md-nav__link">
+    exit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-financials" class="md-nav__link">
+    financials
+  </a>
+  
+    <nav class="md-nav" aria-label="financials">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-financials-compare" class="md-nav__link">
+    compare
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-financials-coverage" class="md-nav__link">
+    coverage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-financials-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-financials-plot" class="md-nav__link">
+    plot
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-market" class="md-nav__link">
+    market
+  </a>
+  
+    <nav class="md-nav" aria-label="market">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-market-summary" class="md-nav__link">
+    summary
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-metrics" class="md-nav__link">
+    metrics
+  </a>
+  
+    <nav class="md-nav" aria-label="metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-metrics-current" class="md-nav__link">
+    current
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-metrics-describe" class="md-nav__link">
+    describe
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-metrics-historical" class="md-nav__link">
+    historical
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-metrics-search" class="md-nav__link">
+    search
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-news" class="md-nav__link">
+    news
+  </a>
+  
+    <nav class="md-nav" aria-label="news">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-news-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-notebook" class="md-nav__link">
+    notebook
+  </a>
+  
+    <nav class="md-nav" aria-label="notebook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-notebook-launch" class="md-nav__link">
+    launch
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-price" class="md-nav__link">
+    price
+  </a>
+  
+    <nav class="md-nav" aria-label="price">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-price-compare" class="md-nav__link">
+    compare
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-price-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-price-plot" class="md-nav__link">
+    plot
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-screen" class="md-nav__link">
+    screen
+  </a>
+  
+    <nav class="md-nav" aria-label="screen">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-screen-gainers" class="md-nav__link">
+    gainers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-screen-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-screen-losers" class="md-nav__link">
+    losers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-screen-search" class="md-nav__link">
+    search
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-shell" class="md-nav__link">
+    shell
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-user" class="md-nav__link">
+    user
+  </a>
+  
+    <nav class="md-nav" aria-label="user">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-user-login" class="md-nav__link">
+    login
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-user-logout" class="md-nav__link">
+    logout
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-version" class="md-nav__link">
+    version
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist" class="md-nav__link">
+    watchlist
+  </a>
+  
+    <nav class="md-nav" aria-label="watchlist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-add" class="md-nav__link">
+    add
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-create" class="md-nav__link">
+    create
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-export" class="md-nav__link">
+    export
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-financials" class="md-nav__link">
+    financials
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-metrics" class="md-nav__link">
+    metrics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-rm" class="md-nav__link">
+    rm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-summary" class="md-nav__link">
+    summary
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="get_started/" class="md-nav__link">
+        Getting started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="metrics/" class="md-nav__link">
+        Metrics
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#i8" class="md-nav__link">
+    i8
+  </a>
+  
+    <nav class="md-nav" aria-label="i8">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-browse" class="md-nav__link">
+    browse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-clear" class="md-nav__link">
+    clear
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-company" class="md-nav__link">
+    company
+  </a>
+  
+    <nav class="md-nav" aria-label="company">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-company-compare" class="md-nav__link">
+    compare
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-company-details" class="md-nav__link">
+    details
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-company-search" class="md-nav__link">
+    search
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-earnings" class="md-nav__link">
+    earnings
+  </a>
+  
+    <nav class="md-nav" aria-label="earnings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-earnings-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-earnings-plot" class="md-nav__link">
+    plot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-earnings-recent" class="md-nav__link">
+    recent
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-earnings-upcoming" class="md-nav__link">
+    upcoming
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-exit" class="md-nav__link">
+    exit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-financials" class="md-nav__link">
+    financials
+  </a>
+  
+    <nav class="md-nav" aria-label="financials">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-financials-compare" class="md-nav__link">
+    compare
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-financials-coverage" class="md-nav__link">
+    coverage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-financials-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-financials-plot" class="md-nav__link">
+    plot
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-market" class="md-nav__link">
+    market
+  </a>
+  
+    <nav class="md-nav" aria-label="market">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-market-summary" class="md-nav__link">
+    summary
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-metrics" class="md-nav__link">
+    metrics
+  </a>
+  
+    <nav class="md-nav" aria-label="metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-metrics-current" class="md-nav__link">
+    current
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-metrics-describe" class="md-nav__link">
+    describe
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-metrics-historical" class="md-nav__link">
+    historical
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-metrics-search" class="md-nav__link">
+    search
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-news" class="md-nav__link">
+    news
+  </a>
+  
+    <nav class="md-nav" aria-label="news">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-news-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-notebook" class="md-nav__link">
+    notebook
+  </a>
+  
+    <nav class="md-nav" aria-label="notebook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-notebook-launch" class="md-nav__link">
+    launch
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-price" class="md-nav__link">
+    price
+  </a>
+  
+    <nav class="md-nav" aria-label="price">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-price-compare" class="md-nav__link">
+    compare
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-price-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-price-plot" class="md-nav__link">
+    plot
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-screen" class="md-nav__link">
+    screen
+  </a>
+  
+    <nav class="md-nav" aria-label="screen">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-screen-gainers" class="md-nav__link">
+    gainers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-screen-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-screen-losers" class="md-nav__link">
+    losers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-screen-search" class="md-nav__link">
+    search
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-shell" class="md-nav__link">
+    shell
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-user" class="md-nav__link">
+    user
+  </a>
+  
+    <nav class="md-nav" aria-label="user">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-user-login" class="md-nav__link">
+    login
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-user-logout" class="md-nav__link">
+    logout
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-version" class="md-nav__link">
+    version
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist" class="md-nav__link">
+    watchlist
+  </a>
+  
+    <nav class="md-nav" aria-label="watchlist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-add" class="md-nav__link">
+    add
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-create" class="md-nav__link">
+    create
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-export" class="md-nav__link">
+    export
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-financials" class="md-nav__link">
+    financials
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-metrics" class="md-nav__link">
+    metrics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-rm" class="md-nav__link">
+    rm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i8-watchlist-summary" class="md-nav__link">
+    summary
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="commands-reference">Commands Reference</h1>
+<h2 id="i8">i8</h2>
+<p>i8 Terminal - Modern Market Research powered by the Command-Line</p>
+<pre><code>Copyright © 2020-2022 Investoreight | https://investoreight.com/
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-browse">i8 browse</h3>
+<pre><code>    Open company detail page in investoreight.com
+
+    Examples:
+
+    `i8 browse --ticker MSFT`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 browse [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--ticker</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Ticker or company name.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-clear">i8 clear</h3>
+<p>Clear the console screen.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 clear [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--all</code>, <code>-a</code></td>
+<td>boolean</td>
+<td>Clear entire screen.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-company">i8 company</h3>
+<p>Get information about all U.S companies and securities listed in the main U.S exchanges.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 company [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-company-compare">i8 company compare</h4>
+<pre><code>Compare details of the given companies. TICKERS is a comma-separated list of tickers.
+
+Examples:
+
+`i8 company compare --tickers MSFT,AAPL`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 company compare [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--tickers</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Comma-separated list of tickers.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-company-details">i8 company details</h4>
+<pre><code>Get details for a given company.
+
+Examples:
+
+`i8 company details --ticker MSFT`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 company details [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--ticker</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Ticker or company name.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-company-search">i8 company search</h4>
+<pre><code>Searches and shows all securities that match with the given KEYWORD.
+
+Examples:
+
+`i8 company search --keyword apl`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 company search [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--keyword</code>, <code>-k</code></td>
+<td>text</td>
+<td>Keyword can be ticker or company name.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-earnings">i8 earnings</h3>
+<p>Get information about company earnings.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 earnings [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-earnings-list">i8 earnings list</h4>
+<pre><code>Lists upcoming company earnings.
+
+Examples:
+
+`i8 earnings list --ticker AAPL`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 earnings list [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--ticker</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Company ticker.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-earnings-plot">i8 earnings plot</h4>
+<pre><code>Compare and plot earning metrics of given companies. TICKERS is a comma-separated list of tickers.
+
+Examples:
+
+`i8 earnings plot --metric net_ppe --tickers AMD,INTC,QCOM`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 earnings plot [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--metric</code>, <code>-m</code></td>
+<td>metric</td>
+<td>Metric name.</td>
+<td><code>basiceps</code></td>
+</tr>
+<tr>
+<td><code>--tickers</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Comma-separated list of tickers.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-earnings-recent">i8 earnings recent</h4>
+<pre><code>Lists recent company earnings.
+
+Examples:
+
+`i8 earnings recent`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 earnings recent [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-earnings-upcoming">i8 earnings upcoming</h4>
+<pre><code>Lists upcoming company earnings.
+
+Examples:
+
+`i8 earnings upcoming`
+
+`i8 earnings upcoming --tickers AAPL,MSFT`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 earnings upcoming [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--tickers</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Comma-separated list of tickers.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-exit">i8 exit</h3>
+<p>Exit the terminal.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 exit [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-financials">i8 financials</h3>
+<p>Get information about company financials.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 financials [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-financials-compare">i8 financials compare</h4>
+<pre><code>Compare financial metrics of given companies. IDENTIFIERS is a comma-separated list of identifiers.
+
+Examples:
+
+`i8 financials compare --period_type FY --statement income --identifiers AAPL-2020-FY,MSFT-2020-FY`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 financials compare [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--identifiers</code>, <code>-i</code></td>
+<td>financials</td>
+<td>Comma-separated list of identifiers.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--statement</code>, <code>-s</code></td>
+<td>financialstatement</td>
+<td>Type of financial statement.</td>
+<td><code>income</code></td>
+</tr>
+<tr>
+<td><code>--period_type</code>, <code>-m</code></td>
+<td>periodtype</td>
+<td>Period by which you want to view the report. Possible values are <code>FY</code> for yearly, <code>Q</code> for quarterly, and <code>TTM</code> for TTM reports.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--plot</code></td>
+<td>boolean</td>
+<td>Plot results on the browser.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-financials-coverage">i8 financials coverage</h4>
+<pre><code>Shows available financial statements of the given company.
+
+Examples:
+
+`i8 financials coverage --ticker AAPL`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 financials coverage [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--ticker</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Company ticker.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-financials-list">i8 financials list</h4>
+<pre><code>Lists financial metrics of a given company.
+
+Examples:
+
+`i8 financials list --period_type FY --statement income --identifier AAPL-2020-FY`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 financials list [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--identifier</code>, <code>-i</code></td>
+<td>financials</td>
+<td>Financial identifier (e.g. MSFT-2023-Q2)</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--statement</code>, <code>-s</code></td>
+<td>financialstatement</td>
+<td>Type of financial statement.</td>
+<td><code>income</code></td>
+</tr>
+<tr>
+<td><code>--period_type</code>, <code>-m</code></td>
+<td>periodtype</td>
+<td>Period by which you want to view the report. Possible values are <code>FY</code> for yearly, <code>Q</code> for quarterly, and <code>TTM</code> for TTM reports.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-financials-plot">i8 financials plot</h4>
+<pre><code>Compare and plot financial metrics of given companies. TICKERS is a comma-separated list of tickers.
+
+Examples:
+
+`i8 financials plot --period_type Q --metrics net_ppe --from_date 2020-05-01 --to_date 2022-05-01 --tickers AMD,INTC,QCOM --chart_type line`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 financials plot [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--tickers</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Comma-separated list of tickers.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--period_type</code>, <code>-m</code></td>
+<td>periodtype</td>
+<td>Period by which you want to view the report. Possible values are <code>FY</code> for yearly, <code>Q</code> for quarterly, and <code>TTM</code> for TTM reports.</td>
+<td><code>FY</code></td>
+</tr>
+<tr>
+<td><code>--metrics</code>, <code>-m</code></td>
+<td>metric</td>
+<td>Comma-separated list of metrics.</td>
+<td><code>basic_eps</code></td>
+</tr>
+<tr>
+<td><code>--from_date</code>, <code>-f</code></td>
+<td>datetime (<code>%Y-%m-%d</code> &#x7C; <code>%Y-%m-%dT%H:%M:%S</code> &#x7C; <code>%Y-%m-%d %H:%M:%S</code>)</td>
+<td>Histotical financials from date.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--to_date</code>, <code>-t</code></td>
+<td>datetime (<code>%Y-%m-%d</code> &#x7C; <code>%Y-%m-%dT%H:%M:%S</code> &#x7C; <code>%Y-%m-%d %H:%M:%S</code>)</td>
+<td>Histotical financials to date.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--chart_type</code>, <code>-c</code></td>
+<td>charttype</td>
+<td>Chart can be bar or line chart.</td>
+<td><code>bar</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-market">i8 market</h3>
+<p>Get information about market.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 market [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-market-summary">i8 market summary</h4>
+<pre><code>Shows a summary of the market information.
+
+Examples:
+
+`i8 market summary`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 market summary [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--live</code></td>
+<td>boolean</td>
+<td>Print live results of market summary on terminal.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-metrics">i8 metrics</h3>
+<p>Get information about company metrics.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 metrics [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-metrics-current">i8 metrics current</h4>
+<pre><code>Lists the given metrics for a given list of companies. TICKERS is a comma-separated list of tickers.
+METRICS can be in the below format:
+{metric}.{optional period}
+
+Available periods:
+    q = most recent quarter,
+    fy = most recent fiscal year,
+    ttm = trailing 12 months,
+    ytd = year to date,
+    p = default period type
+
+Examples:
+
+`i8 metrics current --metrics total_revenue.q,net_income.fy,close.d,total_revenue --tickers AMD,INTC,QCOM`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 metrics current [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--tickers</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Comma-separated list of tickers.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--metrics</code>, <code>-m</code></td>
+<td>metricidentifier</td>
+<td>Comma-separated list of daily metrics.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--view_name</code>, <code>-v</code></td>
+<td>metricview</td>
+<td>Metric view name in configuration file.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-metrics-describe">i8 metrics describe</h4>
+<pre><code>Describe the metric information.
+
+Examples:
+
+`i8 metrics describe --name basic_eps`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 metrics describe [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--name</code>, <code>-n</code></td>
+<td>metric</td>
+<td>Metric name.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-metrics-historical">i8 metrics historical</h4>
+<pre><code>Lists, compares and plots metrics of given companies. TICKERS is a comma-separated list of tickers.
+
+Examples:
+
+`i8 metrics historical --metrics net_income --tickers AMD,INTC,QCOM --output plot --plot_type bar --period_type Q`
+`i8 metrics historical --metrics total_revenue,total_assets --tickers AMD,INTC,QCOM --output terminal --period_type FY --pivot`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 metrics historical [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--tickers</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Comma-separated list of tickers.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--metrics</code>, <code>-m</code></td>
+<td>metric</td>
+<td>Comma-separated list of daily metrics.</td>
+<td><code>pe_ratio_ttm</code></td>
+</tr>
+<tr>
+<td><code>--output</code>, <code>-o</code></td>
+<td>outputtype</td>
+<td>Output can be terminal or plot.</td>
+<td><code>terminal</code></td>
+</tr>
+<tr>
+<td><code>--plot_type</code>, <code>-p</code></td>
+<td>charttype</td>
+<td>Plot can be bar or line chart.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--pivot</code>, <code>-pv</code></td>
+<td>boolean</td>
+<td>Output will be pivot table.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--period_type</code>, <code>-t</code></td>
+<td>periodtype</td>
+<td>Period by which you want to view the report. Possible values are <code>D</code> for daily, <code>FY</code> for yearly, <code>Q</code> for quarterly, <code>TTM</code> for TTM reports, <code>YTD</code> for YTD reports.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--from_date</code>, <code>-f</code></td>
+<td>datetime (<code>%Y-%m-%d</code> &#x7C; <code>%Y-%m-%dT%H:%M:%S</code> &#x7C; <code>%Y-%m-%d %H:%M:%S</code>)</td>
+<td>Histotical metrics from date.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--to_date</code>, <code>-t</code></td>
+<td>datetime (<code>%Y-%m-%d</code> &#x7C; <code>%Y-%m-%dT%H:%M:%S</code> &#x7C; <code>%Y-%m-%d %H:%M:%S</code>)</td>
+<td>Histotical metrics to date.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-metrics-search">i8 metrics search</h4>
+<pre><code>Searches and shows all metrics that match with the given KEYWORD.
+
+Examples:
+
+`i8 metrics search --keyword return`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 metrics search [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--keyword</code>, <code>-k</code></td>
+<td>text</td>
+<td>Keyword can be metric name.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-news">i8 news</h3>
+<p>Get the latest financial markets news.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 news [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-news-list">i8 news list</h4>
+<pre><code>Lists the latest market news for a given ticker.
+
+Examples:
+
+`i8 news list --ticker AAPL`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 news list [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--ticker</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Ticker or company name.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-notebook">i8 notebook</h3>
+<p>Run notebook commands.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 notebook [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-notebook-launch">i8 notebook launch</h4>
+<pre><code>Launches jupyter notebook.
+
+Examples:
+
+`i8 notebook launch --name mynotebook`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 notebook launch [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--name</code>, <code>-n</code></td>
+<td>text</td>
+<td>Notebook file name.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-price">i8 price</h3>
+<p>Get the latest and historical security prices.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 price [OPTIONS] COMMAND1 [ARGS]... [COMMAND2 [ARGS]...]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-price-compare">i8 price compare</h4>
+<pre><code>Compares historical prices of given companies. TICKERS is a comma-separated list of tickers.
+
+Examples:
+
+`i8 price compare --period 3Y --tickers AMD,INTC,QCOM`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 price compare [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--period</code>, <code>-p</code></td>
+<td>priceperiod</td>
+<td>Historical price period.</td>
+<td><code>1M</code></td>
+</tr>
+<tr>
+<td><code>--from_date</code>, <code>-f</code></td>
+<td>datetime (<code>%Y-%m-%d</code> &#x7C; <code>%Y-%m-%dT%H:%M:%S</code> &#x7C; <code>%Y-%m-%d %H:%M:%S</code>)</td>
+<td>Histotical price from date.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--to_date</code>, <code>-t</code></td>
+<td>datetime (<code>%Y-%m-%d</code> &#x7C; <code>%Y-%m-%dT%H:%M:%S</code> &#x7C; <code>%Y-%m-%d %H:%M:%S</code>)</td>
+<td>Histotical price to date.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--tickers</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Comma-separated list of tickers.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-price-list">i8 price list</h4>
+<pre><code>Lists historical prices for a given TICKER.
+
+Examples:
+
+`i8 price list --period 3M --ticker AAPL`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 price list [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--ticker</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Company ticker.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--period</code>, <code>-p</code></td>
+<td>priceperiod</td>
+<td>Historical price period.</td>
+<td><code>1M</code></td>
+</tr>
+<tr>
+<td><code>--from_date</code>, <code>-f</code></td>
+<td>datetime (<code>%Y-%m-%d</code> &#x7C; <code>%Y-%m-%dT%H:%M:%S</code> &#x7C; <code>%Y-%m-%d %H:%M:%S</code>)</td>
+<td>Histotical price from date.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--to_date</code>, <code>-t</code></td>
+<td>datetime (<code>%Y-%m-%d</code> &#x7C; <code>%Y-%m-%dT%H:%M:%S</code> &#x7C; <code>%Y-%m-%d %H:%M:%S</code>)</td>
+<td>Histotical price to date.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-price-plot">i8 price plot</h4>
+<pre><code>Plots historical prices of a given company.
+
+Examples:
+
+`i8 price plot --period 1M --indicators volume --ticker MSFT --chart_type candlestick`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 price plot [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--ticker</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Company ticker.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--period</code>, <code>-p</code></td>
+<td>priceperiod</td>
+<td>Historical price period.</td>
+<td><code>1M</code></td>
+</tr>
+<tr>
+<td><code>--indicators</code>, <code>-i</code></td>
+<td>indicator</td>
+<td>Optional technical indicators to enrich the chart.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--from_date</code>, <code>-f</code></td>
+<td>datetime (<code>%Y-%m-%d</code> &#x7C; <code>%Y-%m-%dT%H:%M:%S</code> &#x7C; <code>%Y-%m-%d %H:%M:%S</code>)</td>
+<td>Histotical price from date.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--to_date</code>, <code>-t</code></td>
+<td>datetime (<code>%Y-%m-%d</code> &#x7C; <code>%Y-%m-%dT%H:%M:%S</code> &#x7C; <code>%Y-%m-%d %H:%M:%S</code>)</td>
+<td>Histotical price to date.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--chart_type</code>, <code>-c</code></td>
+<td>charttype</td>
+<td>Chart can be candlestick or line chart.</td>
+<td><code>line</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-screen">i8 screen</h3>
+<p>Screen the market to find stocks that match your criteria.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 screen [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-screen-gainers">i8 screen gainers</h4>
+<pre><code>Lists today winner companies.
+
+Examples:
+
+`i8 screen gainers --index $SPX`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 screen gainers [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--index</code>, <code>-i</code></td>
+<td>marketindice</td>
+<td>Index of market.</td>
+<td><code>$SPX</code></td>
+</tr>
+<tr>
+<td><code>--view_name</code>, <code>-v</code></td>
+<td>metricview</td>
+<td>Metric view name in configuration file.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-screen-list">i8 screen list</h4>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 screen list [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-screen-losers">i8 screen losers</h4>
+<pre><code>Lists today loser companies.
+
+Examples:
+
+`i8 screen losers --index $SPX`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 screen losers [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--index</code>, <code>-i</code></td>
+<td>marketindice</td>
+<td>Index of market.</td>
+<td><code>$SPX</code></td>
+</tr>
+<tr>
+<td><code>--view_name</code>, <code>-v</code></td>
+<td>metricview</td>
+<td>Metric view name in configuration file.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-screen-search">i8 screen search</h4>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 screen search [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--profile</code>, <code>-p</code></td>
+<td>screeningprofile</td>
+<td>Screening profile name.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--condition</code>, <code>-c</code></td>
+<td>screeningcondition</td>
+<td>Condition of metric.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--view_name</code>, <code>-v</code></td>
+<td>metricview</td>
+<td>Metric view name.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--metrics</code>, <code>-m</code></td>
+<td>metricidentifier</td>
+<td>Comma-separated list of daily metrics.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--sort_by</code>, <code>-sb</code></td>
+<td>metricidentifier</td>
+<td>Metric to sort the output by.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--sort_order</code>, <code>-so</code></td>
+<td>sortordertype</td>
+<td>Order to sort the output by.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--include_period</code>, <code>-ip</code></td>
+<td>boolean</td>
+<td>Output will contain the periods.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-shell">i8 shell</h3>
+<p>Open i8-shell.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 shell [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-user">i8 user</h3>
+<p>Users commands.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 user [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-user-login">i8 user login</h4>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 user login [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--terminal</code></td>
+<td>boolean</td>
+<td>Login with your credentials in the console (Only applicable if you have a local Investoreight account).</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-user-logout">i8 user logout</h4>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 user logout [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-version">i8 version</h3>
+<p>Get i8-terminal version.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 version [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="i8-watchlist">i8 watchlist</h3>
+<p>Get information about user watchlists.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 watchlist [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-watchlist-add">i8 watchlist add</h4>
+<pre><code>Adds given tickers to a given watchlist.
+
+Examples:
+
+`i8 watchlist add --name MyWatchlist --tickers AAPL,MSFT`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 watchlist add [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--name</code>, <code>-n</code></td>
+<td>userwatchlists</td>
+<td>Name of the watchlist.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--tickers</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Comma-separated list of tickers.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-watchlist-create">i8 watchlist create</h4>
+<pre><code>Creates new watchlist with given name and tickers.
+
+Examples:
+
+`i8 watchlist create --name MyWatchlist --tickers AAPL,MSFT`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 watchlist create [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--name</code>, <code>-n</code></td>
+<td>text</td>
+<td>Name of the watchlist you want to create.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--tickers</code>, <code>-k</code></td>
+<td>ticker</td>
+<td>Comma-separated list of tickers.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-watchlist-export">i8 watchlist export</h4>
+<pre><code>Exports a given watchlist to an excel file.
+
+Examples:
+
+`i8 watchlist export --name MyWatchlist --path MyWatchlist.xlsx`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 watchlist export [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--name</code>, <code>-n</code></td>
+<td>userwatchlists</td>
+<td>Name of the watchlist.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--path</code>, <code>-p</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-watchlist-financials">i8 watchlist financials</h4>
+<pre><code>Lists financial metrics for a given watchlist.
+
+Examples:
+
+`i8 watchlist financials --name MyWatchlist`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 watchlist financials [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--name</code>, <code>-n</code></td>
+<td>userwatchlists</td>
+<td>Name of the watchlist.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-watchlist-list">i8 watchlist list</h4>
+<pre><code>Lists user watchlists.
+
+Examples:
+
+`i8 watchlist list`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 watchlist list [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-watchlist-metrics">i8 watchlist metrics</h4>
+<pre><code>Lists and compares watchlist companies based on a given list of metrics.
+
+Examples:
+
+`i8 watchlist metrics --name MyWatchlist --metrics total_revenue,net_income,price_to_earnings`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 watchlist metrics [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--name</code>, <code>-n</code></td>
+<td>userwatchlists</td>
+<td>Name of the watchlist.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--metrics</code>, <code>-m</code></td>
+<td>metric</td>
+<td>Comma-separated list of daily metrics.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--view_name</code>, <code>-v</code></td>
+<td>metricview</td>
+<td>Metric view name in configuration file.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-watchlist-rm">i8 watchlist rm</h4>
+<pre><code>Removes given tickers from a given watchlist.
+
+Examples:
+
+`i8 watchlist rm --name MyWatchlist --tickers AAPL,MSFT`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 watchlist rm [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--name</code>, <code>-n</code></td>
+<td>userwatchlists</td>
+<td>Name of the watchlist.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--tickers</code>, <code>-k</code></td>
+<td>userwatchlisttickers</td>
+<td>Comma-separated list of tickers.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="i8-watchlist-summary">i8 watchlist summary</h4>
+<pre><code>Lists a summary of the companies added to a watchlist.
+
+Examples:
+
+`i8 watchlist summary --name MyWatchlist`
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code>i8 watchlist summary [OPTIONS]
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--name</code>, <code>-n</code></td>
+<td>userwatchlists</td>
+<td>Name of the watchlist.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--export</code>, <code>-e</code></td>
+<td>text</td>
+<td>Filename to export the output to.</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+      
+        
+        <a href="get_started/" class="md-footer__link md-footer__link--next" aria-label="Next: Getting started" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Getting started
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": ".", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.e99e714c.min.js", "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.bc35569b.min.js"></script>
+      
+    
+  </body>
+</html>
